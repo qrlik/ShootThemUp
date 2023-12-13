@@ -10,6 +10,7 @@ ASTUBaseCharacter::ASTUBaseCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
     CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
+	CameraComponent->SetupAttachment(GetRootComponent());
 }
 
 // Called when the game starts or when spawned
