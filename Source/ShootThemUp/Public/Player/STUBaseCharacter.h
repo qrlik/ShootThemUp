@@ -8,6 +8,7 @@
 
 class UCameraComponent;
 class USpringArmComponent;
+class USTUCharacterMovementComponent;
 
 UCLASS()
 class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
@@ -16,7 +17,7 @@ class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
 
 public:
 	// Sets default values for this character's properties
-	ASTUBaseCharacter();
+	ASTUBaseCharacter(const FObjectInitializer& Initializer);
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -35,6 +36,12 @@ protected:
 	USpringArmComponent* SpringArmComponent;
 
 private:
+	void InitMovementComponent();
+
 	void MoveForward(float Amount);
 	void MoveRight(float Amount);
+	void StartRun();
+	void StopRun();
+
+	TWeakObjectPtr<USTUCharacterMovementComponent> MovementComponent;
 };
