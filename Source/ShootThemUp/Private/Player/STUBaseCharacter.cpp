@@ -49,20 +49,30 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 void ASTUBaseCharacter::MoveForward(float Amount) {
 	AddMovementInput(GetActorForwardVector(), Amount);
+	UpdateMovementFlag(EMovementFlags::MoveForward, (Amount > 0.f) ? Amount : 0.f);
 }
 
 void ASTUBaseCharacter::MoveRight(float Amount) {
 	AddMovementInput(GetActorRightVector(), Amount);
+	UpdateMovementFlag(EMovementFlags::MoveSide, Amount);
 }
 
 void ASTUBaseCharacter::StartRun() {
-	if (MovementComponent.IsValid()) {
-		MovementComponent->SetCanRun(true);
-	}
+	UpdateMovementFlag(EMovementFlags::AbleToRun, 1.f);
 }
 
 void ASTUBaseCharacter::StopRun() {
-	if (MovementComponent.IsValid()) {
-		MovementComponent->SetCanRun(false);
+	UpdateMovementFlag(EMovementFlags::AbleToRun, 0.f);
+}
+
+void ASTUBaseCharacter::UpdateMovementFlag(EMovementFlags Flag, float Amount) const {
+	if (!MovementComponent.IsValid()) {
+		return;
+	}
+	if (FMath::IsNearlyEqual(Amount, 0.f)) {
+		MovementComponent->RemoveMovementFlag(Flag);
+	}
+	else {
+		MovementComponent->AddMovementFlag(Flag);
 	}
 }

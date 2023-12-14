@@ -6,9 +6,16 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "STUCharacterMovementComponent.generated.h"
 
-/**
- * 
- */
+enum class EMovementFlags {
+	None = 0,
+	MoveForward = (1 << 0),
+	MoveSide = (1 << 1),
+	AllowToRun = (1 << 2),
+	AbleToRun = MoveForward | AllowToRun
+};
+
+ENUM_CLASS_FLAGS(EMovementFlags)
+
 UCLASS()
 class SHOOTTHEMUP_API USTUCharacterMovementComponent : public UCharacterMovementComponent
 {
@@ -22,12 +29,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 	float GetVelocityFactor() const;
 
-	void SetCanRun(bool State) { CanRun = State; }
+	void AddMovementFlag(EMovementFlags Flag);
+	void RemoveMovementFlag(EMovementFlags Flag);
 
-protected:
+protected :
 	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "1.0"), Category = "Character Movement: Walking")
 	float RunModifier = 2.f;
 
 private:
-	bool CanRun = false;
+	EMovementFlags MovementFlags = EMovementFlags::None;
 };

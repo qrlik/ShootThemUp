@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "STUBaseCharacter.generated.h"
 
+enum class EMovementFlags;
 class UCameraComponent;
 class USpringArmComponent;
 class USTUCharacterMovementComponent;
@@ -23,7 +24,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 protected:
 	// Called when the game starts or when spawned
@@ -42,6 +43,7 @@ private:
 	void MoveRight(float Amount);
 	void StartRun();
 	void StopRun();
+	void UpdateMovementFlag(EMovementFlags Flag, float Amount) const;
 
 	TWeakObjectPtr<USTUCharacterMovementComponent> MovementComponent;
 };

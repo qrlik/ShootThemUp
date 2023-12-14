@@ -3,8 +3,16 @@
 
 #include "Components/STUCharacterMovementComponent.h"
 
+void USTUCharacterMovementComponent::AddMovementFlag(EMovementFlags Flag) {
+	MovementFlags |= Flag;
+}
+
+void USTUCharacterMovementComponent::RemoveMovementFlag(EMovementFlags Flag) {
+	MovementFlags &= ~Flag;
+}
+
 float USTUCharacterMovementComponent::GetMaxSpeed() const {
-	return (CanRun) ? Super::GetMaxSpeed() * RunModifier : Super::GetMaxSpeed();
+	return (MovementFlags == EMovementFlags::AbleToRun) ? Super::GetMaxSpeed() * RunModifier : Super::GetMaxSpeed();
 }
 
 float USTUCharacterMovementComponent::GetVelocityFactor() const {
