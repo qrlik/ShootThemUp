@@ -47,13 +47,29 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAxis("TurnAround", this, &ASTUBaseCharacter::AddControllerYawInput);
 }
 
+float ASTUBaseCharacter::GetDirectionAngle() const {
+	const auto VelocityNormal = GetVelocity().GetSafeNormal();
+	if (VelocityNormal.IsZero()) {
+		return 0.f;
+	}
+	const auto Forward = GetActorForwardVector();
+	const auto Angle = FMath::Acos(Forward.Dot(VelocityNormal));
+	const auto Degrees = FMath::RadiansToDegrees(Angle);
+	const auto Cross = Forward.Cross(VelocityNormal);
+	return (FMath::IsNearlyZero(Cross.Z)) ? Degrees : Degrees * FMath::Sign(Cross.Z);
+}
+
 void ASTUBaseCharacter::MoveForward(float Amount) {
-	AddMovementInput(GetActorForwardVector(), Amount);
+	if (!FMath::IsNearlyZero(Amount)) {
+		AddMovementInput(GetActorForwardVector(), Amount);
+	}
 	UpdateMovementFlag(EMovementFlags::MoveForward, (Amount > 0.f) ? Amount : 0.f);
 }
 
 void ASTUBaseCharacter::MoveRight(float Amount) {
-	AddMovementInput(GetActorRightVector(), Amount);
+	if (!FMath::IsNearlyZero(Amount)) {
+		AddMovementInput(GetActorRightVector(), Amount);
+	}
 	UpdateMovementFlag(EMovementFlags::MoveSide, Amount);
 }
 

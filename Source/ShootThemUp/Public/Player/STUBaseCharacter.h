@@ -26,6 +26,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION(BlueprintCallable)
+	float GetDirectionAngle() const;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
