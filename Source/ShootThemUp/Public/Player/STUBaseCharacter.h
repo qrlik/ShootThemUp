@@ -9,6 +9,8 @@
 enum class EMovementFlags;
 class UCameraComponent;
 class USpringArmComponent;
+class UTextRenderComponent;
+class USTUHealthComponent;
 class USTUCharacterMovementComponent;
 
 UCLASS()
@@ -17,36 +19,35 @@ class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
 	ASTUBaseCharacter(const FObjectInitializer& Initializer);
 
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
+	virtual void Tick(float DeltaSeconds) override;
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION(BlueprintCallable)
 	float GetDirectionAngle() const;
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-	UCameraComponent* CameraComponent;
+	TObjectPtr<USpringArmComponent> SpringArmComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-	USpringArmComponent* SpringArmComponent;
+	TObjectPtr<UCameraComponent> CameraComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	TObjectPtr<USTUHealthComponent> HealthComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	TObjectPtr<UTextRenderComponent> HealthTextComponent;
 
 private:
-	void InitMovementComponent();
-
 	void MoveForward(float Amount);
 	void MoveRight(float Amount);
 	void StartRun();
 	void StopRun();
-	void UpdateMovementFlag(EMovementFlags Flag, float Amount) const;
 
-	TWeakObjectPtr<USTUCharacterMovementComponent> MovementComponent;
+	void UpdateMovementFlag(EMovementFlags Flag, float Amount) const;
+	void UpdateHealthText() const;
 };

@@ -3,14 +3,18 @@
 #include "Player/STUBaseCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "Components/STUCharacterMovementComponent.h"
-#include "GameFramework/CharacterMovementComponent.h"
+#include "Components/STUHealthComponent.h"
+#include "Components/TextRenderComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
-// Sets default values
 ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& Initializer):
 	Super(Initializer.SetDefaultSubobjectClass<USTUCharacterMovementComponent>(CharacterMovementComponentName)) {
-	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	HealthComponent = CreateDefaultSubobject<USTUHealthComponent>("HealthComponent");
+
+	HealthTextComponent = CreateDefaultSubobject<UTextRenderComponent>("TextRenderComponent");
+	HealthTextComponent->SetupAttachment(GetRootComponent());
 
 	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
 	SpringArmComponent->SetupAttachment(GetRootComponent());
@@ -20,22 +24,15 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& Initializer):
 	CameraComponent->SetupAttachment(SpringArmComponent);
 }
 
-void ASTUBaseCharacter::InitMovementComponent() {
-	MovementComponent = Cast<USTUCharacterMovementComponent>(GetMovementComponent());
+void ASTUBaseCharacter::Tick(float DeltaSeconds) {
+	Super::Tick(DeltaSeconds);
+	UpdateHealthText();
 }
 
-// Called when the game starts or when spawned
 void ASTUBaseCharacter::BeginPlay() {
 	Super::BeginPlay();
-	InitMovementComponent();
 }
 
-// Called every frame
-void ASTUBaseCharacter::Tick(float DeltaTime) {
-	Super::Tick(DeltaTime);
-}
-
-// Called to bind functionality to input
 void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASTUBaseCharacter::Jump);
@@ -82,7 +79,8 @@ void ASTUBaseCharacter::StopRun() {
 }
 
 void ASTUBaseCharacter::UpdateMovementFlag(EMovementFlags Flag, float Amount) const {
-	if (!MovementComponent.IsValid()) {
+	auto* MovementComponent = FindComponentByClass<USTUCharacterMovementComponent>();
+	if (!MovementComponent) {
 		return;
 	}
 	if (FMath::IsNearlyEqual(Amount, 0.f)) {
@@ -91,4 +89,9 @@ void ASTUBaseCharacter::UpdateMovementFlag(EMovementFlags Flag, float Amount) co
 	else {
 		MovementComponent->AddMovementFlag(Flag);
 	}
+}
+
+void ASTUBaseCharacter::UpdateHealthText() const {
+	const auto Health = HealthComponent->GetHealth();
+	HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
 }

@@ -33,7 +33,7 @@ public:
 	void RemoveMovementFlag(EMovementFlags Flag);
 
 protected :
-	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "1.0"), Category = "Character Movement: Walking")
+	UPROPERTY(EditDefaultsOnly, Category = "Character Movement: Walking", meta = (ClampMin = "1.0"))
 	float RunModifier = 2.f;
 
 private:
