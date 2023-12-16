@@ -16,6 +16,9 @@ public:
 
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
+	void OnTakeAnyDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser);
+
 	UFUNCTION(BlueprintCallable)
 	float GetHealth() const { return Health; }
 

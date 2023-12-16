@@ -7,6 +7,8 @@
 #include "Components/TextRenderComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
+DEFINE_LOG_CATEGORY_STATIC(BaseCharacterLog, All, All)
+
 ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& Initializer):
 	Super(Initializer.SetDefaultSubobjectClass<USTUCharacterMovementComponent>(CharacterMovementComponentName)) {
 	PrimaryActorTick.bCanEverTick = true;
@@ -27,10 +29,12 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& Initializer):
 void ASTUBaseCharacter::Tick(float DeltaSeconds) {
 	Super::Tick(DeltaSeconds);
 	UpdateHealthText();
+	TakeDamage(0.1f, FDamageEvent{}, Controller, this);
 }
 
 void ASTUBaseCharacter::BeginPlay() {
 	Super::BeginPlay();
+	OnTakeAnyDamage.AddDynamic(HealthComponent.Get(), &USTUHealthComponent::OnTakeAnyDamage); // to do move from tick
 }
 
 void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
