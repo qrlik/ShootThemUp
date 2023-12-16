@@ -29,7 +29,6 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& Initializer):
 void ASTUBaseCharacter::Tick(float DeltaSeconds) {
 	Super::Tick(DeltaSeconds);
 	UpdateHealthText();
-	TakeDamage(0.1f, FDamageEvent{}, Controller, this);
 }
 
 void ASTUBaseCharacter::BeginPlay() {
