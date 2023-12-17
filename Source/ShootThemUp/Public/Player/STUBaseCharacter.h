@@ -46,6 +46,8 @@ protected:
 
 private:
 	void OnDeath();
+	UFUNCTION()
+	void OnGroundLanded(const FHitResult& Hit);
 
 	void MoveForward(float Amount);
 	void MoveRight(float Amount);

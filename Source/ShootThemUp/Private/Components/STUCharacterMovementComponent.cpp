@@ -29,3 +29,11 @@ float USTUCharacterMovementComponent::GetVelocityFactor() const {
 
 	return VelocityLength / DefaultMaxSpeed;
 }
+
+float USTUCharacterMovementComponent::GetLandedDamage() const {
+	const auto FallVelocity = -Velocity.Z;
+	if (FallVelocity < 0.f || FallVelocity < LandedDamageVelocity.X) {
+		return 0.f;
+	}
+	return FMath::GetMappedRangeValueClamped(LandedDamageVelocity, LandedDamage, FallVelocity);
+}

@@ -29,10 +29,18 @@ public:
 	UFUNCTION(BlueprintCallable)
 	float GetVelocityFactor() const;
 
+	float GetLandedDamage() const;
+
 	void AddMovementFlag(EMovementFlags Flag);
 	void RemoveMovementFlag(EMovementFlags Flag);
 
-protected :
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Character Movement: Jumping / Falling", meta = (ClampMin = "0.0"))
+	FVector2D LandedDamageVelocity = FVector2D(600.f, 1500.f);
+
+	UPROPERTY(EditDefaultsOnly, Category = "Character Movement: Jumping / Falling", meta = (ClampMin = "0.0"))
+	FVector2D LandedDamage = FVector2D(10.f, 100.f);
+
 	UPROPERTY(EditDefaultsOnly, Category = "Character Movement: Walking", meta = (ClampMin = "1.0"))
 	float RunModifier = 2.f;
 

@@ -30,6 +30,7 @@ void ASTUBaseCharacter::BeginPlay() {
 	Super::BeginPlay();
 
 	OnTakeAnyDamage.AddDynamic(HealthComponent.Get(), &USTUHealthComponent::OnTakeAnyDamage);
+	LandedDelegate.AddDynamic(this, &ASTUBaseCharacter::OnGroundLanded);
 	HealthComponent->OnHealthChange.BindUObject(this, &ASTUBaseCharacter::UpdateHealthText);
 	HealthComponent->OnDeath.AddUObject(this, &ASTUBaseCharacter::OnDeath);
 
@@ -68,6 +69,14 @@ void ASTUBaseCharacter::OnDeath() {
 		Controller->ChangeState(NAME_Spectating);
 	}
 	SetLifeSpan(5.f);
+}
+
+void ASTUBaseCharacter::OnGroundLanded(const FHitResult& Hit) {
+	if (const auto* MovementComponent = FindComponentByClass<USTUCharacterMovementComponent>()) {
+		if (const auto FallDamage = MovementComponent->GetLandedDamage(); FallDamage > 0.f) {
+			TakeDamage(FallDamage, FDamageEvent{}, nullptr, nullptr);
+		}
+	}
 }
 
 void ASTUBaseCharacter::MoveForward(float Amount) {
