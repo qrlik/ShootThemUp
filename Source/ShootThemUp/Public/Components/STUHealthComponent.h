@@ -6,8 +6,8 @@
 #include "Components/ActorComponent.h"
 #include "STUHealthComponent.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnDeath)
-DECLARE_DELEGATE(FOnHealthChange)
+DECLARE_MULTICAST_DELEGATE(FOnDeathSignature);
+DECLARE_DELEGATE(FOnHealthChangeSignature);
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class SHOOTTHEMUP_API USTUHealthComponent : public UActorComponent {
@@ -24,11 +24,11 @@ public:
 	UFUNCTION()
 	void OnTakeAnyDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Health")
 	float GetHealth() const { return Health; }
 
-	FOnHealthChange OnHealthChange;
-	FOnDeath OnDeath;
+	FOnHealthChangeSignature OnHealthChange;
+	FOnDeathSignature OnDeath;
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (ClampMin = "0.0"), Category = "Health")

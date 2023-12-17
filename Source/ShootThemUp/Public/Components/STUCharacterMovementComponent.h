@@ -24,23 +24,15 @@ class SHOOTTHEMUP_API USTUCharacterMovementComponent : public UCharacterMovement
 public:
 	virtual float GetMaxSpeed() const override;
 
+	void AddMovementFlag(EMovementFlags Flag);
+	void RemoveMovementFlag(EMovementFlags Flag);
+
 	// calculate factor for velocity state
 	// 0 - stay, (0, 1] - walk, (1, 2] - run
 	UFUNCTION(BlueprintCallable)
 	float GetVelocityFactor() const;
 
-	float GetLandedDamage() const;
-
-	void AddMovementFlag(EMovementFlags Flag);
-	void RemoveMovementFlag(EMovementFlags Flag);
-
 protected:
-	UPROPERTY(EditDefaultsOnly, Category = "Character Movement: Jumping / Falling", meta = (ClampMin = "0.0"))
-	FVector2D LandedDamageVelocity = FVector2D(600.f, 1500.f);
-
-	UPROPERTY(EditDefaultsOnly, Category = "Character Movement: Jumping / Falling", meta = (ClampMin = "0.0"))
-	FVector2D LandedDamage = FVector2D(10.f, 100.f);
-
 	UPROPERTY(EditDefaultsOnly, Category = "Character Movement: Walking", meta = (ClampMin = "1.0"))
 	float RunModifier = 2.f;
 

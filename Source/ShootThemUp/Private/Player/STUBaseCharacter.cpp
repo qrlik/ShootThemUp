@@ -68,15 +68,16 @@ void ASTUBaseCharacter::OnDeath() {
 	if (Controller) {
 		Controller->ChangeState(NAME_Spectating);
 	}
-	SetLifeSpan(5.f);
+	SetLifeSpan(LifeSpanOnDeath);
 }
 
 void ASTUBaseCharacter::OnGroundLanded(const FHitResult& Hit) {
-	if (const auto* MovementComponent = FindComponentByClass<USTUCharacterMovementComponent>()) {
-		if (const auto FallDamage = MovementComponent->GetLandedDamage(); FallDamage > 0.f) {
-			TakeDamage(FallDamage, FDamageEvent{}, nullptr, nullptr);
-		}
+	const auto FallVelocity = -GetVelocity().Z;
+	if (FallVelocity < 0.f || FallVelocity < LandedDamageVelocity.X) {
+		return;
 	}
+	const auto FallDamage = FMath::GetMappedRangeValueClamped(LandedDamageVelocity, LandedDamage, FallVelocity);
+	TakeDamage(FallDamage, FDamageEvent{}, nullptr, nullptr);
 }
 
 void ASTUBaseCharacter::MoveForward(float Amount) {

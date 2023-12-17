@@ -44,6 +44,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	TObjectPtr<UAnimMontage> DeathAnimMontage;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Damage", meta = (ClampMin = "0.0"))
+	FVector2D LandedDamageVelocity = FVector2D(600.f, 1500.f);
+
+	UPROPERTY(EditDefaultsOnly, Category = "Damage", meta = (ClampMin = "0.0"))
+	FVector2D LandedDamage = FVector2D(10.f, 100.f);
+
+	UPROPERTY(EditDefaultsOnly, Category = "Damage", meta = (ClampMin = "0.0"))
+	float LifeSpanOnDeath = 5.f;
+
 private:
 	void OnDeath();
 	UFUNCTION()
