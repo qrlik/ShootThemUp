@@ -31,10 +31,28 @@ public:
 	FOnDeath OnDeath;
 
 protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (ClampMin = "0.0"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (ClampMin = "0.0"), Category = "Health")
 	float MaxHealth = 100.f;
 
-private:
-	float Health = 0.f;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health")
+	bool AutoHeal = true;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (ClampMin = "0.0", EditCondition = "AutoHeal"), Category = "Health")
+	float AutoHealDelay = 5.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (ClampMin = "0.0", EditCondition = "AutoHeal"), Category = "Health")
+	float AutoHealTick = 1.f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (ClampMin = "0.0", EditCondition = "AutoHeal"), Category = "Health")
+	float AutoHealFrequency = 1.f;
+
+private:
+	void AddHealth(float Delta);
+
+	void AddAutoHealTick();
+	void StartAutoHeal();
+
+	FTimerHandle AutoHealTimer;
+
+	float Health = 0.f;
 };

@@ -22,14 +22,35 @@ void USTUHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, co
 	if (Damage < 0.f || FMath::IsNearlyZero(Damage) || IsDead()) {
 		return;
 	}
-	Health -= Damage;
+	AddHealth(-Damage);
 
 	if (IsDead()) {
-		Health = 0.f;
-		OnHealthChange.Execute();
 		OnDeath.Broadcast();
 	}
 	else {
-		OnHealthChange.Execute();
+		StartAutoHeal();
+	}
+}
+
+void USTUHealthComponent::AddHealth(float Delta) {
+	Health = FMath::Clamp(Health + Delta, 0.f, MaxHealth);
+	OnHealthChange.Execute();
+}
+
+void USTUHealthComponent::AddAutoHealTick() {
+	AddHealth(AutoHealTick);
+	if (FMath::IsNearlyEqual(Health, MaxHealth)) {
+		if (const auto World = GetWorld()) {
+			World->GetTimerManager().ClearTimer(AutoHealTimer);
+		}
+	}
+}
+
+void USTUHealthComponent::StartAutoHeal() {
+	if (!AutoHeal) {
+		return;
+	}
+	if (const auto World = GetWorld()) {
+		World->GetTimerManager().SetTimer(AutoHealTimer, this, &USTUHealthComponent::AddAutoHealTick, AutoHealFrequency, true, AutoHealDelay);
 	}
 }
