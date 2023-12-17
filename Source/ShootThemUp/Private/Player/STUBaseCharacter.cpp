@@ -64,6 +64,9 @@ void ASTUBaseCharacter::OnDeath() {
 	if (auto* MovementComponent = GetCharacterMovement()) {
 		MovementComponent->DisableMovement();
 	}
+	if (Controller) {
+		Controller->ChangeState(NAME_Spectating);
+	}
 	SetLifeSpan(5.f);
 }
 
