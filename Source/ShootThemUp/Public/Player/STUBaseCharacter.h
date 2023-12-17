@@ -21,7 +21,6 @@ class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
 public:
 	ASTUBaseCharacter(const FObjectInitializer& Initializer);
 
-	virtual void Tick(float DeltaSeconds) override;
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION(BlueprintCallable)
@@ -42,7 +41,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<UTextRenderComponent> HealthTextComponent;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	TObjectPtr<UAnimMontage> DeathAnimMontage;
+
 private:
+	void OnDeath();
+
 	void MoveForward(float Amount);
 	void MoveRight(float Amount);
 	void StartRun();

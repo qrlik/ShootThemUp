@@ -26,14 +26,14 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& Initializer):
 	CameraComponent->SetupAttachment(SpringArmComponent);
 }
 
-void ASTUBaseCharacter::Tick(float DeltaSeconds) {
-	Super::Tick(DeltaSeconds);
-	UpdateHealthText();
-}
-
 void ASTUBaseCharacter::BeginPlay() {
 	Super::BeginPlay();
-	OnTakeAnyDamage.AddDynamic(HealthComponent.Get(), &USTUHealthComponent::OnTakeAnyDamage); // to do move from tick
+
+	OnTakeAnyDamage.AddDynamic(HealthComponent.Get(), &USTUHealthComponent::OnTakeAnyDamage);
+	HealthComponent->OnHealthChange.BindUObject(this, &ASTUBaseCharacter::UpdateHealthText);
+	HealthComponent->OnDeath.AddUObject(this, &ASTUBaseCharacter::OnDeath);
+
+	UpdateHealthText();
 }
 
 void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
@@ -59,6 +59,14 @@ float ASTUBaseCharacter::GetDirectionAngle() const {
 	return (FMath::IsNearlyZero(Cross.Z)) ? Degrees : Degrees * FMath::Sign(Cross.Z);
 }
 
+void ASTUBaseCharacter::OnDeath() {
+	PlayAnimMontage(DeathAnimMontage);
+	if (auto* MovementComponent = GetCharacterMovement()) {
+		MovementComponent->DisableMovement();
+	}
+	SetLifeSpan(5.f);
+}
+
 void ASTUBaseCharacter::MoveForward(float Amount) {
 	if (!FMath::IsNearlyZero(Amount)) {
 		AddMovementInput(GetActorForwardVector(), Amount);
@@ -82,19 +90,16 @@ void ASTUBaseCharacter::StopRun() {
 }
 
 void ASTUBaseCharacter::UpdateMovementFlag(EMovementFlags Flag, float Amount) const {
-	auto* MovementComponent = FindComponentByClass<USTUCharacterMovementComponent>();
-	if (!MovementComponent) {
-		return;
-	}
-	if (FMath::IsNearlyEqual(Amount, 0.f)) {
-		MovementComponent->RemoveMovementFlag(Flag);
-	}
-	else {
-		MovementComponent->AddMovementFlag(Flag);
+	if (auto* MovementComponent = FindComponentByClass<USTUCharacterMovementComponent>()) {
+		if (FMath::IsNearlyEqual(Amount, 0.f)) {
+			MovementComponent->RemoveMovementFlag(Flag);
+		}
+		else {
+			MovementComponent->AddMovementFlag(Flag);
+		}
 	}
 }
 
 void ASTUBaseCharacter::UpdateHealthText() const {
-	const auto Health = HealthComponent->GetHealth();
-	HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
+	HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), HealthComponent->GetHealth())));
 }
