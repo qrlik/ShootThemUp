@@ -7,6 +7,7 @@
 #include "STUBaseCharacter.generated.h"
 
 enum class EMovementFlags;
+class ASTUBaseWeapon;
 class UCameraComponent;
 class USpringArmComponent;
 class UTextRenderComponent;
@@ -41,6 +42,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<UTextRenderComponent> HealthTextComponent;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	TSubclassOf<ASTUBaseWeapon> WeaponClass;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	TObjectPtr<UAnimMontage> DeathAnimMontage;
 
@@ -62,6 +66,8 @@ private:
 	void MoveRight(float Amount);
 	void StartRun();
 	void StopRun();
+
+	void SpawnWeapon() const;
 
 	void UpdateMovementFlag(EMovementFlags Flag, float Amount) const;
 	void UpdateHealthText() const;
