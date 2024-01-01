@@ -10,6 +10,9 @@ ASTUBaseWeapon::ASTUBaseWeapon() {
 	SetRootComponent(WeaponMesh);
 }
 
+void ASTUBaseWeapon::Fire() {
+}
+
 void ASTUBaseWeapon::BeginPlay() {
 	Super::BeginPlay();
 }

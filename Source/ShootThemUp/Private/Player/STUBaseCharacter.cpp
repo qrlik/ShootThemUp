@@ -4,9 +4,9 @@
 #include "Camera/CameraComponent.h"
 #include "Components/STUCharacterMovementComponent.h"
 #include "Components/STUHealthComponent.h"
+#include "Components/STUWeaponComponent.h"
 #include "Components/TextRenderComponent.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "Weapon/STUBaseWeapon.h"
 
 DEFINE_LOG_CATEGORY_STATIC(BaseCharacterLog, All, All)
 
@@ -26,6 +26,8 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& Initializer):
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
 	CameraComponent->SetupAttachment(SpringArmComponent);
+
+	WeaponComponent = CreateDefaultSubobject<USTUWeaponComponent>("WeaponComponent");
 }
 
 void ASTUBaseCharacter::BeginPlay() {
@@ -36,7 +38,6 @@ void ASTUBaseCharacter::BeginPlay() {
 	HealthComponent->OnHealthChange.BindUObject(this, &ASTUBaseCharacter::UpdateHealthText);
 	HealthComponent->OnDeath.AddUObject(this, &ASTUBaseCharacter::OnDeath);
 
-	SpawnWeapon();
 	UpdateHealthText();
 }
 
@@ -45,6 +46,7 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASTUBaseCharacter::Jump);
 	PlayerInputComponent->BindAction("Run", IE_Pressed, this, &ASTUBaseCharacter::StartRun);
 	PlayerInputComponent->BindAction("Run", IE_Released, this, &ASTUBaseCharacter::StopRun);
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, WeaponComponent.Get(), &USTUWeaponComponent::Fire);
 	PlayerInputComponent->BindAxis("MoveForward", this, &ASTUBaseCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ASTUBaseCharacter::MoveRight);
 	PlayerInputComponent->BindAxis("LookUp", this, &ASTUBaseCharacter::AddControllerPitchInput);
@@ -103,15 +105,6 @@ void ASTUBaseCharacter::StartRun() {
 
 void ASTUBaseCharacter::StopRun() {
 	UpdateMovementFlag(EMovementFlags::AbleToRun, 0.f);
-}
-
-void ASTUBaseCharacter::SpawnWeapon() const {
-	if (const auto World = GetWorld()) {
-		if (const auto Weapon = World->SpawnActor(WeaponClass)) {
-			const auto AttachmentRules = FAttachmentTransformRules{ EAttachmentRule::SnapToTarget, false };
-			Weapon->AttachToComponent(GetMesh(), AttachmentRules, "WeaponSocket");
-		}
-	}
 }
 
 void ASTUBaseCharacter::UpdateMovementFlag(EMovementFlags Flag, float Amount) const {

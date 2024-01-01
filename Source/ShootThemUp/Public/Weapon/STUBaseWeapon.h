@@ -13,10 +13,11 @@ class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor {
 public:
 	ASTUBaseWeapon();
 
+	virtual void Fire();
+
 protected:
 	virtual void BeginPlay() override;
 
-protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<USkeletalMeshComponent> WeaponMesh;
 };
