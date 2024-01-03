@@ -20,4 +20,13 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<USkeletalMeshComponent> WeaponMesh;
+
+	UPROPERTY(EditDefaultsOnly)
+	FName MuzzleSocket = "MuzzleSocket";
+
+	UPROPERTY(EditDefaultsOnly)
+	int16 TraceDistance = 1500;
+
+private:
+	void MakeShot();
 };
