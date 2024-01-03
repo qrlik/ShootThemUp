@@ -29,9 +29,7 @@ void ASTUBaseWeapon::MakeShot() {
 
 	// to do check + refactor
 
-	FVector ViewLocation;
-	FRotator ViewRotation;
-	Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
+	auto ViewRotation = Character->GetBaseAimRotation();
 	const auto SocketTransform = WeaponMesh->GetSocketTransform(MuzzleSocket);
 
 	const auto TraceStart = SocketTransform.GetLocation();
