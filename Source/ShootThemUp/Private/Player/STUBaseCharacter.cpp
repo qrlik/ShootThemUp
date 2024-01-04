@@ -2,6 +2,7 @@
 
 #include "Player/STUBaseCharacter.h"
 #include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/STUCharacterMovementComponent.h"
 #include "Components/STUHealthComponent.h"
 #include "Components/STUWeaponComponent.h"
@@ -69,6 +70,9 @@ void ASTUBaseCharacter::OnDeath() {
 	PlayAnimMontage(DeathAnimMontage);
 	if (auto* MovementComponent = GetCharacterMovement()) {
 		MovementComponent->DisableMovement();
+	}
+	if (auto* Capsule = GetCapsuleComponent()) {
+		Capsule->SetCollisionResponseToAllChannels(ECR_Ignore);
 	}
 	if (Controller) {
 		Controller->ChangeState(NAME_Spectating);

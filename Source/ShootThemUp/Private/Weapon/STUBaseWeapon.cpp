@@ -3,6 +3,8 @@
 #include "GameFramework/Character.h"
 #include "Weapon/STUBaseWeapon.h"
 
+#include "Player/STUBaseCharacter.h"
+
 ASTUBaseWeapon::ASTUBaseWeapon() {
 	PrimaryActorTick.bCanEverTick = false;
 
@@ -18,27 +20,23 @@ void ASTUBaseWeapon::BeginPlay() {
 	Super::BeginPlay();
 }
 
-bool ASTUBaseWeapon::GetViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const {
+AController* ASTUBaseWeapon::GetController() const {
 	if (const auto* Character = Cast<ACharacter>(GetOwner())) {
-		if (const auto* Controller = Character->GetController()) {
-			Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
-			return true;
-		}
+		return Character->GetController();
 	}
-	return false;
+	return nullptr;
 }
 
-void ASTUBaseWeapon::MakeShot() const {
+void ASTUBaseWeapon::MakeShot() {
 	const auto* World = GetWorld();
-	if (!World) {
+	const auto* Controller = GetController();
+	if (!World || !Controller) {
 		return;
 	}
 
 	FVector ViewLocation;
 	FRotator ViewRotation;
-	if (!GetViewPoint(ViewLocation, ViewRotation)) {
-		return;
-	}
+	Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
 
 	FHitResult HitResult;
 	const auto TraceEnd = ViewLocation + ViewRotation.Vector() * TraceDistance;
@@ -46,5 +44,8 @@ void ASTUBaseWeapon::MakeShot() const {
 
 	if (HitResult.bBlockingHit) {
 		DrawDebugSphere(World, HitResult.ImpactPoint, 10.f, 24, FColor::Red, false, 5.f);
+		if (auto* HitActor = HitResult.HitObjectHandle.FetchActor<ASTUBaseCharacter>()) {
+			HitActor->TakeDamage(Damage, FDamageEvent{}, GetController(), this);
+		}
 	}
 }

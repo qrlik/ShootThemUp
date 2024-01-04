@@ -22,9 +22,12 @@ protected:
 	TObjectPtr<USkeletalMeshComponent> WeaponMesh;
 
 	UPROPERTY(EditDefaultsOnly)
+	float Damage = 10.f;
+
+	UPROPERTY(EditDefaultsOnly)
 	int16 TraceDistance = 3000;
 
 private:
-	bool GetViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const;
-	void MakeShot() const;
+	AController* GetController() const;
+	void MakeShot();
 };
