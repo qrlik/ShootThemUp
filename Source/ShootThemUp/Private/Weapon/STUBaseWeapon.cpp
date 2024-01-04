@@ -18,32 +18,33 @@ void ASTUBaseWeapon::BeginPlay() {
 	Super::BeginPlay();
 }
 
-void ASTUBaseWeapon::MakeShot() {
-	const auto World = GetWorld();
+bool ASTUBaseWeapon::GetViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const {
+	if (const auto* Character = Cast<ACharacter>(GetOwner())) {
+		if (const auto* Controller = Character->GetController()) {
+			Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
+			return true;
+		}
+	}
+	return false;
+}
+
+void ASTUBaseWeapon::MakeShot() const {
+	const auto* World = GetWorld();
 	if (!World) {
 		return;
 	}
 
-	const auto* Character = Cast<ACharacter>(GetOwner());
-	const auto* Controller = Character->GetController();
-
-	// to do check + refactor
-
-	auto ViewRotation = Character->GetBaseAimRotation();
-	const auto SocketTransform = WeaponMesh->GetSocketTransform(MuzzleSocket);
-
-	const auto TraceStart = SocketTransform.GetLocation();
-	const auto ShootDirection = ViewRotation.Vector(); // SocketTransform.GetRotation().GetForwardVector();
-	const auto TraceEnd = TraceStart + ShootDirection * TraceDistance;
+	FVector ViewLocation;
+	FRotator ViewRotation;
+	if (!GetViewPoint(ViewLocation, ViewRotation)) {
+		return;
+	}
 
 	FHitResult HitResult;
-	FCollisionQueryParams CollisionParams;
-	CollisionParams.AddIgnoredActor(GetOwner());
-	if (World->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, CollisionParams)) {
+	const auto TraceEnd = ViewLocation + ViewRotation.Vector() * TraceDistance;
+	World->LineTraceSingleByChannel(HitResult, ViewLocation, TraceEnd, ECC_Visibility);
+
+	if (HitResult.bBlockingHit) {
 		DrawDebugSphere(World, HitResult.ImpactPoint, 10.f, 24, FColor::Red, false, 5.f);
-		DrawDebugLine(World, TraceStart, HitResult.ImpactPoint, FColor::Red, false, 3.f, 0, 2.f);
-	}
-	else {
-		DrawDebugLine(World, TraceStart, TraceEnd, FColor::Red, false, 3.f, 0, 2.f);
 	}
 }

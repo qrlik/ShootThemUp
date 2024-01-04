@@ -22,11 +22,9 @@ protected:
 	TObjectPtr<USkeletalMeshComponent> WeaponMesh;
 
 	UPROPERTY(EditDefaultsOnly)
-	FName MuzzleSocket = "MuzzleSocket";
-
-	UPROPERTY(EditDefaultsOnly)
-	int16 TraceDistance = 1500;
+	int16 TraceDistance = 3000;
 
 private:
-	void MakeShot();
+	bool GetViewPoint(FVector& ViewLocation, FRotator& ViewRotation) const;
+	void MakeShot() const;
 };
