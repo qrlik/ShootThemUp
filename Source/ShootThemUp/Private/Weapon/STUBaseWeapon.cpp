@@ -12,8 +12,12 @@ ASTUBaseWeapon::ASTUBaseWeapon() {
 	SetRootComponent(WeaponMesh);
 }
 
-void ASTUBaseWeapon::Fire() {
-	MakeShot();
+void ASTUBaseWeapon::StartFire() {
+	GetWorldTimerManager().SetTimer(FireTimer, this, &ASTUBaseWeapon::MakeShot, Cooldown, true, 0.f);
+}
+
+void ASTUBaseWeapon::StopFire() {
+	GetWorldTimerManager().ClearTimer(FireTimer);
 }
 
 void ASTUBaseWeapon::BeginPlay() {
@@ -27,6 +31,21 @@ AController* ASTUBaseWeapon::GetController() const {
 	return nullptr;
 }
 
+FHitResult ASTUBaseWeapon::GetHitResult(FVector& ViewLocation, FRotator& ViewRotation) const {
+	FHitResult HitResult;
+	const auto* World = GetWorld();
+	if (!World) {
+		return HitResult;
+	}
+
+	const auto HalfRad = FMath::DegreesToRadians(BulletSpread);
+	const auto TraceRotation = FMath::VRandCone(ViewRotation.Vector(), HalfRad);
+	const auto TraceEnd = ViewLocation + TraceRotation * TraceDistance;
+
+	World->LineTraceSingleByChannel(HitResult, ViewLocation, TraceEnd, ECC_Visibility);
+	return HitResult;
+}
+
 void ASTUBaseWeapon::MakeShot() {
 	const auto* World = GetWorld();
 	const auto* Controller = GetController();
@@ -38,12 +57,9 @@ void ASTUBaseWeapon::MakeShot() {
 	FRotator ViewRotation;
 	Controller->GetPlayerViewPoint(ViewLocation, ViewRotation);
 
-	FHitResult HitResult;
-	const auto TraceEnd = ViewLocation + ViewRotation.Vector() * TraceDistance;
-	World->LineTraceSingleByChannel(HitResult, ViewLocation, TraceEnd, ECC_Visibility);
-
-	if (HitResult.bBlockingHit) {
+	if (const auto HitResult = GetHitResult(ViewLocation, ViewRotation); HitResult.bBlockingHit) {
 		DrawDebugSphere(World, HitResult.ImpactPoint, 10.f, 24, FColor::Red, false, 5.f);
+
 		if (auto* HitActor = HitResult.HitObjectHandle.FetchActor<ASTUBaseCharacter>()) {
 			HitActor->TakeDamage(Damage, FDamageEvent{}, GetController(), this);
 		}
