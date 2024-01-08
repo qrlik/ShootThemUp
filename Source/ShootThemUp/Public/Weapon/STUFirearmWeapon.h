@@ -11,10 +11,10 @@ class SHOOTTHEMUP_API ASTUFirearmWeapon : public ASTUBaseWeapon {
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	float ShotSpread = 1.5f;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	int16 ShotDistance = 3000;
 
 private:

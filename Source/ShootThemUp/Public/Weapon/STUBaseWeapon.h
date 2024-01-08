@@ -17,20 +17,23 @@ public:
 	void StopFire();
 
 protected:
+	virtual FHitResult GetHitResult(const FVector& ViewLocation, const FRotator& ViewRotation) const;
+	virtual void MakeShot();
+
 	AController* GetController() const;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<USkeletalMeshComponent> WeaponMesh;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	FName MuzzleSocketName = "MuzzleSocket";
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	float Cooldown = 0.1;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	float Damage = 10.f;
 
 private:
-	virtual FHitResult GetHitResult(const FVector& ViewLocation, const FRotator& ViewRotation) const;
-	virtual void MakeShot();
-
 	FTimerHandle FireTimer;
 };
