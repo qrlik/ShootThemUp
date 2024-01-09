@@ -17,10 +17,11 @@ public:
 	void StopFire();
 
 protected:
-	virtual FHitResult GetHitResult(const FVector& ViewLocation, const FRotator& ViewRotation) const;
 	virtual void MakeShot();
 
+	FTransform GetMuzzleTransform() const;
 	AController* GetController() const;
+	FHitResult GetHitResult() const;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<USkeletalMeshComponent> WeaponMesh;
@@ -34,6 +35,14 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	float Damage = 10.f;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	float ShotSpread = 0.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	int16 ShotDistance = 3000;
+
 private:
+	void GetShotTrace(FVector& Start, FVector& End) const;
+
 	FTimerHandle FireTimer;
 };

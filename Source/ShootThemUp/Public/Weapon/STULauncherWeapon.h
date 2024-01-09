@@ -12,10 +12,10 @@ UCLASS()
 class SHOOTTHEMUP_API ASTULauncherWeapon : public ASTUBaseWeapon
 {
 	GENERATED_BODY()
-	virtual FHitResult GetHitResult(const FVector& ViewLocation, const FRotator& ViewRotation) const override;
-	virtual void MakeShot() override;
 
 protected:
+	virtual void MakeShot() override;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
 	TSubclassOf<ASTUProjectile> ProjectileClass;
 };
