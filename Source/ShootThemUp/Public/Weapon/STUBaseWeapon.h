@@ -43,6 +43,8 @@ protected:
 
 private:
 	void GetShotTrace(FVector& Start, FVector& End) const;
+	void TryToShot();
 
 	FTimerHandle FireTimer;
+	bool bShotAccepted = false;
 };

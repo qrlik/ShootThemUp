@@ -28,6 +28,9 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UProjectileMovementComponent> MovementComponent;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	float LifeTime = 5.f;
+
 private:
 	FVector Direction;
 };

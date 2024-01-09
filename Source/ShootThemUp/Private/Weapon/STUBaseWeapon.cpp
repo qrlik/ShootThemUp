@@ -11,20 +11,14 @@ ASTUBaseWeapon::ASTUBaseWeapon() {
 }
 
 void ASTUBaseWeapon::StartFire() {
-	GetWorldTimerManager().SetTimer(FireTimer, this, &ASTUBaseWeapon::MakeShot, Cooldown, true, 0.f);
-
-	//GetWorldTimerManager().SetTimer(
-	//	FireTimer,
-	//	[ptr = TWeakObjectPtr<ASTUBaseWeapon>(this)]() {
-	//		if (ptr.IsValid()) {
-	//			ptr->MakeShot();
-	//		}
-	//	},
-	//	Cooldown, true, 0.f);
+	bShotAccepted = true;
+	if (!FireTimer.IsValid()) {
+		GetWorldTimerManager().SetTimer(FireTimer, this, &ASTUBaseWeapon::TryToShot, Cooldown, true, 0.f);
+	}
 }
 
 void ASTUBaseWeapon::StopFire() {
-	GetWorldTimerManager().ClearTimer(FireTimer);
+	bShotAccepted = false;
 }
 
 FTransform ASTUBaseWeapon::GetMuzzleTransform() const {
@@ -67,6 +61,14 @@ void ASTUBaseWeapon::GetShotTrace(FVector& Start, FVector& End) const {
 	const auto HalfRad = FMath::DegreesToRadians(ShotSpread);
 	const auto TraceRotation = FMath::VRandCone(ViewRotation.Vector(), HalfRad);
 	End = Start + TraceRotation * ShotDistance;
+}
+
+void ASTUBaseWeapon::TryToShot() {
+	if (!bShotAccepted) {
+		GetWorldTimerManager().ClearTimer(FireTimer);
+		return;
+	}
+	MakeShot();
 }
 
 void ASTUBaseWeapon::MakeShot() {
