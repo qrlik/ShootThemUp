@@ -23,6 +23,9 @@ void USTUHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, co
 		return;
 	}
 	AddHealth(-Damage);
+	if (const auto World = GetWorld()) {
+		World->GetTimerManager().ClearTimer(AutoHealTimer);
+	}
 
 	if (IsDead()) {
 		OnDeath.Broadcast();
