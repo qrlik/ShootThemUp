@@ -19,6 +19,9 @@ void USTUWeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason) {
 	Super::EndPlay(EndPlayReason);
 }
 
+void USTUWeaponComponent::OnEquipFinished() const {
+}
+
 void USTUWeaponComponent::NextWeapon() {
 	const auto NextWeaponIndex = (CurrentWeaponIndex + 1) % Weapons.Num();
 	EquipWeapon(NextWeaponIndex);
@@ -63,6 +66,7 @@ void USTUWeaponComponent::EquipWeapon(int32 Index) {
 	if (CurrentWeapon) {
 		CurrentWeapon->StopFire();
 		AttachWeaponToSocket(CurrentWeapon, ArmorySocketName);
+		PlayAnimMontage(EquipAnimMontage);
 	}
 	CurrentWeaponIndex = Index;
 	CurrentWeapon = WeaponToEquip;
@@ -84,4 +88,12 @@ void USTUWeaponComponent::SpawnWeapons() {
 		Weapons.Add(Weapon);
 		AttachWeaponToSocket(Weapon, ArmorySocketName);
 	}
+}
+
+void USTUWeaponComponent::PlayAnimMontage(UAnimMontage* AnimMontage) const {
+	auto* Character = Cast<ACharacter>(GetOwner());
+	if (!Character || !AnimMontage) {
+		return;
+	}
+	Character->PlayAnimMontage(AnimMontage);
 }

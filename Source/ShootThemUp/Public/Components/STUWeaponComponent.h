@@ -17,6 +17,9 @@ public:
 
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
+	UFUNCTION(BlueprintCallable)
+	void OnEquipFinished() const;
+
 	void NextWeapon();
 	void StartFire();
 	void StopFire();
@@ -28,6 +31,9 @@ protected:
 	TArray<TSubclassOf<ASTUBaseWeapon>> WeaponClasses;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	TObjectPtr<UAnimMontage> EquipAnimMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	FName EquipSocketName = "WeaponSocket";
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
@@ -37,6 +43,8 @@ private:
 	void AttachWeaponToSocket(ASTUBaseWeapon* Weapon, const FName& SocketName) const;
 	void EquipWeapon(int32 Index);
 	void SpawnWeapons();
+
+	void PlayAnimMontage(UAnimMontage* AnimMontage) const;
 
 	UPROPERTY()
 	TArray<TObjectPtr<ASTUBaseWeapon>> Weapons;
