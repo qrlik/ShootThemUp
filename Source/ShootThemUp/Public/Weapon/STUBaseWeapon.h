@@ -13,6 +13,8 @@ class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor {
 public:
 	ASTUBaseWeapon();
 
+	virtual void Destroyed() override;
+
 	void StartFire();
 	void StopFire();
 

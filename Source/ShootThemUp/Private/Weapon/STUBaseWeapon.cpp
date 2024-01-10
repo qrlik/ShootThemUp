@@ -10,6 +10,11 @@ ASTUBaseWeapon::ASTUBaseWeapon() {
 	SetRootComponent(WeaponMesh);
 }
 
+void ASTUBaseWeapon::Destroyed() {
+	StopFire();
+	Super::Destroyed();
+}
+
 void ASTUBaseWeapon::StartFire() {
 	bShotAccepted = true;
 	if (!FireTimer.IsValid()) {

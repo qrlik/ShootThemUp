@@ -8,6 +8,22 @@ USTUWeaponComponent::USTUWeaponComponent() {
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
+void USTUWeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+	CurrentWeapon = nullptr;
+	for (const auto Weapon : Weapons) {
+		Weapon->StopFire();
+		Weapon->Destroy();
+	}
+	Weapons.Empty();
+
+	Super::EndPlay(EndPlayReason);
+}
+
+void USTUWeaponComponent::NextWeapon() {
+	const auto NextWeaponIndex = (CurrentWeaponIndex + 1) % Weapons.Num();
+	EquipWeapon(NextWeaponIndex);
+}
+
 void USTUWeaponComponent::StartFire() {
 	if (CurrentWeapon) {
 		CurrentWeapon->StartFire();
@@ -23,20 +39,49 @@ void USTUWeaponComponent::StopFire() {
 void USTUWeaponComponent::BeginPlay() {
 	Super::BeginPlay();
 
-	SpawnWeapon();
+	SpawnWeapons();
+	EquipWeapon(CurrentWeaponIndex);
 }
 
-void USTUWeaponComponent::SpawnWeapon() {
-	const auto Character = Cast<ACharacter>(GetOwner());
+void USTUWeaponComponent::AttachWeaponToSocket(ASTUBaseWeapon* Weapon, const FName& SocketName) const {
+	const auto* Character = Cast<ACharacter>(GetOwner());
+	if (!Character || !Weapon) {
+		return;
+	}
+	const auto AttachmentRules = FAttachmentTransformRules{ EAttachmentRule::SnapToTarget, false };
+	Weapon->AttachToComponent(Character->GetMesh(), AttachmentRules, SocketName);
+}
+
+void USTUWeaponComponent::EquipWeapon(int32 Index) {
+	if (Index >= Weapons.Num()) {
+		return;
+	}
+	const auto WeaponToEquip = Weapons[Index];
+	if (WeaponToEquip == CurrentWeapon) {
+		return;
+	}
+	if (CurrentWeapon) {
+		CurrentWeapon->StopFire();
+		AttachWeaponToSocket(CurrentWeapon, ArmorySocketName);
+	}
+	CurrentWeaponIndex = Index;
+	CurrentWeapon = WeaponToEquip;
+	AttachWeaponToSocket(CurrentWeapon, EquipSocketName);
+}
+
+void USTUWeaponComponent::SpawnWeapons() {
 	const auto World = GetWorld();
-	if (!Character || !World) {
+	if (!World) {
 		return;
 	}
 
-	CurrentWeapon = World->SpawnActor<ASTUBaseWeapon>(WeaponClass); // to do check destroy old weapon
-	if (CurrentWeapon) {
-		const auto AttachmentRules = FAttachmentTransformRules{ EAttachmentRule::SnapToTarget, false };
-		CurrentWeapon->AttachToComponent(Character->GetMesh(), AttachmentRules, WeaponAttachSocketName);
-		CurrentWeapon->SetOwner(GetOwner());
+	for (auto WeaponClass : WeaponClasses) {
+		auto* Weapon = World->SpawnActor<ASTUBaseWeapon>(WeaponClass);
+		if (!Weapon) {
+			continue;
+		}
+		Weapon->SetOwner(GetOwner());
+		Weapons.Add(Weapon);
+		AttachWeaponToSocket(Weapon, ArmorySocketName);
 	}
 }
