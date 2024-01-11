@@ -47,9 +47,8 @@ void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASTUBaseCharacter::Jump);
 	PlayerInputComponent->BindAction("Run", IE_Pressed, this, &ASTUBaseCharacter::StartRun);
 	PlayerInputComponent->BindAction("Run", IE_Released, this, &ASTUBaseCharacter::StopRun);
-	PlayerInputComponent->BindAction("Fire", IE_Pressed, WeaponComponent.Get(), &USTUWeaponComponent::StartFire);
-	PlayerInputComponent->BindAction("Fire", IE_Released, WeaponComponent.Get(), &USTUWeaponComponent::StopFire);
 	PlayerInputComponent->BindAction("NextWeapon", IE_Released, WeaponComponent.Get(), &USTUWeaponComponent::NextWeapon);
+	PlayerInputComponent->BindAxis("Fire", WeaponComponent.Get(), &USTUWeaponComponent::OnFire);
 	PlayerInputComponent->BindAxis("MoveForward", this, &ASTUBaseCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ASTUBaseCharacter::MoveRight);
 	PlayerInputComponent->BindAxis("LookUp", this, &ASTUBaseCharacter::AddControllerPitchInput);

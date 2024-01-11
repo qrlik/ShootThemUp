@@ -19,16 +19,29 @@ void USTUWeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason) {
 	Super::EndPlay(EndPlayReason);
 }
 
-void USTUWeaponComponent::OnEquipFinished() const {
+void USTUWeaponComponent::OnEquipFinished() {
+	bEquipInProgress = false;
+}
+
+void USTUWeaponComponent::OnFire(float Amount) {
+	if (FMath::IsNearlyZero(Amount)) {
+		StopFire();
+	}
+	else {
+		StartFire();
+	}
 }
 
 void USTUWeaponComponent::NextWeapon() {
+	if (!CanEquip()) {
+		return;
+	}
 	const auto NextWeaponIndex = (CurrentWeaponIndex + 1) % Weapons.Num();
 	EquipWeapon(NextWeaponIndex);
 }
 
 void USTUWeaponComponent::StartFire() {
-	if (CurrentWeapon) {
+	if (CanFire()) {
 		CurrentWeapon->StartFire();
 	}
 }
@@ -44,6 +57,14 @@ void USTUWeaponComponent::BeginPlay() {
 
 	SpawnWeapons();
 	EquipWeapon(CurrentWeaponIndex);
+}
+
+bool USTUWeaponComponent::CanFire() const {
+	return CurrentWeapon && !bEquipInProgress;
+}
+
+bool USTUWeaponComponent::CanEquip() const {
+	return !bEquipInProgress;
 }
 
 void USTUWeaponComponent::AttachWeaponToSocket(ASTUBaseWeapon* Weapon, const FName& SocketName) const {
@@ -67,6 +88,7 @@ void USTUWeaponComponent::EquipWeapon(int32 Index) {
 		CurrentWeapon->StopFire();
 		AttachWeaponToSocket(CurrentWeapon, ArmorySocketName);
 		PlayAnimMontage(EquipAnimMontage);
+		bEquipInProgress = true;
 	}
 	CurrentWeaponIndex = Index;
 	CurrentWeapon = WeaponToEquip;

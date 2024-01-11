@@ -18,11 +18,10 @@ public:
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	UFUNCTION(BlueprintCallable)
-	void OnEquipFinished() const;
+	void OnEquipFinished();
 
+	void OnFire(float Amount);
 	void NextWeapon();
-	void StartFire();
-	void StopFire();
 
 protected:
 	virtual void BeginPlay() override;
@@ -40,6 +39,12 @@ protected:
 	FName ArmorySocketName = "ArmorySocket";
 
 private:
+	bool CanFire() const;
+	bool CanEquip() const;
+
+	void StartFire();
+	void StopFire();
+
 	void AttachWeaponToSocket(ASTUBaseWeapon* Weapon, const FName& SocketName) const;
 	void EquipWeapon(int32 Index);
 	void SpawnWeapons();
@@ -52,4 +57,5 @@ private:
 	TObjectPtr<ASTUBaseWeapon> CurrentWeapon;
 
 	int32 CurrentWeaponIndex = 0;
+	bool bEquipInProgress = false;
 };
