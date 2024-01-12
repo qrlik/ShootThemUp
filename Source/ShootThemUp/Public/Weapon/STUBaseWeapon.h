@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "STUBaseWeapon.generated.h"
 
+DECLARE_DELEGATE(FOnClipEmptySignature)
+
 USTRUCT(BlueprintType)
 struct FAmmoData {
 	GENERATED_BODY()
@@ -29,8 +31,13 @@ public:
 
 	virtual void Destroyed() override;
 
+	bool CanReload() const;
+
+	void ChangeClip();
 	void StartFire();
 	void StopFire();
+
+	FOnClipEmptySignature OnClipEmpty;
 
 protected:
 	virtual void BeginPlay() override;
@@ -68,7 +75,6 @@ protected:
 
 private:
 	void DecreaseAmmo();
-	void ChangeClip();
 	void LogAmmo() const;
 
 	void GetShotTrace(FVector& Start, FVector& End) const;

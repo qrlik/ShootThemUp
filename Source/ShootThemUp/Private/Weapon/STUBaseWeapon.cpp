@@ -3,6 +3,8 @@
 #include "Weapon/STUBaseWeapon.h"
 #include "GameFramework/Character.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogBaseWeapon, All, All)
+
 ASTUBaseWeapon::ASTUBaseWeapon() {
 	PrimaryActorTick.bCanEverTick = false;
 
@@ -13,6 +15,10 @@ ASTUBaseWeapon::ASTUBaseWeapon() {
 void ASTUBaseWeapon::Destroyed() {
 	StopFire();
 	Super::Destroyed();
+}
+
+bool ASTUBaseWeapon::CanReload() const {
+	return CurrentAmmo.Bullets < DefaultAmmo.Bullets && (CurrentAmmo.Clips > 0 || CurrentAmmo.Infinite);
 }
 
 void ASTUBaseWeapon::StartFire() {
@@ -79,19 +85,29 @@ void ASTUBaseWeapon::MakeShotImpl() {
 }
 
 void ASTUBaseWeapon::DecreaseAmmo() {
+	if (CurrentAmmo.Bullets <= 0) {
+		UE_LOG(LogBaseWeapon, Warning, TEXT("ASTUBaseWeapon::DecreaseAmmo No more bullets"));
+		return;
+	}
+
 	CurrentAmmo.Bullets -= 1;
 	LogAmmo();
 
 	if (IsClipEmpty() && !IsAmmoEmpty()) {
-		ChangeClip();
+		OnClipEmpty.Execute();
 	}
 }
 
 void ASTUBaseWeapon::ChangeClip() {
-	CurrentAmmo.Bullets = DefaultAmmo.Bullets;
 	if (!CurrentAmmo.Infinite) {
+		if (CurrentAmmo.Clips <= 0) {
+			UE_LOG(LogBaseWeapon, Warning, TEXT("ASTUBaseWeapon::ChangeClip No more clips"));
+			return;
+		}
+
 		CurrentAmmo.Clips -= 1;
 	}
+	CurrentAmmo.Bullets = DefaultAmmo.Bullets;
 	UE_LOG(LogTemp, Display, TEXT("========= CHANGE CLIP =========="));
 }
 

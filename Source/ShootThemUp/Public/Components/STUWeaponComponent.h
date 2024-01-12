@@ -56,6 +56,8 @@ protected:
 private:
 	bool CanDoAction() const;
 
+	void OnEmptyClip();
+
 	void StartFire();
 	void StopFire();
 
