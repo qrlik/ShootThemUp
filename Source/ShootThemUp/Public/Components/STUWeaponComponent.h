@@ -30,6 +30,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void OnEquipFinished();
+	UFUNCTION(BlueprintCallable)
+	void OnReloadFinished();
+
 
 	void OnFire(float Amount);
 	void NextWeapon();
@@ -51,8 +54,7 @@ protected:
 	FName ArmorySocketName = "ArmorySocket";
 
 private:
-	bool CanFire() const;
-	bool CanEquip() const;
+	bool CanDoAction() const;
 
 	void StartFire();
 	void StopFire();
@@ -70,4 +72,5 @@ private:
 
 	int32 CurrentWeaponIndex = 0;
 	bool bEquipInProgress = false;
+	bool bReloadInProgress = false;
 };

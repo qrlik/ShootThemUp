@@ -21,6 +21,12 @@ void USTUWeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason) {
 
 void USTUWeaponComponent::OnEquipFinished() {
 	bEquipInProgress = false;
+	UE_LOG(LogTemp, Display, TEXT("OnEquipFinished"));
+}
+
+void USTUWeaponComponent::OnReloadFinished() {
+	bReloadInProgress = false;
+	UE_LOG(LogTemp, Display, TEXT("OnReloadFinished"));
 }
 
 void USTUWeaponComponent::OnFire(float Amount) {
@@ -33,7 +39,7 @@ void USTUWeaponComponent::OnFire(float Amount) {
 }
 
 void USTUWeaponComponent::NextWeapon() {
-	if (!CanEquip()) {
+	if (!CanDoAction()) {
 		return;
 	}
 	const auto NextWeaponIndex = (CurrentWeaponIndex + 1) % Weapons.Num();
@@ -41,17 +47,27 @@ void USTUWeaponComponent::NextWeapon() {
 }
 
 void USTUWeaponComponent::Reload() {
+	if (!CanDoAction()) {
+		return;
+	}
 	const auto CurrentData = WeaponData.FindByPredicate([Weapon = CurrentWeapon](const FWeaponData& Data) {
 		return Weapon.GetClass() == Data.WeaponClass;
 	});
 	if (CurrentData) {
 		PlayAnimMontage(CurrentData->ReloadAnimMontage);
+		bReloadInProgress = true;
 	}
 }
 
 void USTUWeaponComponent::StartFire() {
-	if (CanFire()) {
+	if (!CurrentWeapon) {
+		return;
+	}
+	if (CanDoAction()) {
 		CurrentWeapon->StartFire();
+	}
+	else {
+		CurrentWeapon->StopFire();
 	}
 }
 
@@ -68,12 +84,8 @@ void USTUWeaponComponent::BeginPlay() {
 	EquipWeapon(CurrentWeaponIndex);
 }
 
-bool USTUWeaponComponent::CanFire() const {
-	return CurrentWeapon && !bEquipInProgress;
-}
-
-bool USTUWeaponComponent::CanEquip() const {
-	return !bEquipInProgress;
+bool USTUWeaponComponent::CanDoAction() const {
+	return !bEquipInProgress && !bReloadInProgress;
 }
 
 void USTUWeaponComponent::AttachWeaponToSocket(ASTUBaseWeapon* Weapon, const FName& SocketName) const {
@@ -127,4 +139,5 @@ void USTUWeaponComponent::PlayAnimMontage(UAnimMontage* AnimMontage) const {
 		return;
 	}
 	Character->PlayAnimMontage(AnimMontage);
+	UE_LOG(LogTemp, Display, TEXT("PlayAnimMontage %s"), *AnimMontage->GetName());
 }
