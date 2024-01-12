@@ -40,6 +40,15 @@ void USTUWeaponComponent::NextWeapon() {
 	EquipWeapon(NextWeaponIndex);
 }
 
+void USTUWeaponComponent::Reload() {
+	const auto CurrentData = WeaponData.FindByPredicate([Weapon = CurrentWeapon](const FWeaponData& Data) {
+		return Weapon.GetClass() == Data.WeaponClass;
+	});
+	if (CurrentData) {
+		PlayAnimMontage(CurrentData->ReloadAnimMontage);
+	}
+}
+
 void USTUWeaponComponent::StartFire() {
 	if (CanFire()) {
 		CurrentWeapon->StartFire();
@@ -77,7 +86,7 @@ void USTUWeaponComponent::AttachWeaponToSocket(ASTUBaseWeapon* Weapon, const FNa
 }
 
 void USTUWeaponComponent::EquipWeapon(int32 Index) {
-	if (Index >= Weapons.Num()) {
+	if (Index < 0 && Index >= Weapons.Num()) {
 		return;
 	}
 	const auto WeaponToEquip = Weapons[Index];
@@ -101,8 +110,8 @@ void USTUWeaponComponent::SpawnWeapons() {
 		return;
 	}
 
-	for (auto WeaponClass : WeaponClasses) {
-		auto* Weapon = World->SpawnActor<ASTUBaseWeapon>(WeaponClass);
+	for (const auto& Data : WeaponData) {
+		auto* Weapon = World->SpawnActor<ASTUBaseWeapon>(Data.WeaponClass);
 		if (!Weapon) {
 			continue;
 		}
