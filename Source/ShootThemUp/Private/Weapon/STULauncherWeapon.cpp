@@ -3,7 +3,7 @@
 #include "Weapon/STULauncherWeapon.h"
 #include "Weapon/STUProjectile.h"
 
-void ASTULauncherWeapon::MakeShot() {
+void ASTULauncherWeapon::MakeShotImpl() {
 	auto* World = GetWorld();
 	if (!World) {
 		return;

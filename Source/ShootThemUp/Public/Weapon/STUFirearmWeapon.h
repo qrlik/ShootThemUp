@@ -11,5 +11,5 @@ class SHOOTTHEMUP_API ASTUFirearmWeapon : public ASTUBaseWeapon {
 	GENERATED_BODY()
 
 protected:
-	virtual void MakeShot() override;
+	virtual void MakeShotImpl() override;
 };

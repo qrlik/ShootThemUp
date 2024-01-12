@@ -6,6 +6,20 @@
 #include "GameFramework/Actor.h"
 #include "STUBaseWeapon.generated.h"
 
+USTRUCT(BlueprintType)
+struct FAmmoData {
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (ClampMin = "0"))
+	int32 Bullets = 0;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (ClampMin = "0", EditCondition = "!Infinite"))
+	int32 Clips = 0;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	bool Infinite = false;
+};
+
 UCLASS()
 class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor {
 	GENERATED_BODY()
@@ -19,14 +33,23 @@ public:
 	void StopFire();
 
 protected:
-	virtual void MakeShot();
+	virtual void BeginPlay() override;
+	virtual void MakeShotImpl();
 
 	FTransform GetMuzzleTransform() const;
 	AController* GetController() const;
 	FHitResult GetHitResult() const;
 
+	bool IsAmmoEmpty() const;
+	bool IsClipEmpty() const;
+
+	void MakeShot();
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<USkeletalMeshComponent> WeaponMesh;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	FAmmoData DefaultAmmo;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	FName MuzzleSocketName = "MuzzleSocket";
@@ -44,9 +67,14 @@ protected:
 	int16 ShotDistance = 3000;
 
 private:
+	void DecreaseAmmo();
+	void ChangeClip();
+	void LogAmmo() const;
+
 	void GetShotTrace(FVector& Start, FVector& End) const;
 	void TryToShot();
 
+	FAmmoData CurrentAmmo;
 	FTimerHandle FireTimer;
 	bool bShotAccepted = false;
 };

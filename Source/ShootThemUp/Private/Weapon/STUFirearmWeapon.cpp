@@ -3,7 +3,7 @@
 #include "Weapon/STUFirearmWeapon.h"
 #include "Player/STUBaseCharacter.h"
 
-void ASTUFirearmWeapon::MakeShot() {
+void ASTUFirearmWeapon::MakeShotImpl() {
 	const auto* World = GetWorld();
 	if (!World) {
 		return;
