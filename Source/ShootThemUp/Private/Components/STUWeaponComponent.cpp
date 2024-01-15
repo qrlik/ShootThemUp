@@ -32,6 +32,13 @@ void USTUWeaponComponent::OnReloadFinished() {
 	UE_LOG(LogTemp, Display, TEXT("OnReloadFinished"));
 }
 
+FWeaponUIData USTUWeaponComponent::GetUIData() const {
+	if (CurrentWeapon) {
+		return CurrentWeapon->GetUIData();
+	}
+	return {};
+}
+
 void USTUWeaponComponent::OnFire(float Amount) {
 	if (FMath::IsNearlyZero(Amount)) {
 		StopFire();

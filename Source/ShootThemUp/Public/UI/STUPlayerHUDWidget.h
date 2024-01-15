@@ -4,17 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Weapon/STUBaseWeapon.h"
 #include "STUPlayerHUDWidget.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class SHOOTTHEMUP_API USTUPlayerHUDWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintCallable)
+	FWeaponUIData GetWeaponUIData() const;
+
 	UFUNCTION(BlueprintCallable)
 	float GetHealthPercent() const;
 };

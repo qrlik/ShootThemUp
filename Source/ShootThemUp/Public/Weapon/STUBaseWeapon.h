@@ -22,6 +22,17 @@ struct FAmmoData {
 	bool Infinite = false;
 };
 
+USTRUCT(BlueprintType)
+struct FWeaponUIData {
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+	TObjectPtr<UTexture2D> MainIcon;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+	UTexture2D* CrossHairIcon;
+};
+
 UCLASS()
 class SHOOTTHEMUP_API ASTUBaseWeapon : public AActor {
 	GENERATED_BODY()
@@ -31,6 +42,7 @@ public:
 
 	virtual void Destroyed() override;
 
+	FWeaponUIData GetUIData() const { return UIData; }
 	bool CanReload() const;
 
 	void ChangeClip();
@@ -54,6 +66,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<USkeletalMeshComponent> WeaponMesh;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	FWeaponUIData UIData;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	FAmmoData DefaultAmmo;

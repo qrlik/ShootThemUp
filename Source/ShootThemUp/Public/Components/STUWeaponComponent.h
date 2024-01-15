@@ -4,9 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Weapon/STUBaseWeapon.h"
 #include "STUWeaponComponent.generated.h"
-
-class ASTUBaseWeapon;
 
 USTRUCT(BlueprintType)
 struct FWeaponData {
@@ -33,7 +32,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void OnReloadFinished();
 
-
+	FWeaponUIData GetUIData() const;
 	void OnFire(float Amount);
 	void NextWeapon();
 	void Reload();
