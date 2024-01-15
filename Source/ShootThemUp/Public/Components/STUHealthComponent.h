@@ -27,11 +27,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Health")
 	float GetHealth() const { return Health; }
 
+	UFUNCTION(BlueprintCallable, Category = "Health")
+	float GetHealthPercent() const { return Health / MaxHealth; }
+
 	FOnHealthChangeSignature OnHealthChange;
 	FOnDeathSignature OnDeath;
 
 protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (ClampMin = "0.0"), Category = "Health")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (ClampMin = "1.0"), Category = "Health")
 	float MaxHealth = 100.f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Health")

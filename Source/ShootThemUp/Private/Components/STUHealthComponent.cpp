@@ -11,6 +11,7 @@ USTUHealthComponent::USTUHealthComponent() :
 
 void USTUHealthComponent::BeginPlay() {
 	Super::BeginPlay();
+	check(MaxHealth > 0.f);
 }
 
 bool USTUHealthComponent::IsDead() const {
