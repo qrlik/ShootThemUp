@@ -13,6 +13,12 @@ class SHOOTTHEMUP_API ASTUGameHUD : public AHUD {
 public:
 	virtual void DrawHUD() override;
 
+protected:
+	virtual void BeginPlay() override;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<UUserWidget> PlayerHUDWidgetClass;
+
 private:
 	void DrawCrossHair();
 };
