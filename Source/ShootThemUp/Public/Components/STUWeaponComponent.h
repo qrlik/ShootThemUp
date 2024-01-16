@@ -32,6 +32,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void OnReloadFinished();
 
+	FAmmoData GetAmmoData() const;
 	FWeaponUIData GetUIData() const;
 	void OnFire(float Amount);
 	void NextWeapon();

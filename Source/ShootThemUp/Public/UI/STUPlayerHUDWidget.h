@@ -14,7 +14,10 @@ class SHOOTTHEMUP_API USTUPlayerHUDWidget : public UUserWidget
 
 public:
 	UFUNCTION(BlueprintCallable)
-	FWeaponUIData GetWeaponUIData() const;
+	FWeaponUIData GetCurrentWeaponUIData() const;
+
+	UFUNCTION(BlueprintCallable)
+	FAmmoData GetCurrentWeaponAmmo() const;
 
 	UFUNCTION(BlueprintCallable)
 	float GetHealthPercent() const;

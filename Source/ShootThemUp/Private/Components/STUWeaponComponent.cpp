@@ -32,6 +32,13 @@ void USTUWeaponComponent::OnReloadFinished() {
 	UE_LOG(LogTemp, Display, TEXT("OnReloadFinished"));
 }
 
+FAmmoData USTUWeaponComponent::GetAmmoData() const {
+	if (CurrentWeapon) {
+		return CurrentWeapon->GetAmmoData();
+	}
+	return {};
+}
+
 FWeaponUIData USTUWeaponComponent::GetUIData() const {
 	if (CurrentWeapon) {
 		return CurrentWeapon->GetUIData();

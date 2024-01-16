@@ -12,13 +12,13 @@ USTRUCT(BlueprintType)
 struct FAmmoData {
 	GENERATED_BODY()
 
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (ClampMin = "0"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", meta = (ClampMin = "0"))
 	int32 Bullets = 0;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (ClampMin = "0", EditCondition = "!Infinite"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon", meta = (ClampMin = "0", EditCondition = "!Infinite"))
 	int32 Clips = 0;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
 	bool Infinite = false;
 };
 
@@ -42,7 +42,8 @@ public:
 
 	virtual void Destroyed() override;
 
-	FWeaponUIData GetUIData() const { return UIData; }
+	const FWeaponUIData& GetUIData() const { return UIData; }
+	const FAmmoData& GetAmmoData() const { return CurrentAmmo; }
 	bool CanReload() const;
 
 	void ChangeClip();
