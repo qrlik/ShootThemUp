@@ -21,4 +21,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	float GetHealthPercent() const;
+
+	UFUNCTION(BlueprintCallable)
+	bool IsPlayerAlive() const;
+
+	UFUNCTION(BlueprintCallable)
+	bool IsPlayerSpectating() const;
 };

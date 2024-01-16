@@ -36,3 +36,17 @@ float USTUPlayerHUDWidget::GetHealthPercent() const {
 	}
 	return 0.f;
 }
+
+bool USTUPlayerHUDWidget::IsPlayerAlive() const {
+	if (const auto* HealthComponent = GetComponentByClass<USTUHealthComponent>(GetOwningPlayerPawn())) {
+		return !HealthComponent->IsDead();
+	}
+	return false;
+}
+
+bool USTUPlayerHUDWidget::IsPlayerSpectating() const {
+	if (const auto* Controller = GetOwningPlayer()) {
+		return Controller->GetStateName() == NAME_Spectating;
+	}
+	return false;
+}
