@@ -9,4 +9,7 @@
 UCLASS()
 class SHOOTTHEMUP_API ASTUAmmoPickup : public ASTUBasePickup {
 	GENERATED_BODY()
+
+protected:
+	virtual bool GiveTo(APawn* Pawn) const override;
 };

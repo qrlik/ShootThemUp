@@ -24,6 +24,26 @@ void ASTUBasePickup::Tick(float DeltaTime) {
 void ASTUBasePickup::NotifyActorBeginOverlap(AActor* OtherActor) {
 	Super::NotifyActorBeginOverlap(OtherActor);
 
-	UE_LOG(LogTemp, Warning, TEXT("NotifyActorBeginOverlap"));
+	if (GiveTo(Cast<APawn>(OtherActor))) {
+		OnTake();
+	}
+}
+
+bool ASTUBasePickup::GiveTo(APawn* Pawn) const {
+	// to do add impls and pawn check
+	return false;
+}
+
+void ASTUBasePickup::OnTake() const {
+	CollisionComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	CollisionComponent->SetVisibility(false, true);
+
+	FTimerHandle RespawnTimer;
+	GetWorldTimerManager().SetTimer(RespawnTimer, this, &ASTUBasePickup::Respawn, RespawnTime);
+}
+
+void ASTUBasePickup::Respawn() const {
+	CollisionComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	CollisionComponent->SetVisibility(true, true);
 }
 

@@ -24,4 +24,13 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UStaticMeshComponent* MeshComponent;
+
+	UPROPERTY(EditAnywhere, Category = "Pickup")
+	float RespawnTime = 5.f;
+
+	virtual bool GiveTo(APawn* Pawn) const;
+
+private:
+	void OnTake() const;
+	void Respawn() const;
 };
