@@ -2,6 +2,6 @@
 
 #include "Pickups/STUAmmoPickup.h"
 
-bool ASTUAmmoPickup::GiveTo(APawn* Pawn) const {
+bool ASTUAmmoPickup::GiveTo(TObjectPtr<APawn> Pawn) const {
 	return true;
 }

@@ -17,6 +17,9 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+	virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
+
+	bool IsActive() const;
 
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
@@ -28,9 +31,15 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Pickup")
 	float RespawnTime = 5.f;
 
-	virtual bool GiveTo(APawn* Pawn) const;
+	virtual bool GiveTo(TObjectPtr<APawn> Pawn) const;
 
 private:
-	void OnTake() const;
-	void Respawn() const;
+	void TryToGive();
+	void OnTake();
+	void Respawn();
+
+	UPROPERTY()
+	TArray<TObjectPtr<APawn>> Candidates;
+
+	bool bActive = true;
 };

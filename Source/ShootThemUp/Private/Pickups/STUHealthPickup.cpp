@@ -2,6 +2,6 @@
 
 #include "Pickups/STUHealthPickup.h"
 
-bool ASTUHealthPickup::GiveTo(APawn* Pawn) const {
+bool ASTUHealthPickup::GiveTo(TObjectPtr<APawn> Pawn) const {
 	return true;
 }

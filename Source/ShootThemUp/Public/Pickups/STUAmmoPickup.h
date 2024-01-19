@@ -11,5 +11,5 @@ class SHOOTTHEMUP_API ASTUAmmoPickup : public ASTUBasePickup {
 	GENERATED_BODY()
 
 protected:
-	virtual bool GiveTo(APawn* Pawn) const override;
+	virtual bool GiveTo(TObjectPtr<APawn> Pawn) const override;
 };
