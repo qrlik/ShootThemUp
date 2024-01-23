@@ -2,6 +2,8 @@
 
 #include "Pickups/STUBasePickup.h"
 #include "Components/SphereComponent.h"
+#include "Components/STUHealthComponent.h"
+#include "Player/STUBaseCharacter.h"
 
 ASTUBasePickup::ASTUBasePickup() {
 	PrimaryActorTick.bCanEverTick = true;
@@ -43,6 +45,17 @@ bool ASTUBasePickup::IsActive() const {
 }
 
 bool ASTUBasePickup::GiveTo(TObjectPtr<APawn> Pawn) const {
+	auto* Character = Cast<ASTUBaseCharacter>(Pawn);
+	if (!Character) {
+		return false;
+	}
+	if (const auto* HealthComponent = Character->GetHealthComponent(); HealthComponent && HealthComponent->IsDead()) {
+		return false;
+	}
+	return GiveToImpl(Character);
+}
+
+bool ASTUBasePickup::GiveToImpl(ASTUBaseCharacter* Character) const {
 	return false;
 }
 

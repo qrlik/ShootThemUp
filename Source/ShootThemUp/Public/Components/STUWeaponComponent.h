@@ -34,6 +34,7 @@ public:
 
 	FAmmoData GetAmmoData() const;
 	FWeaponUIData GetUIData() const;
+	bool TryToAddAmmo(TSubclassOf<ASTUBaseWeapon> WeaponType, int32 ClipsAmount) const;
 	void OnFire(float Amount);
 	void NextWeapon();
 	void Reload();
@@ -56,7 +57,7 @@ protected:
 private:
 	bool CanDoAction() const;
 
-	void OnEmptyClip();
+	void OnEmptyClip(TSubclassOf<ASTUBaseWeapon> WeaponClass);
 
 	void StartFire();
 	void StopFire();

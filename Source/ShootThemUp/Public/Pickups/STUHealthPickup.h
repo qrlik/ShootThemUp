@@ -11,5 +11,5 @@ class SHOOTTHEMUP_API ASTUHealthPickup : public ASTUBasePickup {
 	GENERATED_BODY()
 
 protected:
-	virtual bool GiveTo(TObjectPtr<APawn> Pawn) const override;
+	virtual bool GiveToImpl(ASTUBaseCharacter* Character) const override;
 };

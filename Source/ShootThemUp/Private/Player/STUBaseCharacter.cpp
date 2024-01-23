@@ -34,6 +34,12 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& Initializer):
 void ASTUBaseCharacter::BeginPlay() {
 	Super::BeginPlay();
 
+	check(HealthComponent);
+	check(HealthTextComponent);
+	check(SpringArmComponent);
+	check(CameraComponent);
+	check(WeaponComponent);
+
 	OnTakeAnyDamage.AddDynamic(HealthComponent.Get(), &USTUHealthComponent::OnTakeAnyDamage);
 	LandedDelegate.AddDynamic(this, &ASTUBaseCharacter::OnGroundLanded);
 	HealthComponent->OnHealthChange.BindUObject(this, &ASTUBaseCharacter::UpdateHealthText);
@@ -66,6 +72,14 @@ float ASTUBaseCharacter::GetDirectionAngle() const {
 	const auto Degrees = FMath::RadiansToDegrees(Angle);
 	const auto Cross = Forward.Cross(VelocityNormal);
 	return (FMath::IsNearlyZero(Cross.Z)) ? Degrees : Degrees * FMath::Sign(Cross.Z);
+}
+
+USTUHealthComponent* ASTUBaseCharacter::GetHealthComponent() const {
+	return HealthComponent;
+}
+
+USTUWeaponComponent* ASTUBaseCharacter::GetWeaponComponent() const {
+	return WeaponComponent;
 }
 
 void ASTUBaseCharacter::OnDeath() {

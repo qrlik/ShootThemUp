@@ -27,6 +27,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	float GetDirectionAngle() const;
 
+	USTUHealthComponent* GetHealthComponent() const;
+	USTUWeaponComponent* GetWeaponComponent() const;
+
 protected:
 	virtual void BeginPlay() override;
 

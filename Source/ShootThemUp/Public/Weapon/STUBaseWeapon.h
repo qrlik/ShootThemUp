@@ -45,8 +45,10 @@ public:
 	const FWeaponUIData& GetUIData() const { return UIData; }
 	const FAmmoData& GetAmmoData() const { return CurrentAmmo; }
 	bool CanReload() const;
+	bool TryToAddAmmo(int32 ClipsAmount);
 
 	void ChangeClip();
+	void OnEquip() const;
 	void StartFire();
 	void StopFire();
 
@@ -61,8 +63,10 @@ protected:
 	FHitResult GetHitResult() const;
 
 	bool IsAmmoEmpty() const;
+	bool IsAmmoFull() const;
 	bool IsClipEmpty() const;
 
+	void CheckEmptyClip() const;
 	void MakeShot();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
@@ -91,8 +95,6 @@ protected:
 
 private:
 	void DecreaseAmmo();
-	void LogAmmo() const;
-
 	void GetShotTrace(FVector& Start, FVector& End) const;
 	void TryToShot();
 

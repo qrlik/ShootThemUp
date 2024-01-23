@@ -21,7 +21,9 @@ void USTUWeaponComponent::EndPlay(const EEndPlayReason::Type EndPlayReason) {
 
 void USTUWeaponComponent::OnEquipFinished() {
 	bEquipInProgress = false;
-	UE_LOG(LogTemp, Display, TEXT("OnEquipFinished"));
+	if (CurrentWeapon) {
+		CurrentWeapon->OnEquip();
+	}
 }
 
 void USTUWeaponComponent::OnReloadFinished() {
@@ -29,7 +31,6 @@ void USTUWeaponComponent::OnReloadFinished() {
 	if (CurrentWeapon) {
 		CurrentWeapon->ChangeClip();
 	}
-	UE_LOG(LogTemp, Display, TEXT("OnReloadFinished"));
 }
 
 FAmmoData USTUWeaponComponent::GetAmmoData() const {
@@ -74,6 +75,15 @@ void USTUWeaponComponent::Reload() {
 	}
 }
 
+bool USTUWeaponComponent::TryToAddAmmo(TSubclassOf<ASTUBaseWeapon> WeaponType, int32 ClipsAmount) const {
+	for (const auto& Weapon : Weapons) {
+		if (Weapon && Weapon->IsA(WeaponType)) {
+			return Weapon->TryToAddAmmo(ClipsAmount);
+		}
+	}
+	return false;
+}
+
 void USTUWeaponComponent::StartFire() {
 	if (!CurrentWeapon) {
 		return;
@@ -103,8 +113,10 @@ bool USTUWeaponComponent::CanDoAction() const {
 	return !bEquipInProgress && !bReloadInProgress;
 }
 
-void USTUWeaponComponent::OnEmptyClip() {
-	Reload();
+void USTUWeaponComponent::OnEmptyClip(TSubclassOf<ASTUBaseWeapon> WeaponClass) {
+	if (WeaponClass == CurrentWeapon.GetClass()) {
+		Reload();
+	}
 }
 
 void USTUWeaponComponent::AttachWeaponToSocket(ASTUBaseWeapon* Weapon, const FName& SocketName) const {
@@ -147,7 +159,7 @@ void USTUWeaponComponent::SpawnWeapons() {
 			continue;
 		}
 		Weapon->SetOwner(GetOwner());
-		Weapon->OnClipEmpty.BindUObject(this, &USTUWeaponComponent::OnEmptyClip);
+		Weapon->OnClipEmpty.BindUObject(this, &USTUWeaponComponent::OnEmptyClip, Data.WeaponClass);
 		Weapons.Add(Weapon);
 		AttachWeaponToSocket(Weapon, ArmorySocketName);
 	}
@@ -159,5 +171,4 @@ void USTUWeaponComponent::PlayAnimMontage(UAnimMontage* AnimMontage) const {
 		return;
 	}
 	Character->PlayAnimMontage(AnimMontage);
-	UE_LOG(LogTemp, Display, TEXT("PlayAnimMontage %s"), *AnimMontage->GetName());
 }

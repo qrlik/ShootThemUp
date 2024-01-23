@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "STUBasePickup.generated.h"
 
+class ASTUBaseCharacter;
 class USphereComponent;
 
 UCLASS()
@@ -31,9 +32,10 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Pickup")
 	float RespawnTime = 5.f;
 
-	virtual bool GiveTo(TObjectPtr<APawn> Pawn) const;
+	virtual bool GiveToImpl(ASTUBaseCharacter* Character) const;
 
 private:
+	bool GiveTo(TObjectPtr<APawn> Pawn) const;
 	void TryToGive();
 	void OnTake();
 	void Respawn();
