@@ -16,6 +16,8 @@ ASTUBasePickup::ASTUBasePickup() {
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("MeshComponent");
 	MeshComponent->SetupAttachment(CollisionComponent);
 	MeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	GenerateRotationSpeed();
 }
 
 void ASTUBasePickup::Tick(float DeltaTime) {
@@ -24,6 +26,7 @@ void ASTUBasePickup::Tick(float DeltaTime) {
 	check(CollisionComponent);
 
 	TryToGive();
+	Rotate(DeltaTime);
 }
 
 void ASTUBasePickup::NotifyActorBeginOverlap(AActor* OtherActor) {
@@ -55,6 +58,11 @@ bool ASTUBasePickup::GiveTo(TObjectPtr<APawn> Pawn) const {
 	return GiveToImpl(Character);
 }
 
+void ASTUBasePickup::GenerateRotationSpeed() {
+	const auto Direction = FMath::RandBool() ? 1 : -1;
+	DegreeRotationSpeed = FMath::RandRange(MinMaxRotationSpeed.X, MinMaxRotationSpeed.Y) * Direction;
+}
+
 bool ASTUBasePickup::GiveToImpl(ASTUBaseCharacter* Character) const {
 	return false;
 }
@@ -83,5 +91,11 @@ void ASTUBasePickup::OnTake() {
 void ASTUBasePickup::Respawn() {
 	CollisionComponent->SetVisibility(true, true);
 	CollisionComponent->SetCollisionResponseToAllChannels(ECR_Overlap);
+	GenerateRotationSpeed();
 	bActive = true;
+}
+
+void ASTUBasePickup::Rotate(float DeltaTime) {
+	const auto RotateDelta = DeltaTime / 1.0 * DegreeRotationSpeed;
+	AddActorLocalRotation(FRotator{ 0.0, RotateDelta, 0.0 });
 }

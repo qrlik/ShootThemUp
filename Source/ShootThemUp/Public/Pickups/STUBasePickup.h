@@ -29,6 +29,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UStaticMeshComponent* MeshComponent;
 
+	UPROPERTY(EditAnywhere, Category = "Pickup", meta = (ClampMin = "0.0"))
+	FVector2D MinMaxRotationSpeed = { 25.0, 75.0 };
+
 	UPROPERTY(EditAnywhere, Category = "Pickup")
 	float RespawnTime = 5.f;
 
@@ -36,12 +39,15 @@ protected:
 
 private:
 	bool GiveTo(TObjectPtr<APawn> Pawn) const;
-	void TryToGive();
+	void GenerateRotationSpeed();
 	void OnTake();
 	void Respawn();
+	void Rotate(float DeltaTime);
+	void TryToGive();
 
 	UPROPERTY()
 	TArray<TObjectPtr<APawn>> Candidates;
 
+	float DegreeRotationSpeed = 0.f;
 	bool bActive = true;
 };
