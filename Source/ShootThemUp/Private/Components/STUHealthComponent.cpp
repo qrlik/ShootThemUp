@@ -36,6 +36,18 @@ void USTUHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, co
 	}
 }
 
+bool USTUHealthComponent::IsFullHealth() const {
+	return FMath::IsNearlyEqual(Health, MaxHealth) || Health > MaxHealth;
+}
+
+bool USTUHealthComponent::TryToAddHealth(float HealthAmount) {
+	if (IsFullHealth() || IsDead()) {
+		return false;
+	}
+	AddHealth(HealthAmount);
+	return true;
+}
+
 void USTUHealthComponent::AddHealth(float Delta) {
 	Health = FMath::Clamp(Health + Delta, 0.f, MaxHealth);
 	OnHealthChange.Execute();

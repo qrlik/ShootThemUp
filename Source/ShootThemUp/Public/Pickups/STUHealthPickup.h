@@ -12,4 +12,7 @@ class SHOOTTHEMUP_API ASTUHealthPickup : public ASTUBasePickup {
 
 protected:
 	virtual bool GiveToImpl(ASTUBaseCharacter* Character) const override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pickup", meta = (ClampMin = "1.0"))
+	float RestoreHealth = 1.f;
 };

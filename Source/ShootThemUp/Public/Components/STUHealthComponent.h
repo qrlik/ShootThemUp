@@ -18,17 +18,20 @@ public:
 
 	virtual void BeginPlay() override;
 
+	UFUNCTION(BlueprintCallable, Category = "Health")
+	float GetHealthPercent() const { return Health / MaxHealth; }
+
+	UFUNCTION(BlueprintCallable, Category = "Health")
+	float GetHealth() const { return Health; }
+
 	UFUNCTION()
 	bool IsDead() const;
 
 	UFUNCTION()
 	void OnTakeAnyDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* InstigatedBy, AActor* DamageCauser);
 
-	UFUNCTION(BlueprintCallable, Category = "Health")
-	float GetHealth() const { return Health; }
-
-	UFUNCTION(BlueprintCallable, Category = "Health")
-	float GetHealthPercent() const { return Health / MaxHealth; }
+	bool IsFullHealth() const;
+	bool TryToAddHealth(float HealthAmount);
 
 	FOnHealthChangeSignature OnHealthChange;
 	FOnDeathSignature OnDeath;
