@@ -1,6 +1,7 @@
 // Shoot Them Up Game. All Rights Reserved.
 
 #include "Player/STUBaseCharacter.h"
+
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/STUCharacterMovementComponent.h"

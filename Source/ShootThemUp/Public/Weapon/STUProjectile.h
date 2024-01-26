@@ -8,6 +8,7 @@
 
 class UProjectileMovementComponent;
 class USphereComponent;
+class USTUFXComponent;
 
 UCLASS()
 class SHOOTTHEMUP_API ASTUProjectile : public AActor
@@ -29,6 +30,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<UProjectileMovementComponent> MovementComponent;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	TObjectPtr<USTUFXComponent> FXComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Projectile")
 	float LifeTime = 5.f;

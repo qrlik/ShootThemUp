@@ -1,6 +1,7 @@
 // Shoot Them Up Game. All Rights Reserved.
 
 #include "Components/STUWeaponComponent.h"
+
 #include "GameFramework/Character.h"
 #include "Weapon/STUBaseWeapon.h"
 

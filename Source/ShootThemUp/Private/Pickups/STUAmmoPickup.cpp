@@ -1,6 +1,7 @@
 // Shoot Them Up Game. All Rights Reserved.
 
 #include "Pickups/STUAmmoPickup.h"
+
 #include "Components/STUWeaponComponent.h"
 #include "Player/STUBaseCharacter.h"
 

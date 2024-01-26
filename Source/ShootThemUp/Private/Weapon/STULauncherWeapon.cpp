@@ -1,6 +1,7 @@
 // Shoot Them Up Game. All Rights Reserved.
 
 #include "Weapon/STULauncherWeapon.h"
+
 #include "Weapon/STUProjectile.h"
 
 void ASTULauncherWeapon::MakeShotImpl() {

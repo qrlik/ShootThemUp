@@ -1,6 +1,7 @@
 // Shoot Them Up Game. All Rights Reserved.
 
 #include "Weapon/STUBaseWeapon.h"
+
 #include "GameFramework/Character.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBaseWeapon, All, All)
