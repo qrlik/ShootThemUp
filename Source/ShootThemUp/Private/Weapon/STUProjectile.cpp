@@ -3,9 +3,11 @@
 #include "Weapon/STUProjectile.h"
 
 #include "Components/SphereComponent.h"
-#include "Components/STUFXComponent.h"
+#include "Components/STUWeaponVFXComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Player/STUBaseCharacter.h"
+#include "Weapon/STUBaseWeapon.h"
 
 ASTUProjectile::ASTUProjectile()
 {
@@ -16,8 +18,10 @@ ASTUProjectile::ASTUProjectile()
 	CollisionComponent->SetCollisionResponseToAllChannels(ECR_Block);
 
 	MovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>("MovementComponent");
+}
 
-	FXComponent = CreateDefaultSubobject<USTUFXComponent>("FXComponent");
+void ASTUProjectile::SetWeaponOwner(AActor* Character) {
+	WeaponOwner = Character;
 }
 
 void ASTUProjectile::BeginPlay() {
@@ -25,10 +29,9 @@ void ASTUProjectile::BeginPlay() {
 
 	check(CollisionComponent);
 	check(MovementComponent);
-	check(FXComponent);
 
 	MovementComponent->Velocity = Direction * MovementComponent->InitialSpeed;
-	CollisionComponent->IgnoreActorWhenMoving(GetOwner(), true);
+	CollisionComponent->IgnoreActorWhenMoving(WeaponOwner, true);
 	CollisionComponent->OnComponentHit.AddDynamic(this, &ASTUProjectile::OnHit);
 
 	SetLifeSpan(LifeTime);
@@ -44,12 +47,20 @@ void ASTUProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor
 	MovementComponent->StopMovementImmediately();
 	UGameplayStatics::ApplyRadialDamage(World, Damage, GetActorLocation(), DamageRadius, {}, {}, this, GetController(), false);
 	//DrawDebugSphere(World, GetActorLocation(), DamageRadius, 24, FColor::Red, false, LifeTime);
-	FXComponent->PlayImpactFX(Hit);
+	PlayHitEffect(Hit);
 
 	Destroy();
 }
 
+void ASTUProjectile::PlayHitEffect(const FHitResult& Hit) const {
+	if (const auto* Weapon = Cast<ASTUBaseWeapon>(GetOwner())) {
+		if (const auto* Vfx = Weapon->GetVfx()) {
+			Vfx->PlayHitEffect(Hit);
+		}
+	}
+}
+
 AController* ASTUProjectile::GetController() const {
-	const auto* Pawn = Cast<APawn>(GetOwner());
+	const auto* Pawn = Cast<APawn>(WeaponOwner);
 	return Pawn ? Pawn->GetController() : nullptr;
 }

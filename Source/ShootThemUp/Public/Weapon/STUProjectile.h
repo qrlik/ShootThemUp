@@ -6,9 +6,10 @@
 #include "GameFramework/Actor.h"
 #include "STUProjectile.generated.h"
 
+class ASTUBaseCharacter;
+class ASTUBaseWeapon;
 class UProjectileMovementComponent;
 class USphereComponent;
-class USTUFXComponent;
 
 UCLASS()
 class SHOOTTHEMUP_API ASTUProjectile : public AActor
@@ -18,6 +19,7 @@ class SHOOTTHEMUP_API ASTUProjectile : public AActor
 public:
 	ASTUProjectile();
 
+	void SetWeaponOwner(AActor* Character);
 	void SetDirection(const FVector& Value) { Direction = Value; }
 	void SetDamageRadius(float Value) { DamageRadius = Value; }
 	void SetDamage(float Value) { Damage = Value; }
@@ -31,9 +33,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<UProjectileMovementComponent> MovementComponent;
 
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	TObjectPtr<USTUFXComponent> FXComponent;
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Projectile")
 	float LifeTime = 5.f;
 
@@ -42,6 +41,11 @@ private:
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 	AController* GetController() const;
+
+	void PlayHitEffect(const FHitResult& Hit) const;
+
+	UPROPERTY()
+	TObjectPtr<AActor> WeaponOwner;
 
 	FVector Direction;
 	float DamageRadius = 0.f;

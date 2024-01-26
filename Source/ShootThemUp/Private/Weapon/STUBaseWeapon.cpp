@@ -2,6 +2,7 @@
 
 #include "Weapon/STUBaseWeapon.h"
 
+#include "Components/STUWeaponVFXComponent.h"
 #include "GameFramework/Character.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBaseWeapon, All, All)
@@ -11,11 +12,17 @@ ASTUBaseWeapon::ASTUBaseWeapon() {
 
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>("WeaponMesh");
 	SetRootComponent(WeaponMesh);
+
+	Vfx = CreateDefaultSubobject<USTUWeaponVFXComponent>("VFXComponent");
 }
 
 void ASTUBaseWeapon::Destroyed() {
 	StopFire();
 	Super::Destroyed();
+}
+
+USTUWeaponVFXComponent* ASTUBaseWeapon::GetVfx() const {
+	return Vfx;
 }
 
 bool ASTUBaseWeapon::CanReload() const {
@@ -49,6 +56,10 @@ void ASTUBaseWeapon::StopFire() {
 
 void ASTUBaseWeapon::BeginPlay() {
 	Super::BeginPlay();
+
+	check(WeaponMesh);
+	check(Vfx);
+
 	CurrentAmmo = DefaultAmmo;
 }
 

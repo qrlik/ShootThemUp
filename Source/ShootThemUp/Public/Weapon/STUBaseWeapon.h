@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "STUBaseWeapon.generated.h"
 
+class USTUWeaponVFXComponent;
+
 DECLARE_DELEGATE(FOnClipEmptySignature)
 
 USTRUCT(BlueprintType)
@@ -42,6 +44,7 @@ public:
 
 	virtual void Destroyed() override;
 
+	USTUWeaponVFXComponent* GetVfx() const;
 	const FWeaponUIData& GetUIData() const { return UIData; }
 	const FAmmoData& GetAmmoData() const { return CurrentAmmo; }
 	bool CanReload() const;
@@ -71,6 +74,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<USkeletalMeshComponent> WeaponMesh;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	TObjectPtr<USTUWeaponVFXComponent> Vfx;
 
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	FWeaponUIData UIData;

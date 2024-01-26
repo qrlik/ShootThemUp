@@ -11,10 +11,11 @@ void ASTULauncherWeapon::MakeShotImpl() {
 	}
 
 	const auto SpawnTransform = GetMuzzleTransform();
-	if (auto* Projectile = World->SpawnActorDeferred<ASTUProjectile>(ProjectileClass, SpawnTransform, GetOwner())) {
+	if (auto* Projectile = World->SpawnActorDeferred<ASTUProjectile>(ProjectileClass, SpawnTransform, this)) {
 		const auto HitResult = GetHitResult();
 		const auto Direction = (HitResult.ImpactPoint - SpawnTransform.GetLocation()).GetSafeNormal();
 
+		Projectile->SetWeaponOwner(GetOwner());
 		Projectile->SetDirection(Direction);
 		Projectile->SetDamageRadius(DamageRadius);
 		Projectile->SetDamage(Damage);
