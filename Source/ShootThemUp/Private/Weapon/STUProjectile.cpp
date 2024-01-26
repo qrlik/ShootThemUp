@@ -16,6 +16,7 @@ ASTUProjectile::ASTUProjectile()
 	SetRootComponent(CollisionComponent);
 	CollisionComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	CollisionComponent->SetCollisionResponseToAllChannels(ECR_Block);
+	CollisionComponent->bReturnMaterialOnMove = true;
 
 	MovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>("MovementComponent");
 }

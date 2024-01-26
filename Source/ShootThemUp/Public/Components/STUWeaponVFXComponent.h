@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "STUWeaponVFXComponent.generated.h"
 
+class UPhysicalMaterial;
 class UNiagaraSystem;
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
@@ -19,5 +20,8 @@ public:
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
-	TObjectPtr<UNiagaraSystem> HitEffect;
+	TObjectPtr<UNiagaraSystem> DefaultHitEffect;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+	TMap<TObjectPtr<UPhysicalMaterial>, TObjectPtr<UNiagaraSystem>> HitEffectsMap;
 };
