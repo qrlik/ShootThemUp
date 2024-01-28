@@ -51,6 +51,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	TObjectPtr<UAnimMontage> DeathAnimMontage;
 
+	UPROPERTY(EditDefaultsOnly, Category = "VFX")
+	TSubclassOf<UCameraShakeBase> CameraShake;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Damage", meta = (ClampMin = "0.0"))
 	FVector2D LandedDamageVelocity = FVector2D(600.f, 1500.f);
 
@@ -62,6 +65,7 @@ protected:
 
 private:
 	void OnDeath();
+	void OnHealthChanged(float Delta) const;
 	UFUNCTION()
 	void OnGroundLanded(const FHitResult& Hit);
 
@@ -70,6 +74,7 @@ private:
 	void StartRun();
 	void StopRun();
 
+	void PlayCameraShake() const;
 	void UpdateMovementFlag(EMovementFlags Flag, float Amount) const;
 	void UpdateHealthText() const;
 };

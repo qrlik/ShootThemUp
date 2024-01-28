@@ -43,7 +43,7 @@ void ASTUBaseCharacter::BeginPlay() {
 
 	OnTakeAnyDamage.AddDynamic(HealthComponent.Get(), &USTUHealthComponent::OnTakeAnyDamage);
 	LandedDelegate.AddDynamic(this, &ASTUBaseCharacter::OnGroundLanded);
-	HealthComponent->OnHealthChange.BindUObject(this, &ASTUBaseCharacter::UpdateHealthText);
+	HealthComponent->OnHealthChange.BindUObject(this, &ASTUBaseCharacter::OnHealthChanged);
 	HealthComponent->OnDeath.AddUObject(this, &ASTUBaseCharacter::OnDeath);
 
 	UpdateHealthText();
@@ -84,7 +84,7 @@ USTUWeaponComponent* ASTUBaseCharacter::GetWeaponComponent() const {
 }
 
 void ASTUBaseCharacter::OnDeath() {
-	PlayAnimMontage(DeathAnimMontage);
+	//PlayAnimMontage(DeathAnimMontage);
 	if (auto* MovementComponent = GetCharacterMovement()) {
 		MovementComponent->DisableMovement();
 	}
@@ -95,6 +95,16 @@ void ASTUBaseCharacter::OnDeath() {
 		Controller->ChangeState(NAME_Spectating);
 	}
 	SetLifeSpan(LifeSpanOnDeath);
+
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	GetMesh()->SetSimulatePhysics(true);
+}
+
+void ASTUBaseCharacter::OnHealthChanged(float Delta) const {
+	if (Delta < 0.f) {
+		PlayCameraShake();
+	}
+	UpdateHealthText();
 }
 
 void ASTUBaseCharacter::OnGroundLanded(const FHitResult& Hit) {
@@ -126,6 +136,12 @@ void ASTUBaseCharacter::StartRun() {
 
 void ASTUBaseCharacter::StopRun() {
 	UpdateMovementFlag(EMovementFlags::AbleToRun, 0.f);
+}
+
+void ASTUBaseCharacter::PlayCameraShake() const {
+	if (const auto* PController = GetController<APlayerController>(); PController && PController->PlayerCameraManager) {
+		PController->PlayerCameraManager->StartCameraShake(CameraShake);
+	}
 }
 
 void ASTUBaseCharacter::UpdateMovementFlag(EMovementFlags Flag, float Amount) const {

@@ -7,7 +7,7 @@
 #include "STUHealthComponent.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FOnDeathSignature);
-DECLARE_DELEGATE(FOnHealthChangeSignature);
+DECLARE_DELEGATE_OneParam(FOnHealthChangeSignature, float);
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class SHOOTTHEMUP_API USTUHealthComponent : public UActorComponent {
