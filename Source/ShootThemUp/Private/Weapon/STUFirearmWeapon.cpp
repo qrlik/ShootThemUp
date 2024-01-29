@@ -11,7 +11,9 @@ void ASTUFirearmWeapon::MakeShotImpl() {
 		return;
 	}
 
-	if (const auto HitResult = GetHitResult(); HitResult.bBlockingHit) {
+	const auto HitResult = GetHitResult();
+	Vfx->ShowTraceEffect(GetMuzzleTransform().GetLocation(), HitResult.ImpactPoint);
+	if (HitResult.bBlockingHit) {
 		//DrawDebugSphere(World, HitResult.ImpactPoint, 10.f, 24, FColor::Red, false, 5.f);
 		Vfx->PlayHitEffect(HitResult);
 

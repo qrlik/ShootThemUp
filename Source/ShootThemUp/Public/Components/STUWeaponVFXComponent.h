@@ -14,19 +14,29 @@ USTRUCT(BlueprintType)
 struct FWeaponDecal {
 	GENERATED_BODY()
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UMaterialInterface> Material;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly)
 	FVector Size;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly)
 	float LifeTime = 0.f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UPROPERTY(EditDefaultsOnly)
 	float FadeOutTime = 0.f;
 };
 
+USTRUCT(BlueprintType)
+struct FWeaponTrace {
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UNiagaraSystem> TraceEffect;
+
+	UPROPERTY(EditDefaultsOnly)
+	FName TraceVariableName = "TraceEnd";
+};
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class SHOOTTHEMUP_API USTUWeaponVFXComponent : public UActorComponent {
@@ -35,12 +45,16 @@ class SHOOTTHEMUP_API USTUWeaponVFXComponent : public UActorComponent {
 public:
 	USTUWeaponVFXComponent();
 
-	void PlayHitEffect(const FHitResult& Hit) const;
+	void ShowTraceEffect(const FVector& TraceStart, const FVector& TraceEnd) const;
 	void ShowMuzzleEffect(USceneComponent* Weapon, const FName& MuzzleSocket) const;
+	void PlayHitEffect(const FHitResult& Hit) const;
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "VFX")
-	TObjectPtr<UNiagaraSystem> MuzzleEffectClass;
+	TObjectPtr<UNiagaraSystem> MuzzleEffect;
+
+	UPROPERTY(EditDefaultsOnly, Category = "VFX")
+	FWeaponTrace Trace;
 
 	UPROPERTY(EditDefaultsOnly, Category = "VFX")
 	TObjectPtr<UNiagaraSystem> DefaultHitEffect;

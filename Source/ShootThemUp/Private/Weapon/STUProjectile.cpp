@@ -2,11 +2,11 @@
 
 #include "Weapon/STUProjectile.h"
 
+#include "NiagaraComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/STUWeaponVFXComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Player/STUBaseCharacter.h"
 #include "Weapon/STUBaseWeapon.h"
 
 ASTUProjectile::ASTUProjectile()
@@ -17,6 +17,13 @@ ASTUProjectile::ASTUProjectile()
 	CollisionComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	CollisionComponent->SetCollisionResponseToAllChannels(ECR_Block);
 	CollisionComponent->bReturnMaterialOnMove = true;
+
+	TraceComponent = CreateDefaultSubobject<UNiagaraComponent>("NiagaraComponent");
+	TraceComponent->SetupAttachment(CollisionComponent);
+
+	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("MeshComponent");
+	MeshComponent->SetupAttachment(CollisionComponent);
+	MeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	MovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>("MovementComponent");
 }
@@ -47,10 +54,17 @@ void ASTUProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor
 
 	MovementComponent->StopMovementImmediately();
 	UGameplayStatics::ApplyRadialDamage(World, Damage, GetActorLocation(), DamageRadius, {}, {}, this, GetController(), false);
-	//DrawDebugSphere(World, GetActorLocation(), DamageRadius, 24, FColor::Red, false, LifeTime);
+	// DrawDebugSphere(World, GetActorLocation(), DamageRadius, 24, FColor::Red, false, LifeTime);
 	PlayHitEffect(Hit);
 
-	Destroy();
+	if (TraceComponent->IsActive()) {
+		TraceComponent->Deactivate();
+		MeshComponent->SetVisibility(false, true);
+		SetLifeSpan(LifeTime);
+	}
+	else {
+		Destroy();
+	}
 }
 
 void ASTUProjectile::PlayHitEffect(const FHitResult& Hit) const {

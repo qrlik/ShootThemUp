@@ -8,6 +8,7 @@
 
 class ASTUBaseCharacter;
 class ASTUBaseWeapon;
+class UNiagaraComponent;
 class UProjectileMovementComponent;
 class USphereComponent;
 
@@ -31,10 +32,16 @@ protected:
 	TObjectPtr<USphereComponent> CollisionComponent;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
+	TObjectPtr<UNiagaraComponent> TraceComponent;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	TObjectPtr<UStaticMeshComponent> MeshComponent;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<UProjectileMovementComponent> MovementComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Projectile")
-	float LifeTime = 5.f;
+	float LifeTime = 10.f;
 
 private:
 	UFUNCTION()

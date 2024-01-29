@@ -11,6 +11,12 @@ USTUWeaponVFXComponent::USTUWeaponVFXComponent() {
 	PrimaryComponentTick.bCanEverTick = false;
 }
 
+void USTUWeaponVFXComponent::ShowTraceEffect(const FVector& TraceStart, const FVector& TraceEnd) const {
+	if (auto* TraceComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), Trace.TraceEffect, TraceStart)) {
+		TraceComponent->SetVariableVec3(Trace.TraceVariableName, TraceEnd);
+	}
+}
+
 void USTUWeaponVFXComponent::PlayHitEffect(const FHitResult& Hit) const {
 	auto HitEffect = DefaultHitEffect;
 
@@ -28,6 +34,6 @@ void USTUWeaponVFXComponent::PlayHitEffect(const FHitResult& Hit) const {
 }
 
 void USTUWeaponVFXComponent::ShowMuzzleEffect(USceneComponent* Weapon, const FName& MuzzleSocket) const {
-	UNiagaraFunctionLibrary::SpawnSystemAttached(MuzzleEffectClass, Weapon, MuzzleSocket, FVector::ZeroVector,
+	UNiagaraFunctionLibrary::SpawnSystemAttached(MuzzleEffect, Weapon, MuzzleSocket, FVector::ZeroVector,
 	                                             FRotator::ZeroRotator, EAttachLocation::SnapToTarget, true);
 }
