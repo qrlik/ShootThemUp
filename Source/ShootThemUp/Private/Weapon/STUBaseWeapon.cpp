@@ -118,6 +118,7 @@ void ASTUBaseWeapon::MakeShot() {
 	}
 	MakeShotImpl();
 	DecreaseAmmo();
+	Vfx->ShowMuzzleEffect(WeaponMesh, MuzzleSocketName);
 }
 
 void ASTUBaseWeapon::MakeShotImpl() {

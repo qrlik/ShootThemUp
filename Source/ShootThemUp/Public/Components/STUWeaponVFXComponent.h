@@ -6,6 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "STUWeaponVFXComponent.generated.h"
 
+class UNiagaraComponent;
 class UPhysicalMaterial;
 class UNiagaraSystem;
 
@@ -35,14 +36,18 @@ public:
 	USTUWeaponVFXComponent();
 
 	void PlayHitEffect(const FHitResult& Hit) const;
+	void ShowMuzzleEffect(USceneComponent* Weapon, const FName& MuzzleSocket) const;
 
 protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+	UPROPERTY(EditDefaultsOnly, Category = "VFX")
+	TObjectPtr<UNiagaraSystem> MuzzleEffectClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "VFX")
 	TObjectPtr<UNiagaraSystem> DefaultHitEffect;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+	UPROPERTY(EditDefaultsOnly, Category = "VFX")
 	TMap<TObjectPtr<UPhysicalMaterial>, TObjectPtr<UNiagaraSystem>> HitEffectsMap;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+	UPROPERTY(EditDefaultsOnly, Category = "VFX")
 	FWeaponDecal HitDecal;
 };

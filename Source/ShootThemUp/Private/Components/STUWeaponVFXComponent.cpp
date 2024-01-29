@@ -2,9 +2,10 @@
 
 #include "Components/STUWeaponVFXComponent.h"
 
+#include "Components/DecalComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "NiagaraFunctionLibrary.h"
-#include "Components/DecalComponent.h"
+#include "NiagaraComponent.h"
 
 USTUWeaponVFXComponent::USTUWeaponVFXComponent() {
 	PrimaryComponentTick.bCanEverTick = false;
@@ -24,4 +25,9 @@ void USTUWeaponVFXComponent::PlayHitEffect(const FHitResult& Hit) const {
 	if (Decal) {
 		Decal->SetFadeOut(HitDecal.LifeTime, HitDecal.FadeOutTime);
 	}
+}
+
+void USTUWeaponVFXComponent::ShowMuzzleEffect(USceneComponent* Weapon, const FName& MuzzleSocket) const {
+	UNiagaraFunctionLibrary::SpawnSystemAttached(MuzzleEffectClass, Weapon, MuzzleSocket, FVector::ZeroVector,
+	                                             FRotator::ZeroRotator, EAttachLocation::SnapToTarget, true);
 }
