@@ -13,18 +13,28 @@ class SHOOTTHEMUP_API USTUPlayerHUDWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable)
+	virtual bool Initialize() override;
+
+	UFUNCTION(BlueprintCallable, Category = "UI")
 	FWeaponUIData GetCurrentWeaponUIData() const;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "UI")
 	FAmmoData GetCurrentWeaponAmmo() const;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "UI")
 	float GetHealthPercent() const;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "UI")
 	bool IsPlayerAlive() const;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "UI")
 	bool IsPlayerSpectating() const;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "UI")
+	void OnTakeDamage();
+
+private:
+	void InitializeDamageEvent();
+
+	void OnHealthChanged(float Delta);
 };

@@ -50,7 +50,7 @@ bool USTUHealthComponent::TryToAddHealth(float HealthAmount) {
 
 void USTUHealthComponent::AddHealth(float Delta) {
 	Health = FMath::Clamp(Health + Delta, 0.f, MaxHealth);
-	OnHealthChange.Execute(Delta);
+	OnHealthChange.Broadcast(Delta);
 }
 
 void USTUHealthComponent::AddAutoHealTick() {

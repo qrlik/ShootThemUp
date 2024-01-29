@@ -43,7 +43,7 @@ void ASTUBaseCharacter::BeginPlay() {
 
 	OnTakeAnyDamage.AddDynamic(HealthComponent.Get(), &USTUHealthComponent::OnTakeAnyDamage);
 	LandedDelegate.AddDynamic(this, &ASTUBaseCharacter::OnGroundLanded);
-	HealthComponent->OnHealthChange.BindUObject(this, &ASTUBaseCharacter::OnHealthChanged);
+	HealthComponent->OnHealthChange.AddUObject(this, &ASTUBaseCharacter::OnHealthChanged);
 	HealthComponent->OnDeath.AddUObject(this, &ASTUBaseCharacter::OnDeath);
 
 	UpdateHealthText();
