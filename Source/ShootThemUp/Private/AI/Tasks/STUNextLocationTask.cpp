@@ -17,15 +17,17 @@ EBTNodeResult::Type USTUNextLocationTask::ExecuteTask(UBehaviorTreeComponent& Ow
 	if (!Controller || !NavSys || !Blackboard) {
 		return EBTNodeResult::Failed;
 	}
-	const auto* Pawn = Controller->GetPawn();
-	if (!Pawn) {
+
+	const auto* TargetActor = Cast<AActor>(Blackboard->GetValueAsObject(TargetActorKey.SelectedKeyName));
+	TargetActor = (TargetActor) ? TargetActor : Controller->GetPawn();
+	if (!TargetActor) {
 		return EBTNodeResult::Failed;
 	}
 
 	FNavLocation NavLocation;
-	if (!NavSys->GetRandomReachablePointInRadius(Pawn->GetActorLocation(), Radius, NavLocation)) {
+	if (!NavSys->GetRandomReachablePointInRadius(TargetActor->GetActorLocation(), Radius, NavLocation)) {
 		return EBTNodeResult::Failed;
 	}
-	Blackboard->SetValueAsVector(AimLocationKey.SelectedKeyName, NavLocation.Location);
+	Blackboard->SetValueAsVector(LocationKey.SelectedKeyName, NavLocation.Location);
 	return EBTNodeResult::Succeeded;
 }

@@ -11,8 +11,13 @@ ASTUAIController::ASTUAIController() {
 }
 
 void ASTUAIController::Tick(float DeltaTime) {
+	UpdateEnemyActor();
+	UpdateFocus();
 	Super::Tick(DeltaTime);
-	SetFocus(Perception->GetClosestEnemy());
+}
+
+TWeakObjectPtr<AActor> ASTUAIController::GetEnemyActor() const {
+	return EnemyActor;
 }
 
 void ASTUAIController::OnPossess(APawn* InPawn) {
@@ -21,4 +26,12 @@ void ASTUAIController::OnPossess(APawn* InPawn) {
 	if (const auto* AICharacter = Cast<ASTUAICharacter>(InPawn)) {
 		RunBehaviorTree(AICharacter->GetBehaviorTree());
 	}
+}
+
+void ASTUAIController::UpdateEnemyActor() {
+	EnemyActor = Perception->GetClosestEnemy();
+}
+
+void ASTUAIController::UpdateFocus() {
+	SetFocus(EnemyActor.Get());
 }

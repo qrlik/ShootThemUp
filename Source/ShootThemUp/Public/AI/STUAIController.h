@@ -17,9 +17,17 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	TWeakObjectPtr<AActor> GetEnemyActor() const;
+
 protected:
 	virtual void OnPossess(APawn* InPawn) override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<USTUAIPerceptionComponent> Perception;
+
+private:
+	void UpdateEnemyActor();
+	void UpdateFocus();
+
+	TWeakObjectPtr<AActor> EnemyActor;
 };

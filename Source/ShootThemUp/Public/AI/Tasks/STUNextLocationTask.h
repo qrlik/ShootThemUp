@@ -17,7 +17,10 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "AI")
-	FBlackboardKeySelector AimLocationKey;
+	FBlackboardKeySelector TargetActorKey;
+
+	UPROPERTY(EditAnywhere, Category = "AI")
+	FBlackboardKeySelector LocationKey;
 
 	UPROPERTY(EditAnywhere, Category = "AI")
 	float Radius = 1000.f;
