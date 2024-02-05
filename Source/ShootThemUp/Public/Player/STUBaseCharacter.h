@@ -33,6 +33,8 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	virtual void OnDeathImpl();
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<USpringArmComponent> SpringArmComponent;
 

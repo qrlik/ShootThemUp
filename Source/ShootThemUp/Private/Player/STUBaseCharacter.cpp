@@ -49,6 +49,9 @@ void ASTUBaseCharacter::BeginPlay() {
 	UpdateHealthText();
 }
 
+void ASTUBaseCharacter::OnDeathImpl() {
+}
+
 void ASTUBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASTUBaseCharacter::Jump);
@@ -85,6 +88,8 @@ USTUWeaponComponent* ASTUBaseCharacter::GetWeaponComponent() const {
 
 void ASTUBaseCharacter::OnDeath() {
 	//PlayAnimMontage(DeathAnimMontage);
+	OnDeathImpl();
+
 	if (auto* MovementComponent = GetCharacterMovement()) {
 		MovementComponent->DisableMovement();
 	}

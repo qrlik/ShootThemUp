@@ -18,6 +18,8 @@ public:
 	UBehaviorTree* GetBehaviorTree() const;
 
 protected:
+	virtual void OnDeathImpl() override;
+
 	UPROPERTY(EditAnywhere, Category = "AI")
 	TObjectPtr<UBehaviorTree> BehaviorTree;
 };
