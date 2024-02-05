@@ -85,6 +85,13 @@ bool USTUWeaponComponent::TryToAddAmmo(TSubclassOf<ASTUBaseWeapon> WeaponType, i
 	return false;
 }
 
+bool USTUWeaponComponent::IsNextWeaponCanFire() const {
+	if (const auto* NextWeapon = GetNextWeapon()) {
+		return !NextWeapon->IsAmmoEmpty();
+	}
+	return false;
+}
+
 void USTUWeaponComponent::StartFire() {
 	if (!CurrentWeapon) {
 		return;

@@ -3,9 +3,9 @@
 #include "AI/Services/FireService.h"
 
 #include "AIController.h"
-#include "STUUtils.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Components/STUWeaponComponent.h"
+#include "STUUtils.h"
 
 namespace {
 	APawn* GetPawn(const AAIController* Controller) {
