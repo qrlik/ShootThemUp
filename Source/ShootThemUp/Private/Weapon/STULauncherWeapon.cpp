@@ -14,7 +14,8 @@ void ASTULauncherWeapon::MakeShotImpl() {
 	const auto SpawnTransform = GetMuzzleTransform();
 	if (auto* Projectile = World->SpawnActorDeferred<ASTUProjectile>(ProjectileClass, SpawnTransform, this)) {
 		const auto HitResult = GetHitResult();
-		const auto Direction = (HitResult.ImpactPoint - SpawnTransform.GetLocation()).GetSafeNormal();
+		const auto& TraceEnd = (HitResult.bBlockingHit) ? HitResult.ImpactPoint : HitResult.TraceEnd;
+		const auto Direction = (TraceEnd - SpawnTransform.GetLocation()).GetSafeNormal();
 
 		Projectile->SetWeaponOwner(GetOwner());
 		Projectile->SetDirection(Direction);

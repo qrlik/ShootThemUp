@@ -15,7 +15,6 @@ ASTUProjectile::ASTUProjectile()
 	CollisionComponent = CreateDefaultSubobject<USphereComponent>("CollisionComponent");
 	SetRootComponent(CollisionComponent);
 	CollisionComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	CollisionComponent->SetCollisionResponseToAllChannels(ECR_Block);
 	CollisionComponent->bReturnMaterialOnMove = true;
 
 	TraceComponent = CreateDefaultSubobject<UNiagaraComponent>("NiagaraComponent");
@@ -57,6 +56,7 @@ void ASTUProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor
 	// DrawDebugSphere(World, GetActorLocation(), DamageRadius, 24, FColor::Red, false, LifeTime);
 	PlayHitEffect(Hit);
 
+	CollisionComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
 	if (TraceComponent->IsActive()) {
 		TraceComponent->Deactivate();
 		MeshComponent->SetVisibility(false, true);

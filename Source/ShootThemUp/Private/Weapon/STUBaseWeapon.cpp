@@ -88,9 +88,6 @@ FHitResult ASTUBaseWeapon::GetHitResult() const {
 	if (const auto* World = GetWorld()) {
 		World->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, CollisionParams);
 	}
-	if (!HitResult.bBlockingHit) {
-		HitResult.ImpactPoint = TraceEnd;
-	}
 	return HitResult;
 }
 
@@ -106,14 +103,16 @@ bool ASTUBaseWeapon::IsClipEmpty() const {
 	return CurrentAmmo.Bullets <= 0;
 }
 
-void ASTUBaseWeapon::CheckEmptyClip() const {
+bool ASTUBaseWeapon::CheckEmptyClip() const {
 	if (IsClipEmpty()) {
 		OnClipEmpty.Execute();
+		return true;
 	}
+	return false;
 }
 
 void ASTUBaseWeapon::MakeShot() {
-	if (IsAmmoEmpty()) {
+	if (CheckEmptyClip()) {
 		return;
 	}
 	MakeShotImpl();

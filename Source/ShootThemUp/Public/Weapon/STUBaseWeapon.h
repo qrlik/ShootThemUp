@@ -69,7 +69,7 @@ protected:
 	AController* GetController() const;
 	FHitResult GetHitResult() const;
 
-	void CheckEmptyClip() const;
+	bool CheckEmptyClip() const;
 	void MakeShot();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
