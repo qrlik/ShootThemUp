@@ -39,6 +39,9 @@ public:
 	void NextWeapon();
 	void Reload();
 
+	void StartFire();
+	void StopFire();
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -58,9 +61,6 @@ private:
 	bool CanDoAction() const;
 
 	void OnEmptyClip(TSubclassOf<ASTUBaseWeapon> WeaponClass);
-
-	void StartFire();
-	void StopFire();
 
 	void AttachWeaponToSocket(ASTUBaseWeapon* Weapon, const FName& SocketName) const;
 	void EquipWeapon(int32 Index);

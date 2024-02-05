@@ -156,13 +156,19 @@ void ASTUBaseWeapon::GetShotTrace(FVector& Start, FVector& End) const {
 	if (!Controller) {
 		return;
 	}
+	if (Controller->IsPlayerController()) {
+		FRotator ViewRotation;
+		Controller->GetPlayerViewPoint(Start, ViewRotation);
 
-	FRotator ViewRotation;
-	Controller->GetPlayerViewPoint(Start, ViewRotation);
-
-	const auto HalfRad = FMath::DegreesToRadians(ShotSpread);
-	const auto TraceRotation = FMath::VRandCone(ViewRotation.Vector(), HalfRad);
-	End = Start + TraceRotation * ShotDistance;
+		const auto HalfRad = FMath::DegreesToRadians(ShotSpread);
+		const auto TraceRotation = FMath::VRandCone(ViewRotation.Vector(), HalfRad);
+		End = Start + TraceRotation * ShotDistance;
+	}
+	else {
+		const auto Muzzle = GetMuzzleTransform();
+		Start = Muzzle.GetLocation();
+		End = Start + Muzzle.GetRotation().Vector() * ShotDistance;
+	}
 }
 
 void ASTUBaseWeapon::TryToShot() {

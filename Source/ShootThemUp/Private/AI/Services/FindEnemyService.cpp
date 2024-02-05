@@ -10,8 +10,8 @@ UFindEnemyService::UFindEnemyService() {
 }
 
 void UFindEnemyService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) {
-	UpdateEnemyActor(OwnerComp);
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
+	UpdateEnemyActor(OwnerComp);
 }
 
 void UFindEnemyService::UpdateEnemyActor(UBehaviorTreeComponent& OwnerComp) const {
