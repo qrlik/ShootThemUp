@@ -107,7 +107,7 @@ bool ASTUBaseWeapon::IsClipEmpty() const {
 }
 
 void ASTUBaseWeapon::CheckEmptyClip() const {
-	if (IsClipEmpty() && !IsAmmoEmpty()) {
+	if (IsClipEmpty()) {
 		OnClipEmpty.Execute();
 	}
 }

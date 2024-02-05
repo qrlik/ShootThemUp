@@ -45,6 +45,12 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	virtual void OnEmptyClipImpl();
+	virtual void OnReloadFinishedImpl();
+
+	ASTUBaseWeapon* GetCurrentWeapon() const;
+	ASTUBaseWeapon* GetNextWeapon() const;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	TArray<FWeaponData> WeaponData;
 
@@ -65,6 +71,7 @@ private:
 	void AttachWeaponToSocket(ASTUBaseWeapon* Weapon, const FName& SocketName) const;
 	void EquipWeapon(int32 Index);
 	void SpawnWeapons();
+	int32 GetNextWeaponIndex() const;
 
 	void PlayAnimMontage(UAnimMontage* AnimMontage) const;
 

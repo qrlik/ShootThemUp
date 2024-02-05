@@ -47,8 +47,12 @@ public:
 	USTUWeaponVFXComponent* GetVfx() const;
 	const FWeaponUIData& GetUIData() const { return UIData; }
 	const FAmmoData& GetAmmoData() const { return CurrentAmmo; }
-	bool CanReload() const;
 	bool TryToAddAmmo(int32 ClipsAmount);
+
+	bool CanReload() const;
+	bool IsAmmoEmpty() const;
+	bool IsAmmoFull() const;
+	bool IsClipEmpty() const;
 
 	void ChangeClip();
 	void OnEquip() const;
@@ -64,10 +68,6 @@ protected:
 	FTransform GetMuzzleTransform() const;
 	AController* GetController() const;
 	FHitResult GetHitResult() const;
-
-	bool IsAmmoEmpty() const;
-	bool IsAmmoFull() const;
-	bool IsClipEmpty() const;
 
 	void CheckEmptyClip() const;
 	void MakeShot();

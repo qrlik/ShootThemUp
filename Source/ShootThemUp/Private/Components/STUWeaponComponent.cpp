@@ -32,6 +32,7 @@ void USTUWeaponComponent::OnReloadFinished() {
 	if (CurrentWeapon) {
 		CurrentWeapon->ChangeClip();
 	}
+	OnReloadFinishedImpl();
 }
 
 FAmmoData USTUWeaponComponent::GetAmmoData() const {
@@ -61,8 +62,7 @@ void USTUWeaponComponent::NextWeapon() {
 	if (!CanDoAction()) {
 		return;
 	}
-	const auto NextWeaponIndex = (CurrentWeaponIndex + 1) % Weapons.Num();
-	EquipWeapon(NextWeaponIndex);
+	EquipWeapon(GetNextWeaponIndex());
 }
 
 void USTUWeaponComponent::Reload() {
@@ -110,13 +110,32 @@ void USTUWeaponComponent::BeginPlay() {
 	EquipWeapon(CurrentWeaponIndex);
 }
 
+void USTUWeaponComponent::OnEmptyClipImpl() {
+}
+
+void USTUWeaponComponent::OnReloadFinishedImpl() {
+}
+
+ASTUBaseWeapon* USTUWeaponComponent::GetCurrentWeapon() const {
+	return CurrentWeapon;
+}
+
+ASTUBaseWeapon* USTUWeaponComponent::GetNextWeapon() const {
+	const auto NextIndex = GetNextWeaponIndex();
+	if (NextIndex < 0 && NextIndex >= Weapons.Num()) {
+		return CurrentWeapon;
+	}
+	return Weapons[NextIndex];
+}
+
 bool USTUWeaponComponent::CanDoAction() const {
 	return !bEquipInProgress && !bReloadInProgress;
 }
 
 void USTUWeaponComponent::OnEmptyClip(TSubclassOf<ASTUBaseWeapon> WeaponClass) {
-	if (WeaponClass == CurrentWeapon.GetClass()) {
+	if (CurrentWeapon && WeaponClass == CurrentWeapon.GetClass()) {
 		Reload();
+		OnEmptyClipImpl();
 	}
 }
 
@@ -164,6 +183,10 @@ void USTUWeaponComponent::SpawnWeapons() {
 		Weapons.Add(Weapon);
 		AttachWeaponToSocket(Weapon, ArmorySocketName);
 	}
+}
+
+int32 USTUWeaponComponent::GetNextWeaponIndex() const {
+	return (CurrentWeaponIndex + 1) % Weapons.Num();
 }
 
 void USTUWeaponComponent::PlayAnimMontage(UAnimMontage* AnimMontage) const {
