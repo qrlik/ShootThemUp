@@ -6,15 +6,6 @@
 #include "Components/STUWeaponComponent.h"
 #include "STUUtils.h"
 
-namespace {
-	APawn* GetPawn(const AAIController* Controller) {
-		if (Controller) {
-			return Controller->GetPawn();
-		}
-		return nullptr;
-	}
-}
-
 UChangeWeaponService::UChangeWeaponService() {
 }
 
@@ -36,7 +27,7 @@ void UChangeWeaponService::TryToChangeWeapon(UBehaviorTreeComponent& OwnerComp) 
 		return;
 	}
 
-	if (auto* WeaponComponent = STUUtils::GetComponentByClass<USTUWeaponComponent>(GetPawn(OwnerComp.GetAIOwner()))) {
+	if (auto* WeaponComponent = STUUtils::GetComponentByClass<USTUWeaponComponent>(STUUtils::GetPawn(OwnerComp.GetAIOwner()))) {
 		if (WeaponComponent->IsNextWeaponCanFire()) {
 			WeaponComponent->NextWeapon();
 		}

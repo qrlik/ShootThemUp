@@ -7,15 +7,6 @@
 #include "Components/STUWeaponComponent.h"
 #include "STUUtils.h"
 
-namespace {
-	APawn* GetPawn(const AAIController* Controller) {
-		if (Controller) {
-			return Controller->GetPawn();
-		}
-		return nullptr;
-	}
-}
-
 UFireService::UFireService() {
 	NodeName = "Fire";
 }
@@ -27,7 +18,7 @@ void UFireService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory
 
 void UFireService::UpdateFire(UBehaviorTreeComponent& OwnerComp) const {
 	const auto* Blackboard = OwnerComp.GetBlackboardComponent();
-	auto* WeaponComponent = STUUtils::GetComponentByClass<USTUWeaponComponent>(GetPawn(OwnerComp.GetAIOwner()));
+	auto* WeaponComponent = STUUtils::GetComponentByClass<USTUWeaponComponent>(STUUtils::GetPawn(OwnerComp.GetAIOwner()));
 	if (!WeaponComponent || !Blackboard) {
 		return;
 	}

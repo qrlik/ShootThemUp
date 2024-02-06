@@ -2,8 +2,10 @@
 
 class STUUtils {
 public:
+	static APawn* GetPawn(const AController* Controller);
+
 	template <typename T>
-	static T* GetComponentByClass(APawn* Pawn) {
+	static T* GetComponentByClass(AActor* Pawn) {
 		if (Pawn) {
 			if (auto* Component = Pawn->GetComponentByClass<T>()) {
 				return Component;
