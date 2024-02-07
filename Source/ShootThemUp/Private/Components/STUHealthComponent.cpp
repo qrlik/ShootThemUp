@@ -14,6 +14,10 @@ void USTUHealthComponent::BeginPlay() {
 	check(MaxHealth > 0.f);
 }
 
+int USTUHealthComponent::GetHealthPercent() const {
+	return static_cast<int>(Health / MaxHealth * 100);
+}
+
 bool USTUHealthComponent::IsDead() const {
 	return Health < 0.f || FMath::IsNearlyZero(Health);
 }

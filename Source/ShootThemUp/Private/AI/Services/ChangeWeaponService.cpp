@@ -15,7 +15,7 @@ void UChangeWeaponService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* No
 }
 
 bool UChangeWeaponService::RollWeaponChange() const {
-	const auto Roll = FMath::RandRange(0.f, 1.f);
+	const auto Roll = FMath::FRand();
 	if (Roll < Probability || FMath::IsNearlyEqual(Roll, Probability)) {
 		return true;
 	}
