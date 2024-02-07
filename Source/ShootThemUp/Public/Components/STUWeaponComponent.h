@@ -32,6 +32,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void OnReloadFinished();
 
+	ASTUBaseWeapon* GetCurrentWeapon() const;
+	ASTUBaseWeapon* GetNextWeapon() const;
+	ASTUBaseWeapon* GetWeapon(TSubclassOf<ASTUBaseWeapon> Type) const;
+
 	FAmmoData GetAmmoData() const;
 	FWeaponUIData GetUIData() const;
 	bool TryToAddAmmo(TSubclassOf<ASTUBaseWeapon> WeaponType, int32 ClipsAmount) const;
@@ -49,9 +53,6 @@ protected:
 
 	virtual void OnEmptyClipImpl();
 	virtual void OnReloadFinishedImpl();
-
-	ASTUBaseWeapon* GetCurrentWeapon() const;
-	ASTUBaseWeapon* GetNextWeapon() const;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	TArray<FWeaponData> WeaponData;

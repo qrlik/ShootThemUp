@@ -135,6 +135,15 @@ ASTUBaseWeapon* USTUWeaponComponent::GetNextWeapon() const {
 	return Weapons[NextIndex];
 }
 
+ASTUBaseWeapon* USTUWeaponComponent::GetWeapon(TSubclassOf<ASTUBaseWeapon> Type) const {
+	for (const auto& Weapon : Weapons) {
+		if (Weapon->IsA(Type)) {
+			return Weapon;
+		}
+	}
+	return nullptr;
+}
+
 bool USTUWeaponComponent::CanDoAction() const {
 	return !bEquipInProgress && !bReloadInProgress;
 }
