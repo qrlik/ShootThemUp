@@ -11,6 +11,10 @@ UBTDecorator_NeedAmmo::UBTDecorator_NeedAmmo() {
 }
 
 bool UBTDecorator_NeedAmmo::CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const {
+	if (!WeaponType) {
+		UE_LOG(LogInit, Error, TEXT("UBTDecorator_NeedAmmo don't have WeaponType"));
+		return false;
+	}
 	const auto* Pawn = STUUtils::GetPawn(OwnerComp.GetAIOwner());
 	const auto* WeaponComponent = STUUtils::GetComponentByClass<USTUWeaponComponent>(Pawn);
 	if (!WeaponComponent) {

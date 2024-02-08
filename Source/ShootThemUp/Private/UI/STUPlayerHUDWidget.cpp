@@ -30,7 +30,7 @@ FAmmoData USTUPlayerHUDWidget::GetCurrentWeaponAmmo() const {
 
 float USTUPlayerHUDWidget::GetHealthPercent() const {
 	if (const auto* HealthComponent = STUUtils::GetComponentByClass<USTUHealthComponent>(GetOwningPlayerPawn())) {
-		return HealthComponent->GetHealthPercent();
+		return HealthComponent->GetHealthPercent() / 100.f;
 	}
 	return 0.f;
 }
