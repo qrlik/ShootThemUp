@@ -12,7 +12,4 @@ class SHOOTTHEMUP_API USTUAIPerceptionComponent : public UAIPerceptionComponent 
 
 public:
 	AActor* GetClosestEnemy() const;
-
-private:
-	APawn* GetOwnerPawn() const;
 };
