@@ -36,6 +36,8 @@ public:
 
 	virtual void StartPlay() override;
 
+	void Killed(const AController* KillerController, const AController* VictimController) const;
+
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Game")
 	TSubclassOf<AAIController> AIControllerClass;
@@ -58,6 +60,8 @@ private:
 	void SetPlayerColor(const AController* Controller) const;
 	void ResetPlayer(AController* Controller);
 	void ResetPlayers();
+
+	void LogPlayerInfo() const;
 
 	FTimerHandle RoundTimer;
 	int32 CurrentRound = 0;

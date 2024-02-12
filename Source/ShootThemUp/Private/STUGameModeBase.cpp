@@ -26,6 +26,18 @@ void ASTUGameModeBase::StartPlay() {
 	Super::StartPlay();
 }
 
+void ASTUGameModeBase::Killed(const AController* KillerController, const AController* VictimController) const {
+	if (!KillerController || !VictimController) {
+		return;
+	}
+	if (auto* KillerState = KillerController->GetPlayerState<ASTUPlayerState>()) {
+		KillerState->OnKill();
+	}
+	if (auto* VictimState = VictimController->GetPlayerState<ASTUPlayerState>()) {
+		VictimState->OnDeath();
+	}
+}
+
 UClass* ASTUGameModeBase::GetDefaultPawnClassForController_Implementation(AController* InController) {
 	if (InController && InController->IsPlayerController()) {
 		return Super::GetDefaultPawnClassForController_Implementation(InController);
@@ -49,6 +61,7 @@ void ASTUGameModeBase::EndRound() {
 
 	if (CurrentRound >= Data.RoundsAmount) {
 		UE_LOG(LogGameStateBase, Display, TEXT("=========== GAME OVER ==========="));
+		LogPlayerInfo();
 	}
 	else {
 		StartRound();
@@ -82,6 +95,22 @@ void ASTUGameModeBase::ResetPlayers() {
 	}
 	for (auto It = World->GetControllerIterator(); It; ++It) {
 		ResetPlayer(It->Get());
+	}
+}
+
+void ASTUGameModeBase::LogPlayerInfo() const {
+	const auto* World = GetWorld();
+	if (!World) {
+		return;
+	}
+	for (auto It = World->GetControllerIterator(); It; ++It) {
+		const auto* Controller = It->Get();
+		if (!Controller) {
+			continue;
+		}
+		if (const auto* PlayerState = Controller->GetPlayerState<ASTUPlayerState>()) {
+			PlayerState->Log();
+		}
 	}
 }
 

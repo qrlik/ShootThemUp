@@ -58,6 +58,8 @@ private:
 	void AddAutoHealTick();
 	void StartAutoHeal();
 
+	void Killed(AController* Killer) const;
+
 	FTimerHandle AutoHealTimer;
 
 	float Health = 0.f;

@@ -2,6 +2,8 @@
 
 #include "Components/STUHealthComponent.h"
 
+#include "STUGameModeBase.h"
+
 DEFINE_LOG_CATEGORY_STATIC(HealthComponentLog, All, All)
 
 USTUHealthComponent::USTUHealthComponent() :
@@ -33,6 +35,7 @@ void USTUHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, co
 	}
 
 	if (IsDead()) {
+		Killed(InstigatedBy);
 		OnDeath.Broadcast();
 	}
 	else {
@@ -73,4 +76,18 @@ void USTUHealthComponent::StartAutoHeal() {
 	if (const auto World = GetWorld()) {
 		World->GetTimerManager().SetTimer(AutoHealTimer, this, &USTUHealthComponent::AddAutoHealTick, AutoHealFrequency, true, AutoHealDelay);
 	}
+}
+
+void USTUHealthComponent::Killed(AController* Killer) const {
+	const auto* World = GetWorld();
+	if (!World) {
+		return;
+	}
+	const auto* GameMode = World->GetAuthGameMode<ASTUGameModeBase>();
+	if (!GameMode) {
+		return;
+	}
+	const auto Pawn = Cast<APawn>(GetOwner());
+	const auto Victim = (Pawn) ? Pawn->Controller : nullptr;
+	GameMode->Killed(Killer, Victim);
 }
