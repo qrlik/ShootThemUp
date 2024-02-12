@@ -5,6 +5,7 @@
 #include "AIController.h"
 #include "Player/STUBaseCharacter.h"
 #include "Player/STUPlayerController.h"
+#include "Player/STUPlayerState.h"
 #include "UI/STUGameHUD.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameStateBase, All, All)
@@ -12,11 +13,14 @@ DEFINE_LOG_CATEGORY_STATIC(LogGameStateBase, All, All)
 ASTUGameModeBase::ASTUGameModeBase() {
 	DefaultPawnClass = ASTUBaseCharacter::StaticClass();
 	PlayerControllerClass = ASTUPlayerController::StaticClass();
+	PlayerStateClass = ASTUPlayerState::StaticClass();
 	HUDClass = ASTUGameHUD::StaticClass();
 }
 
 void ASTUGameModeBase::StartPlay() {
 	SpawnBots();
+	CreateTeamsInfo();
+
 	StartRound();
 
 	Super::StartPlay();
@@ -51,11 +55,24 @@ void ASTUGameModeBase::EndRound() {
 	}
 }
 
+void ASTUGameModeBase::SetPlayerColor(const AController* Controller) const {
+	if (!Controller) {
+		return;
+	}
+	const auto* PlayerState = Controller->GetPlayerState<ASTUPlayerState>();
+	const auto* Character = Controller->GetPawn<ASTUBaseCharacter>();
+	if (!PlayerState || !Character) {
+		return;
+	}
+	Character->SetPlayerColor(PlayerState->GetTeamColor());
+}
+
 void ASTUGameModeBase::ResetPlayer(AController* Controller) {
 	if (Controller && Controller->GetPawn()) {
 		Controller->GetPawn()->Reset();
 	}
 	RestartPlayer(Controller);
+	SetPlayerColor(Controller);
 }
 
 void ASTUGameModeBase::ResetPlayers() {
@@ -65,6 +82,42 @@ void ASTUGameModeBase::ResetPlayers() {
 	}
 	for (auto It = World->GetControllerIterator(); It; ++It) {
 		ResetPlayer(It->Get());
+	}
+}
+
+FLinearColor ASTUGameModeBase::GetTeamColor(int32 TeamID) const {
+	if (TeamID >= Data.TeamColors.Num() || TeamID < 0) {
+		UE_LOG(LogGameStateBase, Warning, TEXT("GetTeamColor invalid Team ID"));
+		return FLinearColor::White;
+	}
+	return Data.TeamColors[TeamID];
+}
+
+void ASTUGameModeBase::CreateTeamsInfo() const {
+	const auto* World = GetWorld();
+	if (!World) {
+		return;
+	}
+
+	int32 TeamID = 0;
+	const int32 TeamsAmount = Data.TeamColors.Num();
+	for (auto It = World->GetControllerIterator(); It; ++It) {
+		const auto* Controller = It->Get();
+		if (!Controller) {
+			continue;
+		}
+		auto* PlayerState = Controller->GetPlayerState<ASTUPlayerState>();
+		if (!PlayerState) {
+			continue;
+		}
+
+		PlayerState->SetTeamID(TeamID);
+		PlayerState->SetTeamColor(GetTeamColor(TeamID));
+		SetPlayerColor(Controller);
+
+		if (TeamsAmount > 0) {
+			TeamID = (TeamID + 1) % TeamsAmount;
+		}
 	}
 }
 

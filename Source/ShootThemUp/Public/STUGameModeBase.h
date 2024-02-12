@@ -12,6 +12,9 @@ USTRUCT(BlueprintType)
 struct FGameData {
 	GENERATED_BODY()
 
+	UPROPERTY(EditDefaultsOnly)
+	TArray<FLinearColor> TeamColors;
+
 	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "1", ClampMax = "100"))
 	int32 PlayersAmount = 2;
 
@@ -44,13 +47,17 @@ protected:
 	FGameData Data;
 
 private:
+	FLinearColor GetTeamColor(int32 TeamID) const;
+
+	void CreateTeamsInfo() const;
+	void SpawnBots();
+
 	void StartRound();
 	void EndRound();
 
+	void SetPlayerColor(const AController* Controller) const;
 	void ResetPlayer(AController* Controller);
 	void ResetPlayers();
-
-	void SpawnBots();
 
 	FTimerHandle RoundTimer;
 	int32 CurrentRound = 0;

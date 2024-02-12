@@ -86,6 +86,14 @@ USTUWeaponComponent* ASTUBaseCharacter::GetWeaponComponent() const {
 	return WeaponComponent;
 }
 
+void ASTUBaseCharacter::SetPlayerColor(FLinearColor Color) const {
+	auto* Material = GetMesh()->CreateAndSetMaterialInstanceDynamic(0);
+	if (!Material) {
+		return;
+	}
+	Material->SetVectorParameterValue(TeamColorMaterial, Color);
+}
+
 void ASTUBaseCharacter::OnDeath() {
 	//PlayAnimMontage(DeathAnimMontage);
 	OnDeathImpl();

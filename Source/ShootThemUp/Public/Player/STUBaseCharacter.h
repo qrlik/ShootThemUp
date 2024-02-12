@@ -30,6 +30,8 @@ public:
 	USTUHealthComponent* GetHealthComponent() const;
 	USTUWeaponComponent* GetWeaponComponent() const;
 
+	void SetPlayerColor(FLinearColor Color) const;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -55,6 +57,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "VFX")
 	TSubclassOf<UCameraShakeBase> CameraShake;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Material")
+	FName TeamColorMaterial = "Paint Color";
 
 	UPROPERTY(EditDefaultsOnly, Category = "Damage", meta = (ClampMin = "0.0"))
 	FVector2D LandedDamageVelocity = FVector2D(600.f, 1500.f);
