@@ -32,6 +32,8 @@ UClass* ASTUGameModeBase::GetDefaultPawnClassForController_Implementation(AContr
 void ASTUGameModeBase::StartRound() {
 	if (!RoundTimer.IsValid()) {
 		CurrentRound += 1;
+		ResetPlayers();
+
 		GetWorldTimerManager().SetTimer(RoundTimer, this, &ASTUGameModeBase::EndRound, Data.RoundTime);
 
 		UE_LOG(LogGameStateBase, Display, TEXT("NEW ROUND - %i"), CurrentRound);
@@ -46,6 +48,23 @@ void ASTUGameModeBase::EndRound() {
 	}
 	else {
 		StartRound();
+	}
+}
+
+void ASTUGameModeBase::ResetPlayer(AController* Controller) {
+	if (Controller && Controller->GetPawn()) {
+		Controller->GetPawn()->Reset();
+	}
+	RestartPlayer(Controller);
+}
+
+void ASTUGameModeBase::ResetPlayers() {
+	const auto* World = GetWorld();
+	if (!World) {
+		return;
+	}
+	for (auto It = World->GetControllerIterator(); It; ++It) {
+		ResetPlayer(It->Get());
 	}
 }
 

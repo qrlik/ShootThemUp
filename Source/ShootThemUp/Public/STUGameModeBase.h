@@ -47,6 +47,9 @@ private:
 	void StartRound();
 	void EndRound();
 
+	void ResetPlayer(AController* Controller);
+	void ResetPlayers();
+
 	void SpawnBots();
 
 	FTimerHandle RoundTimer;
