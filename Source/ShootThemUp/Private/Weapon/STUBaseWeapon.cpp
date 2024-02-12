@@ -143,7 +143,7 @@ void ASTUBaseWeapon::ChangeClip() {
 		CurrentAmmo.Clips -= 1;
 	}
 	CurrentAmmo.Bullets = DefaultAmmo.Bullets;
-	UE_LOG(LogTemp, Display, TEXT("========= CHANGE CLIP =========="));
+	//UE_LOG(LogBaseWeapon, Display, TEXT("========= CHANGE CLIP =========="));
 }
 
 void ASTUBaseWeapon::OnEquip() const {

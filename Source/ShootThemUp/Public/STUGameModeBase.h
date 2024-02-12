@@ -14,18 +14,24 @@ struct FGameData {
 
 	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "1", ClampMax = "100"))
 	int32 PlayersAmount = 2;
+
+	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "1", ClampMax = "25"))
+	int32 RoundsAmount = 4;
+
+	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "1", ClampMax = "300"))
+	int32 RoundTime = 20;
 };
 
 UCLASS()
-class SHOOTTHEMUP_API ASTUGameModeBase : public AGameModeBase
-{
+class SHOOTTHEMUP_API ASTUGameModeBase : public AGameModeBase {
 	GENERATED_BODY()
 
 public:
 	ASTUGameModeBase();
 
-	virtual void StartPlay() override;
 	virtual UClass* GetDefaultPawnClassForController_Implementation(AController* InController) override;
+
+	virtual void StartPlay() override;
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Game")
@@ -38,5 +44,11 @@ protected:
 	FGameData Data;
 
 private:
+	void StartRound();
+	void EndRound();
+
 	void SpawnBots();
+
+	FTimerHandle RoundTimer;
+	int32 CurrentRound = 0;
 };
