@@ -23,6 +23,9 @@ struct FGameData {
 
 	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "1", ClampMax = "300"))
 	int32 RoundTime = 20;
+
+	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "3", ClampMax = "30"))
+	int32 RespawnTime = 5;
 };
 
 UCLASS()
@@ -37,6 +40,7 @@ public:
 	virtual void StartPlay() override;
 
 	void Killed(const AController* KillerController, const AController* VictimController) const;
+	void OnRespawn(AController* Controller);
 
 	UFUNCTION(BlueprintCallable)
 	const FGameData& GetGameData() const;
@@ -63,6 +67,7 @@ private:
 	void EndRound();
 
 	void SetPlayerColor(const AController* Controller) const;
+	void SetRespawn(const AController* Controller, bool State) const;
 	void ResetPlayer(AController* Controller);
 	void ResetPlayers();
 

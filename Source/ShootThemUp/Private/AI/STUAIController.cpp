@@ -4,12 +4,15 @@
 
 #include "AI/STUAICharacter.h"
 #include "Components/STUAIPerceptionComponent.h"
+#include "Components/STURespawnComponent.h"
 
 ASTUAIController::ASTUAIController() {
+	bWantsPlayerState = true;
+
 	Perception = CreateDefaultSubobject<USTUAIPerceptionComponent>("PerceptionComponent");
 	SetPerceptionComponent(*Perception);
 
-	bWantsPlayerState = true;
+	Respawn = CreateDefaultSubobject<USTURespawnComponent>("RespawnComponent");
 }
 
 void ASTUAIController::Tick(float DeltaTime) {

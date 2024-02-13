@@ -3,9 +3,11 @@
 #include "STUGameModeBase.h"
 
 #include "AIController.h"
+#include "Components/STURespawnComponent.h"
 #include "Player/STUBaseCharacter.h"
 #include "Player/STUPlayerController.h"
 #include "Player/STUPlayerState.h"
+#include "STUUtils.h"
 #include "UI/STUGameHUD.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameStateBase, All, All)
@@ -36,6 +38,11 @@ void ASTUGameModeBase::Killed(const AController* KillerController, const AContro
 	if (auto* VictimState = VictimController->GetPlayerState<ASTUPlayerState>()) {
 		VictimState->OnDeath();
 	}
+	SetRespawn(VictimController, true);
+}
+
+void ASTUGameModeBase::OnRespawn(AController* Controller) {
+	ResetPlayer(Controller);
 }
 
 const FGameData& ASTUGameModeBase::GetGameData() const {
@@ -110,6 +117,18 @@ void ASTUGameModeBase::ResetPlayers() {
 	}
 	for (auto It = World->GetControllerIterator(); It; ++It) {
 		ResetPlayer(It->Get());
+		SetRespawn(It->Get(), false);
+	}
+}
+
+void ASTUGameModeBase::SetRespawn(const AController* Controller, bool State) const {
+	if (auto* RespawnComponent = STUUtils::GetComponentByClass<USTURespawnComponent>(Controller)) {
+		if (State) {
+			RespawnComponent->StartRespawn(Data.RespawnTime);
+		}
+		else {
+			RespawnComponent->Reset();
+		}
 	}
 }
 

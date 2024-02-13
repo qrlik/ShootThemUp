@@ -6,6 +6,7 @@
 #include "AIController.h"
 #include "STUAIController.generated.h"
 
+class USTURespawnComponent;
 class USTUAIPerceptionComponent;
 
 UCLASS()
@@ -24,6 +25,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<USTUAIPerceptionComponent> Perception;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	TObjectPtr<USTURespawnComponent> Respawn;
 
 private:
 	void UpdateEnemyActor();
