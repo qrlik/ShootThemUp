@@ -15,6 +15,9 @@ public:
 	void StartRespawn(float Respawn);
 	void Reset();
 
+	float GetRespawnRemainingTime() const;
+	bool IsActive() const;
+
 private:
 	void Respawn();
 

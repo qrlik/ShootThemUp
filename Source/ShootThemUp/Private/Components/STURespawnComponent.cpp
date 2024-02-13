@@ -21,6 +21,18 @@ void USTURespawnComponent::Reset() {
 	World->GetTimerManager().ClearTimer(RespawnTimer);
 }
 
+float USTURespawnComponent::GetRespawnRemainingTime() const {
+	const auto* World = GetWorld();
+	if (!World || !RespawnTimer.IsValid()) {
+		return 0.f;
+	}
+	return World->GetTimerManager().GetTimerRemaining(RespawnTimer);
+}
+
+bool USTURespawnComponent::IsActive() const {
+	return RespawnTimer.IsValid();
+}
+
 void USTURespawnComponent::Respawn() {
 	Reset();
 
