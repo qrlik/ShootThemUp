@@ -3,6 +3,7 @@
 #include "STUGameModeBase.h"
 
 #include "AIController.h"
+#include "EngineUtils.h"
 #include "Components/STURespawnComponent.h"
 #include "Player/STUBaseCharacter.h"
 #include "Player/STUPlayerController.h"
@@ -67,6 +68,16 @@ UClass* ASTUGameModeBase::GetDefaultPawnClassForController_Implementation(AContr
 	return AIPawnClass;
 }
 
+
+void ASTUGameModeBase::GameOver() const {
+	UE_LOG(LogGameStateBase, Display, TEXT("=========== GAME OVER ==========="));
+	LogPlayerInfo();
+	for (auto* Pawn : TActorRange<APawn>(GetWorld())) {
+		Pawn->TurnOff();
+		Pawn->DisableInput(nullptr);
+	}
+}
+
 void ASTUGameModeBase::StartRound() {
 	if (!RoundTimer.IsValid()) {
 		CurrentRound += 1;
@@ -82,8 +93,7 @@ void ASTUGameModeBase::EndRound() {
 	GetWorldTimerManager().ClearTimer(RoundTimer);
 
 	if (CurrentRound >= Data.RoundsAmount) {
-		UE_LOG(LogGameStateBase, Display, TEXT("=========== GAME OVER ==========="));
-		LogPlayerInfo();
+		GameOver();
 	}
 	else {
 		StartRound();

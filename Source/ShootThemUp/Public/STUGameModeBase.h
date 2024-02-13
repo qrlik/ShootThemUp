@@ -63,6 +63,7 @@ private:
 	void CreateTeamsInfo() const;
 	void SpawnBots();
 
+	void GameOver() const;
 	void StartRound();
 	void EndRound();
 
