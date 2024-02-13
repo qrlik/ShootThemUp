@@ -38,6 +38,11 @@ public:
 
 	void Killed(const AController* KillerController, const AController* VictimController) const;
 
+	UFUNCTION(BlueprintCallable)
+	const FGameData& GetGameData() const;
+	float GetRoundRemainingTime() const;
+	int32 GetCurrentRound() const;
+
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Game")
 	TSubclassOf<AAIController> AIControllerClass;

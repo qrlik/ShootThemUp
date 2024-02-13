@@ -38,6 +38,21 @@ void ASTUGameModeBase::Killed(const AController* KillerController, const AContro
 	}
 }
 
+const FGameData& ASTUGameModeBase::GetGameData() const {
+	return Data;
+}
+
+float ASTUGameModeBase::GetRoundRemainingTime() const {
+	if (RoundTimer.IsValid()) {
+		return GetWorldTimerManager().GetTimerRemaining(RoundTimer);
+	}
+	return 0.f;
+}
+
+int32 ASTUGameModeBase::GetCurrentRound() const {
+	return CurrentRound;
+}
+
 UClass* ASTUGameModeBase::GetDefaultPawnClassForController_Implementation(AController* InController) {
 	if (InController && InController->IsPlayerController()) {
 		return Super::GetDefaultPawnClassForController_Implementation(InController);
