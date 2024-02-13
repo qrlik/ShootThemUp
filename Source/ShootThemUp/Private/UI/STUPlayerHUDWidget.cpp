@@ -5,11 +5,17 @@
 #include "Components/STUHealthComponent.h"
 #include "Components/STUWeaponComponent.h"
 #include "STUUtils.h"
+#include "Player/STUPlayerController.h"
 
 namespace {
 }
 
 bool USTUPlayerHUDWidget::Initialize() {
+	if (auto* Controller = GetOwningPlayer<ASTUPlayerController>()) {
+		if (!Controller->OnPawnPossess.IsBoundToObject(this)) {
+			Controller->OnPawnPossess.AddUObject(this, &USTUPlayerHUDWidget::InitializeDamageEvent);
+		}
+	}
 	InitializeDamageEvent();
 	return Super::Initialize();
 }
@@ -51,7 +57,9 @@ bool USTUPlayerHUDWidget::IsPlayerSpectating() const {
 
 void USTUPlayerHUDWidget::InitializeDamageEvent() {
 	if (auto* HealthComponent = STUUtils::GetComponentByClass<USTUHealthComponent>(GetOwningPlayerPawn())) {
-		HealthComponent->OnHealthChange.AddUObject(this, &USTUPlayerHUDWidget::OnHealthChanged);
+		if (!HealthComponent->OnHealthChange.IsBoundToObject(this)) {
+			HealthComponent->OnHealthChange.AddUObject(this, &USTUPlayerHUDWidget::OnHealthChanged);
+		}
 	}
 }
 

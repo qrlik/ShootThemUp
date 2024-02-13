@@ -8,6 +8,8 @@
 
 class USTURespawnComponent;
 
+DECLARE_MULTICAST_DELEGATE(FPawnPossessSignature);
+
 UCLASS()
 class SHOOTTHEMUP_API ASTUPlayerController : public APlayerController {
 	GENERATED_BODY()
@@ -15,7 +17,11 @@ class SHOOTTHEMUP_API ASTUPlayerController : public APlayerController {
 public:
 	ASTUPlayerController();
 
+	FPawnPossessSignature OnPawnPossess;
+
 protected:
+	virtual void OnPossess(APawn* aPawn) override;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<USTURespawnComponent> Respawn;
 };

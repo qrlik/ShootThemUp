@@ -7,3 +7,9 @@
 ASTUPlayerController::ASTUPlayerController() {
 	Respawn = CreateDefaultSubobject<USTURespawnComponent>("RespawnComponent");
 }
+
+void ASTUPlayerController::OnPossess(APawn* aPawn) {
+	Super::OnPossess(aPawn);
+
+	OnPawnPossess.Broadcast();
+}
