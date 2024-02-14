@@ -7,9 +7,6 @@
 #include "STUBaseCharacter.generated.h"
 
 enum class EMovementFlags;
-class UCameraComponent;
-class USpringArmComponent;
-class UTextRenderComponent;
 class USTUCharacterMovementComponent;
 class USTUHealthComponent;
 class USTUWeaponComponent;
@@ -22,8 +19,6 @@ class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
 public:
 	ASTUBaseCharacter(const FObjectInitializer& Initializer);
 
-	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
-
 	UFUNCTION(BlueprintCallable)
 	float GetDirectionAngle() const;
 
@@ -32,31 +27,25 @@ public:
 
 	void SetPlayerColor(FLinearColor Color) const;
 
+	void StartRun();
+	void StopRun();
+
 protected:
 	virtual void BeginPlay() override;
 
 	virtual void OnDeathImpl();
+	virtual void OnHealthChangedImpl(float Delta) const;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-	TObjectPtr<USpringArmComponent> SpringArmComponent;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-	TObjectPtr<UCameraComponent> CameraComponent;
+	void UpdateMovementFlag(EMovementFlags Flag, float Amount) const;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<USTUHealthComponent> HealthComponent;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-	TObjectPtr<UTextRenderComponent> HealthTextComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<USTUWeaponComponent> WeaponComponent;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	TObjectPtr<UAnimMontage> DeathAnimMontage;
-
-	UPROPERTY(EditDefaultsOnly, Category = "VFX")
-	TSubclassOf<UCameraShakeBase> CameraShake;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Material")
 	FName TeamColorMaterial = "Paint Color";
@@ -75,13 +64,4 @@ private:
 	void OnHealthChanged(float Delta) const;
 	UFUNCTION()
 	void OnGroundLanded(const FHitResult& Hit);
-
-	void MoveForward(float Amount);
-	void MoveRight(float Amount);
-	void StartRun();
-	void StopRun();
-
-	void PlayCameraShake() const;
-	void UpdateMovementFlag(EMovementFlags Flag, float Amount) const;
-	void UpdateHealthText() const;
 };
