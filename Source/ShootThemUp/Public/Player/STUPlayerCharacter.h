@@ -7,6 +7,7 @@
 #include "STUPlayerCharacter.generated.h"
 
 class UCameraComponent;
+class USphereComponent;
 class USpringArmComponent;
 
 UCLASS()
@@ -29,12 +30,22 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<UCameraComponent> CameraComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	TObjectPtr<USphereComponent> CameraCollisionComponent;
+
 	UPROPERTY(EditDefaultsOnly, Category = "VFX")
 	TSubclassOf<UCameraShakeBase> CameraShake;
 
 private:
 	void MoveForward(float Amount);
 	void MoveRight(float Amount);
+
+	UFUNCTION()
+	void OnCameraBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
+	                          bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION()
+	void OnCameraEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	void UpdateMeshRenderState(bool Visible) const;
 
 	void PlayCameraShake() const;
 };

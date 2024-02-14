@@ -3,6 +3,8 @@
 #include "Player/STUPlayerCharacter.h"
 
 #include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "Components/SphereComponent.h"
 #include "Components/STUCharacterMovementComponent.h"
 #include "Components/STUWeaponComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -15,6 +17,10 @@ ASTUPlayerCharacter::ASTUPlayerCharacter(const FObjectInitializer& Initializer):
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
 	CameraComponent->SetupAttachment(SpringArmComponent);
+
+	CameraCollisionComponent = CreateDefaultSubobject<USphereComponent>("CameraCollisionComponent");
+	CameraCollisionComponent->SetupAttachment(CameraComponent);
+	CameraCollisionComponent->SetCollisionResponseToAllChannels(ECR_Overlap);
 }
 
 void ASTUPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) {
@@ -33,9 +39,13 @@ void ASTUPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 
 void ASTUPlayerCharacter::BeginPlay() {
 	Super::BeginPlay();
-	
+
 	check(SpringArmComponent);
 	check(CameraComponent);
+	check(CameraCollisionComponent);
+
+	CameraCollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &ASTUPlayerCharacter::OnCameraBeginOverlap);
+	CameraCollisionComponent->OnComponentEndOverlap.AddDynamic(this, &ASTUPlayerCharacter::OnCameraEndOverlap);
 }
 
 void ASTUPlayerCharacter::OnDeathImpl() {
@@ -62,6 +72,29 @@ void ASTUPlayerCharacter::MoveRight(float Amount) {
 		AddMovementInput(GetActorRightVector(), Amount);
 	}
 	UpdateMovementFlag(EMovementFlags::MoveSide, Amount);
+}
+
+void ASTUPlayerCharacter::OnCameraBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+                                               int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
+	if (Cast<UPrimitiveComponent>(GetCapsuleComponent()) == OtherComp) {
+		UpdateMeshRenderState(false);
+	}
+}
+
+void ASTUPlayerCharacter::OnCameraEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+                                             int32 OtherBodyIndex) {
+	if (Cast<UPrimitiveComponent>(GetCapsuleComponent()) == OtherComp) {
+		UpdateMeshRenderState(true);
+	}
+}
+
+void ASTUPlayerCharacter::UpdateMeshRenderState(bool Visible) const {
+	GetMesh()->SetOwnerNoSee(!Visible);
+	for (const auto Child : GetMesh()->GetAttachChildren()) {
+		if (auto* Primitive = Cast<UPrimitiveComponent>(Child)) {
+			Primitive->SetOwnerNoSee(!Visible);
+		}
+	}
 }
 
 void ASTUPlayerCharacter::PlayCameraShake() const {

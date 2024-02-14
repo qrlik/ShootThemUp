@@ -82,10 +82,11 @@ FHitResult ASTUBaseWeapon::GetHitResult() const {
 	FVector TraceStart, TraceEnd;
 	GetShotTrace(TraceStart, TraceEnd);
 
-	FCollisionQueryParams CollisionParams;
-	CollisionParams.bReturnPhysicalMaterial = true;
-
 	if (const auto* World = GetWorld()) {
+		FCollisionQueryParams CollisionParams;
+		CollisionParams.bReturnPhysicalMaterial = true;
+		CollisionParams.AddIgnoredActor(GetOwner());
+
 		World->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, CollisionParams);
 	}
 	return HitResult;
