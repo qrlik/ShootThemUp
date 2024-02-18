@@ -47,9 +47,11 @@ public:
 
 	FOnMatchStateChangeSignature OnMatchStateChange;
 
-	virtual UClass* GetDefaultPawnClassForController_Implementation(AController* InController) override;
-
 	virtual void StartPlay() override;
+
+	virtual UClass* GetDefaultPawnClassForController_Implementation(AController* InController) override;
+	virtual bool SetPause(APlayerController* PC, FCanUnpause CanUnpauseDelegate) override;
+	virtual bool ClearPause() override;
 
 	void Killed(const AController* KillerController, const AController* VictimController) const;
 	void OnRespawn(AController* Controller);

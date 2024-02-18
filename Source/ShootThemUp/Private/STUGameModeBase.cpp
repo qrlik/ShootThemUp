@@ -70,6 +70,22 @@ UClass* ASTUGameModeBase::GetDefaultPawnClassForController_Implementation(AContr
 	return AIPawnClass;
 }
 
+bool ASTUGameModeBase::SetPause(APlayerController* PC, FCanUnpause CanUnpauseDelegate) {
+	const auto Result = Super::SetPause(PC, CanUnpauseDelegate);
+	if (Result) {
+		SetMatchState(EMatchState::Pause);
+	}
+	return Result;
+}
+
+bool ASTUGameModeBase::ClearPause() {
+	const auto Result = Super::ClearPause();
+	if (Result) {
+		SetMatchState(EMatchState::InProgress);
+	}
+	return Result;
+}
+
 
 void ASTUGameModeBase::GameOver() {
 	UE_LOG(LogGameStateBase, Display, TEXT("=========== GAME OVER ==========="));

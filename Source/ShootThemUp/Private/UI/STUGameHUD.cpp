@@ -4,6 +4,7 @@
 #include "UI/STUGameHUD.h"
 
 #include "STUGameModeBase.h"
+#include "STUUtils.h"
 #include "Blueprint/UserWidget.h"
 #include "Engine/Canvas.h"
 
@@ -16,18 +17,17 @@ void ASTUGameHUD::DrawHUD() {
 
 void ASTUGameHUD::BeginPlay() {
 	Super::BeginPlay();
-	if (auto* PlayerHUDWidget = CreateWidget(GetWorld(), PlayerHUDWidgetClass)) {
-		PlayerHUDWidget->AddToViewport();
-	}
-	InitStateDelegate();
+	CreateWidgets();
+	InitMatchStateDelegate();
 }
 
-void ASTUGameHUD::InitStateDelegate() {
-	const auto* World = GetWorld();
-	if (!World) {
-		return;
-	}
-	if (auto* GameMode = World->GetAuthGameMode<ASTUGameModeBase>()) {
+void ASTUGameHUD::CreateWidgets() {
+	GameWidgets.Add(EMatchState::InProgress, CreateWidget(GetWorld(), PlayerHUDWidgetClass));
+	GameWidgets.Add(EMatchState::Pause, CreateWidget(GetWorld(), PauseWidgetClass));
+}
+
+void ASTUGameHUD::InitMatchStateDelegate() {
+	if (auto* GameMode = STUUtils::GetGameMode<ASTUGameModeBase>(GetWorld())) {
 		check(!GameMode->OnMatchStateChange.IsBoundToObject(this));
 		GameMode->OnMatchStateChange.AddUObject(this, &ASTUGameHUD::OnMatchStateChanged);
 	}
@@ -45,4 +45,18 @@ void ASTUGameHUD::DrawCrossHair() {
 
 void ASTUGameHUD::OnMatchStateChanged(EMatchState State) {
 	UE_LOG(LogGameHUD, Display, TEXT("Match state changed: %s"), *UEnum::GetValueAsString(State));
+	const auto* It = GameWidgets.Find(State);
+	if (!It) {
+		return;
+	}
+	const auto Widget = *It;
+	if (Widget == CurrentWidget) {
+		return;
+	}
+
+	if (CurrentWidget) {
+		CurrentWidget->RemoveFromParent();
+	}
+	Widget->AddToViewport();
+	CurrentWidget = Widget;
 }

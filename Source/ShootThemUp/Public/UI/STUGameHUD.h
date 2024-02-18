@@ -21,10 +21,19 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	TSubclassOf<UUserWidget> PlayerHUDWidgetClass;
 
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<UUserWidget> PauseWidgetClass;
+
 private:
-	void InitStateDelegate();
+	void CreateWidgets();
+	void InitMatchStateDelegate();
 
 	void DrawCrossHair();
 
 	void OnMatchStateChanged(EMatchState State);
+
+	UPROPERTY()
+	TMap<EMatchState, TObjectPtr<UUserWidget>> GameWidgets;
+	UPROPERTY()
+	TObjectPtr<UUserWidget> CurrentWidget;
 };
