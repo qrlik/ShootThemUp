@@ -2,25 +2,19 @@
 
 #include "UI/STUMatchInfoWidget.h"
 
-#include "STUGameModeBase.h"
 #include "Player/STUPlayerState.h"
-
-ASTUGameModeBase* USTUMatchInfoWidget::GetGameMode() const {
-	if (const auto* World = GetWorld()) {
-		return World->GetAuthGameMode<ASTUGameModeBase>();
-	}
-	return nullptr;
-}
+#include "STUGameModeBase.h"
+#include "STUUtils.h"
 
 float USTUMatchInfoWidget::GetRemainingTime() const {
-	if (const auto* GameMode = GetGameMode()) {
+	if (const auto* GameMode = STUUtils::GetGameMode<ASTUGameModeBase>(GetWorld())) {
 		return GameMode->GetRoundRemainingTime();
 	}
 	return 0.f;
 }
 
 FIntPoint USTUMatchInfoWidget::GetRoundsInfo() const {
-	const auto* GameMode = GetGameMode();
+	const auto* GameMode = STUUtils::GetGameMode<ASTUGameModeBase>(GetWorld());
 	if (!GameMode) {
 		return {};
 	}

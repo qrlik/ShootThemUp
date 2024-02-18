@@ -3,6 +3,7 @@
 #include "Components/STURespawnComponent.h"
 
 #include "STUGameModeBase.h"
+#include "STUUtils.h"
 
 void USTURespawnComponent::StartRespawn(float Respawn) {
 	const auto* World = GetWorld();
@@ -36,9 +37,7 @@ bool USTURespawnComponent::IsActive() const {
 void USTURespawnComponent::Respawn() {
 	Reset();
 
-	if (const auto* World = GetWorld()) {
-		if (auto* GameMode = World->GetAuthGameMode<ASTUGameModeBase>()) {
-			GameMode->OnRespawn(Cast<AController>(GetOwner()));
-		}
+	if (auto* GameMode = STUUtils::GetGameMode<ASTUGameModeBase>(GetWorld())) {
+		GameMode->OnRespawn(Cast<AController>(GetOwner()));
 	}
 }

@@ -15,5 +15,15 @@ public:
 		return nullptr;
 	}
 
+	template <typename T = AGameModeBase>
+	static T* GetGameMode(const UWorld* World) {
+		if (World) {
+			if (auto* GameMode = World->GetAuthGameMode<T>()) {
+				return GameMode;
+			}
+		}
+		return nullptr;
+	}
+
 	static bool AreEnemies(const AController* Lhs, const AController* Rhs);
 };

@@ -3,6 +3,7 @@
 #include "Components/STUHealthComponent.h"
 
 #include "STUGameModeBase.h"
+#include "STUUtils.h"
 
 DEFINE_LOG_CATEGORY_STATIC(HealthComponentLog, All, All)
 
@@ -78,12 +79,8 @@ void USTUHealthComponent::StartAutoHeal() {
 	}
 }
 
-void USTUHealthComponent::Killed(AController* Killer) const {
-	const auto* World = GetWorld();
-	if (!World) {
-		return;
-	}
-	const auto* GameMode = World->GetAuthGameMode<ASTUGameModeBase>();
+void USTUHealthComponent::Killed(const AController* Killer) const {
+	const auto* GameMode = STUUtils::GetGameMode<ASTUGameModeBase>(GetWorld());
 	if (!GameMode) {
 		return;
 	}

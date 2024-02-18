@@ -58,7 +58,7 @@ private:
 	void AddAutoHealTick();
 	void StartAutoHeal();
 
-	void Killed(AController* Killer) const;
+	void Killed(const AController* Killer) const;
 
 	FTimerHandle AutoHealTimer;
 

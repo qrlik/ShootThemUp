@@ -21,7 +21,4 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	int32 GetKills() const;
-
-private:
-	ASTUGameModeBase* GetGameMode() const;
 };
