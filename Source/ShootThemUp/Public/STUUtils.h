@@ -15,6 +15,16 @@ public:
 		return nullptr;
 	}
 
+	template <typename T = APlayerState>
+	static T* GetPlayerState(const AController* Controller) {
+		if (Controller) {
+			if (auto* PlayerState = Controller->GetPlayerState<T>()) {
+				return PlayerState;
+			}
+		}
+		return nullptr;
+	}
+
 	template <typename T = AGameModeBase>
 	static T* GetGameMode(const UWorld* World) {
 		if (World) {

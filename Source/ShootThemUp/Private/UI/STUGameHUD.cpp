@@ -24,6 +24,7 @@ void ASTUGameHUD::BeginPlay() {
 void ASTUGameHUD::CreateWidgets() {
 	GameWidgets.Add(EMatchState::InProgress, CreateWidget(GetWorld(), PlayerHUDWidgetClass));
 	GameWidgets.Add(EMatchState::Pause, CreateWidget(GetWorld(), PauseWidgetClass));
+	GameWidgets.Add(EMatchState::GameOver, CreateWidget(GetWorld(), GameOverWidgetClass));
 }
 
 void ASTUGameHUD::InitMatchStateDelegate() {
