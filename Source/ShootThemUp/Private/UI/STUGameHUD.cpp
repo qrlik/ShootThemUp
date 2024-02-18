@@ -3,8 +3,11 @@
 
 #include "UI/STUGameHUD.h"
 
+#include "STUGameModeBase.h"
 #include "Blueprint/UserWidget.h"
 #include "Engine/Canvas.h"
+
+DEFINE_LOG_CATEGORY_STATIC(LogGameHUD, All, All);
 
 void ASTUGameHUD::DrawHUD() {
 	Super::DrawHUD();
@@ -16,6 +19,18 @@ void ASTUGameHUD::BeginPlay() {
 	if (auto* PlayerHUDWidget = CreateWidget(GetWorld(), PlayerHUDWidgetClass)) {
 		PlayerHUDWidget->AddToViewport();
 	}
+	InitStateDelegate();
+}
+
+void ASTUGameHUD::InitStateDelegate() {
+	const auto* World = GetWorld();
+	if (!World) {
+		return;
+	}
+	if (auto* GameMode = World->GetAuthGameMode<ASTUGameModeBase>()) {
+		check(!GameMode->OnMatchStateChange.IsBoundToObject(this));
+		GameMode->OnMatchStateChange.AddUObject(this, &ASTUGameHUD::OnMatchStateChanged);
+	}
 }
 
 void ASTUGameHUD::DrawCrossHair() {
@@ -26,4 +41,8 @@ void ASTUGameHUD::DrawCrossHair() {
 
 	DrawLine(Center.X - HalfLine, Center.Y, Center.X + HalfLine, Center.Y, LineColor, LineThickness);
 	DrawLine(Center.X, Center.Y - HalfLine, Center.X, Center.Y + HalfLine, LineColor, LineThickness);
+}
+
+void ASTUGameHUD::OnMatchStateChanged(EMatchState State) {
+	UE_LOG(LogGameHUD, Display, TEXT("Match state changed: %s"), *UEnum::GetValueAsString(State));
 }

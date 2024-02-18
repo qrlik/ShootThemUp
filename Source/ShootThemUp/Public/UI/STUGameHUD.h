@@ -6,6 +6,8 @@
 #include "GameFramework/HUD.h"
 #include "STUGameHUD.generated.h"
 
+enum class EMatchState;
+
 UCLASS()
 class SHOOTTHEMUP_API ASTUGameHUD : public AHUD {
 	GENERATED_BODY()
@@ -20,5 +22,9 @@ protected:
 	TSubclassOf<UUserWidget> PlayerHUDWidgetClass;
 
 private:
+	void InitStateDelegate();
+
 	void DrawCrossHair();
+
+	void OnMatchStateChanged(EMatchState State);
 };

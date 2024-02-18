@@ -28,12 +28,24 @@ struct FGameData {
 	int32 RespawnTime = 5;
 };
 
+UENUM(BlueprintType)
+enum class EMatchState {
+	WaitingToStart = 0,
+	InProgress,
+	Pause,
+	GameOver
+};
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnMatchStateChangeSignature, EMatchState)
+
 UCLASS()
 class SHOOTTHEMUP_API ASTUGameModeBase : public AGameModeBase {
 	GENERATED_BODY()
 
 public:
 	ASTUGameModeBase();
+
+	FOnMatchStateChangeSignature OnMatchStateChange;
 
 	virtual UClass* GetDefaultPawnClassForController_Implementation(AController* InController) override;
 
@@ -63,17 +75,19 @@ private:
 	void CreateTeamsInfo() const;
 	void SpawnBots();
 
-	void GameOver() const;
-	void StartRound();
-	void EndRound();
-
+	void LogPlayerInfo() const;
 	void SetPlayerColor(const AController* Controller) const;
 	void SetRespawn(const AController* Controller, bool State) const;
 	void ResetPlayer(AController* Controller);
 	void ResetPlayers();
 
-	void LogPlayerInfo() const;
+	void GameOver();
+	void StartRound();
+	void EndRound();
+
+	void SetMatchState(EMatchState State);
 
 	FTimerHandle RoundTimer;
+	EMatchState MatchState = EMatchState::WaitingToStart;
 	int32 CurrentRound = 0;
 };

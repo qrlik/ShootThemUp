@@ -21,12 +21,14 @@ ASTUGameModeBase::ASTUGameModeBase() {
 }
 
 void ASTUGameModeBase::StartPlay() {
+	Super::StartPlay();
+
 	SpawnBots();
 	CreateTeamsInfo();
 
 	StartRound();
 
-	Super::StartPlay();
+	SetMatchState(EMatchState::InProgress);
 }
 
 void ASTUGameModeBase::Killed(const AController* KillerController, const AController* VictimController) const {
@@ -69,13 +71,14 @@ UClass* ASTUGameModeBase::GetDefaultPawnClassForController_Implementation(AContr
 }
 
 
-void ASTUGameModeBase::GameOver() const {
+void ASTUGameModeBase::GameOver() {
 	UE_LOG(LogGameStateBase, Display, TEXT("=========== GAME OVER ==========="));
 	LogPlayerInfo();
 	for (auto* Pawn : TActorRange<APawn>(GetWorld())) {
 		Pawn->TurnOff();
 		Pawn->DisableInput(nullptr);
 	}
+	SetMatchState(EMatchState::GameOver);
 }
 
 void ASTUGameModeBase::StartRound() {
@@ -97,6 +100,13 @@ void ASTUGameModeBase::EndRound() {
 	}
 	else {
 		StartRound();
+	}
+}
+
+void ASTUGameModeBase::SetMatchState(EMatchState State) {
+	if (MatchState != State) {
+		MatchState = State;
+		OnMatchStateChange.Broadcast(MatchState);
 	}
 }
 
