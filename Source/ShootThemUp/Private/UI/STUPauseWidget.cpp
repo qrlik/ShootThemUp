@@ -6,12 +6,10 @@
 #include "STUGameModeBase.h"
 #include "STUUtils.h"
 
-bool USTUPauseWidget::Initialize() {
-	const auto InitStatus = Super::Initialize();
+void USTUPauseWidget::NativeOnInitialized() {
+	Super::NativeOnInitialized();
 
 	InitClearPauseButton();
-
-	return InitStatus;
 }
 
 void USTUPauseWidget::InitClearPauseButton() {

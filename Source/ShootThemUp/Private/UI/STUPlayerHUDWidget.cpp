@@ -7,19 +7,6 @@
 #include "STUUtils.h"
 #include "Player/STUPlayerController.h"
 
-namespace {
-}
-
-bool USTUPlayerHUDWidget::Initialize() {
-	if (auto* Controller = GetOwningPlayer<ASTUPlayerController>()) {
-		if (!Controller->OnPawnPossess.IsBoundToObject(this)) {
-			Controller->OnPawnPossess.AddUObject(this, &USTUPlayerHUDWidget::InitializeDamageEvent);
-		}
-	}
-	InitializeDamageEvent();
-	return Super::Initialize();
-}
-
 FWeaponUIData USTUPlayerHUDWidget::GetCurrentWeaponUIData() const {
 	if (const auto* WeaponComponent = STUUtils::GetComponentByClass<USTUWeaponComponent>(GetOwningPlayerPawn())) {
 		return WeaponComponent->GetUIData();
@@ -53,6 +40,17 @@ bool USTUPlayerHUDWidget::IsPlayerSpectating() const {
 		return Controller->GetStateName() == NAME_Spectating;
 	}
 	return false;
+}
+
+void USTUPlayerHUDWidget::NativeOnInitialized() {
+	Super::NativeOnInitialized();
+
+	if (auto* Controller = GetOwningPlayer<ASTUPlayerController>()) {
+		if (!Controller->OnPawnPossess.IsBoundToObject(this)) {
+			Controller->OnPawnPossess.AddUObject(this, &USTUPlayerHUDWidget::InitializeDamageEvent);
+		}
+	}
+	InitializeDamageEvent();
 }
 
 void USTUPlayerHUDWidget::InitializeDamageEvent() {

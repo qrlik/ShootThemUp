@@ -13,8 +13,6 @@ class SHOOTTHEMUP_API USTUPlayerHUDWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	virtual bool Initialize() override;
-
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	FWeaponUIData GetCurrentWeaponUIData() const;
 
@@ -32,6 +30,9 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "UI")
 	void OnTakeDamage();
+
+protected:
+	virtual void NativeOnInitialized() override;
 
 private:
 	void InitializeDamageEvent();
