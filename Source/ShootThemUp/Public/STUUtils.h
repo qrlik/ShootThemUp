@@ -2,14 +2,31 @@
 
 class STUUtils {
 public:
-	static APawn* GetPawn(const AController* Controller);
-	static AController* GetController(const AActor* Actor);
-
 	template <typename T>
 	static T* GetComponentByClass(const AActor* Pawn) {
 		if (Pawn) {
 			if (auto* Component = Pawn->GetComponentByClass<T>()) {
 				return Component;
+			}
+		}
+		return nullptr;
+	}
+
+	template <typename T = UGameInstance>
+	static T* GetGameInstance(const UWorld* World) {
+		if (World) {
+			if (auto* GameInstance = World->GetGameInstance<T>()) {
+				return GameInstance;
+			}
+		}
+		return nullptr;
+	}
+
+	template <typename T = AGameModeBase>
+	static T* GetGameMode(const UWorld* World) {
+		if (World) {
+			if (auto* GameMode = World->GetAuthGameMode<T>()) {
+				return GameMode;
 			}
 		}
 		return nullptr;
@@ -25,15 +42,8 @@ public:
 		return nullptr;
 	}
 
-	template <typename T = AGameModeBase>
-	static T* GetGameMode(const UWorld* World) {
-		if (World) {
-			if (auto* GameMode = World->GetAuthGameMode<T>()) {
-				return GameMode;
-			}
-		}
-		return nullptr;
-	}
+	static APawn* GetPawn(const AController* Controller);
+	static AController* GetController(const AActor* Actor);
 
 	static bool AreEnemies(const AController* Lhs, const AController* Rhs);
 };
