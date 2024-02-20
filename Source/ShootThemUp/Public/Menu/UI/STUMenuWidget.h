@@ -18,9 +18,15 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton> StartGameButton;
 
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UButton> QuitGameButton;
+
 private:
 	void InitStartGameButton();
+	void InitQuitGameButton();
 
 	UFUNCTION()
 	void OnStartGame();
+	UFUNCTION()
+	void OnQuitGame();
 };

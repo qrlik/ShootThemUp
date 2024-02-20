@@ -13,11 +13,18 @@ void USTUMenuWidget::NativeOnInitialized() {
 	Super::NativeOnInitialized();
 
 	InitStartGameButton();
+	InitQuitGameButton();
 }
 
 void USTUMenuWidget::InitStartGameButton() {
 	if (StartGameButton) {
 		StartGameButton->OnClicked.AddDynamic(this, &USTUMenuWidget::OnStartGame);
+	}
+}
+
+void USTUMenuWidget::InitQuitGameButton() {
+	if (QuitGameButton) {
+		QuitGameButton->OnClicked.AddDynamic(this, &USTUMenuWidget::OnQuitGame);
 	}
 }
 
@@ -33,4 +40,8 @@ void USTUMenuWidget::OnStartGame() {
 		return;
 	}
 	UGameplayStatics::OpenLevel(this, StartupLevelName);
+}
+
+void USTUMenuWidget::OnQuitGame() {
+	UKismetSystemLibrary::QuitGame(this, GetOwningPlayer(), EQuitPreference::Quit, true);
 }
