@@ -6,6 +6,9 @@
 #include "Blueprint/UserWidget.h"
 #include "STUMenuWidget.generated.h"
 
+struct FLevelData;
+class USTULevelItemWidget;
+class UHorizontalBox;
 class UButton;
 
 UCLASS()
@@ -21,12 +24,27 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton> QuitGameButton;
 
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UHorizontalBox> LevelItemsBox;
+
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<USTULevelItemWidget> LevelItemWidgetClass;
+
 private:
 	void InitStartGameButton();
 	void InitQuitGameButton();
+	void InitLevelItemsBox();
 
 	UFUNCTION()
 	void OnStartGame();
 	UFUNCTION()
 	void OnQuitGame();
+	void OnLevelSelected(const FName& LevelName);
+
+	void SelectLevel(TObjectPtr<USTULevelItemWidget> LevelWidget);
+
+	UPROPERTY()
+	TArray<TObjectPtr<USTULevelItemWidget>> LevelItemWidgets;
+	UPROPERTY()
+	TObjectPtr<USTULevelItemWidget> SelectedLevelItemWidget;
 };

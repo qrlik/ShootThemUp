@@ -3,7 +3,10 @@
 #include "Menu/UI/STUMenuWidget.h"
 
 #include "Components/Button.h"
+#include "Components/HorizontalBox.h"
 #include "Kismet/GameplayStatics.h"
+#include "Menu/UI/STULevelItemWidget.h"
+#include "STUCoreTypes.h"
 #include "STUGameInstance.h"
 #include "STUUtils.h"
 
@@ -14,6 +17,7 @@ void USTUMenuWidget::NativeOnInitialized() {
 
 	InitStartGameButton();
 	InitQuitGameButton();
+	InitLevelItemsBox();
 }
 
 void USTUMenuWidget::InitStartGameButton() {
@@ -28,20 +32,69 @@ void USTUMenuWidget::InitQuitGameButton() {
 	}
 }
 
-void USTUMenuWidget::OnStartGame() {
+void USTUMenuWidget::InitLevelItemsBox() {
 	const auto* GameInstance = STUUtils::GetGameInstance<USTUGameInstance>(GetWorld());
+	if (!GameInstance || !LevelItemsBox) {
+		return;
+	}
+	LevelItemsBox->ClearChildren();
+	const auto& Levels = GameInstance->GetLevelsData();
+	checkf(Levels.Num() > 0, TEXT("Empty levels data"));
+	const auto& LastPlayedLevel = GameInstance->GetLastLevelName();
+
+	for (const auto& LevelData : Levels) {
+		auto* LevelItemWidget = CreateWidget<USTULevelItemWidget>(this, LevelItemWidgetClass);
+		if (!LevelItemWidget) {
+			continue;
+		}
+		LevelItemsBox->AddChild(LevelItemWidget);
+		LevelItemWidgets.Add(LevelItemWidget);
+
+		LevelItemWidget->SetLevelData(LevelData);
+		check(!LevelItemWidget->OnLevelSelected.IsBoundToObject(this));
+		LevelItemWidget->OnLevelSelected.BindUObject(this, &USTUMenuWidget::OnLevelSelected);
+
+		if (LastPlayedLevel == LevelData.LevelName) {
+			SelectLevel(LevelItemWidget);
+		}
+	}
+
+	if (!SelectedLevelItemWidget) {
+		SelectLevel(Cast<USTULevelItemWidget>(LevelItemsBox->GetChildAt(0)));
+	}
+}
+
+void USTUMenuWidget::OnStartGame() {
+	auto* GameInstance = STUUtils::GetGameInstance<USTUGameInstance>(GetWorld());
 	if (!GameInstance) {
 		return;
 	}
-
-	const auto& StartupLevelName = GameInstance->GetStartupLevelName();
-	if (StartupLevelName.IsNone()) {
-		UE_LOG(STUMenuWidget, Error, TEXT("Startup level is None"));
+	if (!SelectedLevelItemWidget) {
+		UE_LOG(STUMenuWidget, Error, TEXT("Level not selected"));
 		return;
 	}
-	UGameplayStatics::OpenLevel(this, StartupLevelName);
+	GameInstance->LoadLevel(SelectedLevelItemWidget->GetLevelData().LevelName);
 }
 
 void USTUMenuWidget::OnQuitGame() {
 	UKismetSystemLibrary::QuitGame(this, GetOwningPlayer(), EQuitPreference::Quit, true);
+}
+
+void USTUMenuWidget::OnLevelSelected(const FName& LevelName) {
+	for (const auto& LevelWidget : LevelItemWidgets) {
+		if (LevelWidget->GetLevelData().LevelName == LevelName) {
+			SelectLevel(LevelWidget);
+		}
+	}
+}
+
+void USTUMenuWidget::SelectLevel(TObjectPtr<USTULevelItemWidget> LevelWidget) {
+	if (!LevelWidget) {
+		return;
+	}
+	if (SelectedLevelItemWidget) {
+		SelectedLevelItemWidget->SetSelected(false);
+	}
+	LevelWidget->SetSelected(true);
+	SelectedLevelItemWidget = LevelWidget;
 }
