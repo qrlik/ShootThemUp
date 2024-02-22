@@ -67,5 +67,6 @@ void USTUGameOverWidget::UpdatePlayersStat() {
 		PlayerStateWidget->SetKills(FText::FromString(FString::FromInt(PlayerState->GetKills())));
 		PlayerStateWidget->SetDeaths(FText::FromString(FString::FromInt(PlayerState->GetDeaths())));
 		PlayerStateWidget->SetTeam(FText::FromString(FString::FromInt(PlayerState->GetTeamID())));
+		PlayerStateWidget->SetTeamColor(PlayerState->GetTeamColor());
 	}
 }

@@ -19,6 +19,7 @@ public:
 	void SetKills(const FText& Kills) const;
 	void SetDeaths(const FText& Deaths) const;
 	void SetTeam(const FText& Team) const;
+	void SetTeamColor(FLinearColor Color) const;
 
 protected:
 	UPROPERTY(meta = (BindWidget))
@@ -31,4 +32,6 @@ protected:
 	TObjectPtr<UTextBlock> DeathsText;
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UTextBlock> TeamText;
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UImage> TeamImage;
 };

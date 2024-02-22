@@ -34,3 +34,9 @@ void USTUPlayerStatRowWidget::SetTeam(const FText& Team) const {
 		TeamText->SetText(Team);
 	}
 }
+
+void USTUPlayerStatRowWidget::SetTeamColor(FLinearColor Color) const {
+	if (TeamImage) {
+		TeamImage->SetColorAndOpacity(Color);
+	}
+}

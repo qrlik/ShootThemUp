@@ -18,7 +18,4 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	float GetRemainingTime() const;
-
-	UFUNCTION(BlueprintCallable, Category = "UI")
-	int32 GetKills() const;
 };

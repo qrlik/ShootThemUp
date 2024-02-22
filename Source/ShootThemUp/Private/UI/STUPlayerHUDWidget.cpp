@@ -2,10 +2,12 @@
 
 #include "UI/STUPlayerHUDWidget.h"
 
+#include "Components/ProgressBar.h"
 #include "Components/STUHealthComponent.h"
 #include "Components/STUWeaponComponent.h"
-#include "STUUtils.h"
 #include "Player/STUPlayerController.h"
+#include <Player/STUPlayerState.h>
+#include "STUUtils.h"
 
 FWeaponUIData USTUPlayerHUDWidget::GetCurrentWeaponUIData() const {
 	if (const auto* WeaponComponent = STUUtils::GetComponentByClass<USTUWeaponComponent>(GetOwningPlayerPawn())) {
@@ -28,6 +30,14 @@ float USTUPlayerHUDWidget::GetHealthPercent() const {
 	return 0.f;
 }
 
+int32 USTUPlayerHUDWidget::GetKills() const {
+	const auto* PlayerState = GetOwningPlayerState<ASTUPlayerState>();
+	if (!PlayerState) {
+		return {};
+	}
+	return PlayerState->GetKills();
+}
+
 bool USTUPlayerHUDWidget::IsPlayerAlive() const {
 	if (const auto* HealthComponent = STUUtils::GetComponentByClass<USTUHealthComponent>(GetOwningPlayerPawn())) {
 		return !HealthComponent->IsDead();
@@ -47,10 +57,10 @@ void USTUPlayerHUDWidget::NativeOnInitialized() {
 
 	if (auto* Controller = GetOwningPlayer<ASTUPlayerController>()) {
 		if (!Controller->OnPawnPossess.IsBoundToObject(this)) {
-			Controller->OnPawnPossess.AddUObject(this, &USTUPlayerHUDWidget::InitializeDamageEvent);
+			Controller->OnPawnPossess.AddUObject(this, &USTUPlayerHUDWidget::OnNewPawn);
 		}
 	}
-	InitializeDamageEvent();
+	OnNewPawn();
 }
 
 void USTUPlayerHUDWidget::InitializeDamageEvent() {
@@ -61,8 +71,22 @@ void USTUPlayerHUDWidget::InitializeDamageEvent() {
 	}
 }
 
+void USTUPlayerHUDWidget::OnNewPawn() {
+	InitializeDamageEvent();
+	UpdateHealthBar();
+}
+
 void USTUPlayerHUDWidget::OnHealthChanged(float Delta) {
 	if (Delta < 0.f) {
 		OnTakeDamage();
 	}
+	UpdateHealthBar();
+}
+
+void USTUPlayerHUDWidget::UpdateHealthBar() const {
+	if (!HealthProgressBar) {
+		return;
+	}
+	const auto Percent = GetHealthPercent();
+	HealthProgressBar->SetFillColorAndOpacity((Percent > PercentColorThreshold) ? DefaultColor : LowColor);
 }

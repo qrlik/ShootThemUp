@@ -7,9 +7,10 @@
 #include "Weapon/STUBaseWeapon.h"
 #include "STUPlayerHUDWidget.generated.h"
 
+class UProgressBar;
+
 UCLASS()
-class SHOOTTHEMUP_API USTUPlayerHUDWidget : public UUserWidget
-{
+class SHOOTTHEMUP_API USTUPlayerHUDWidget : public UUserWidget {
 	GENERATED_BODY()
 
 public:
@@ -23,6 +24,9 @@ public:
 	float GetHealthPercent() const;
 
 	UFUNCTION(BlueprintCallable, Category = "UI")
+	int32 GetKills() const;
+
+	UFUNCTION(BlueprintCallable, Category = "UI")
 	bool IsPlayerAlive() const;
 
 	UFUNCTION(BlueprintCallable, Category = "UI")
@@ -34,8 +38,23 @@ public:
 protected:
 	virtual void NativeOnInitialized() override;
 
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UProgressBar> HealthProgressBar;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	float PercentColorThreshold = 0.3f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	FLinearColor DefaultColor = FLinearColor::White;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	FLinearColor LowColor = FLinearColor::Red;
+
 private:
 	void InitializeDamageEvent();
 
+	void OnNewPawn();
 	void OnHealthChanged(float Delta);
+
+	void UpdateHealthBar() const;
 };

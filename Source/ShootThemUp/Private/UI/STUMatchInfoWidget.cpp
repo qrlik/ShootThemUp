@@ -22,11 +22,3 @@ FIntPoint USTUMatchInfoWidget::GetRoundsInfo() const {
 	const auto RoundsAmount = GameMode->GetGameData().RoundsAmount;
 	return { CurrentRound, RoundsAmount };
 }
-
-int32 USTUMatchInfoWidget::GetKills() const {
-	const auto* PlayerState = GetOwningPlayerState<ASTUPlayerState>();
-	if (!PlayerState) {
-		return {};
-	}
-	return PlayerState->GetKills();
-}
