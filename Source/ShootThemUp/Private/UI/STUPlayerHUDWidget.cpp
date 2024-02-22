@@ -23,6 +23,15 @@ FAmmoData USTUPlayerHUDWidget::GetCurrentWeaponAmmo() const {
 	return {};
 }
 
+FString USTUPlayerHUDWidget::FormatBullets(int32 Bullets) const {
+	constexpr auto MaxLen = 2;
+	auto BulletsStr = FString::FromInt(Bullets);
+	if (const auto AddLen = MaxLen - BulletsStr.Len(); AddLen > 0) {
+		BulletsStr = FString::ChrN(AddLen, '0') + BulletsStr;
+	}
+	return BulletsStr;
+}
+
 float USTUPlayerHUDWidget::GetHealthPercent() const {
 	if (const auto* HealthComponent = STUUtils::GetComponentByClass<USTUHealthComponent>(GetOwningPlayerPawn())) {
 		return HealthComponent->GetHealthPercent() / 100.f;

@@ -21,6 +21,9 @@ public:
 	FAmmoData GetCurrentWeaponAmmo() const;
 
 	UFUNCTION(BlueprintCallable, Category = "UI")
+	FString FormatBullets(int32 Bullets) const;
+
+	UFUNCTION(BlueprintCallable, Category = "UI")
 	float GetHealthPercent() const;
 
 	UFUNCTION(BlueprintCallable, Category = "UI")
