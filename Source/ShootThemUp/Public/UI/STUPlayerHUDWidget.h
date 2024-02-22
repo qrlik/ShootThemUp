@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
 #include "Weapon/STUBaseWeapon.h"
+#include "STUBaseWidget.h"
 #include "STUPlayerHUDWidget.generated.h"
 
 class UProgressBar;
 
 UCLASS()
-class SHOOTTHEMUP_API USTUPlayerHUDWidget : public UUserWidget {
+class SHOOTTHEMUP_API USTUPlayerHUDWidget : public USTUBaseWidget {
 	GENERATED_BODY()
 
 public:
@@ -41,6 +41,9 @@ public:
 protected:
 	virtual void NativeOnInitialized() override;
 
+	UPROPERTY(Transient, meta = (BindWidgetAnim))
+	TObjectPtr<UWidgetAnimation> DamageAnimation;
+
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UProgressBar> HealthProgressBar;
 
@@ -59,5 +62,6 @@ private:
 	void OnNewPawn();
 	void OnHealthChanged(float Delta);
 
+	void UpdateDamageAnimation();
 	void UpdateHealthBar() const;
 };

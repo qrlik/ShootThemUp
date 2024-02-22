@@ -88,8 +88,15 @@ void USTUPlayerHUDWidget::OnNewPawn() {
 void USTUPlayerHUDWidget::OnHealthChanged(float Delta) {
 	if (Delta < 0.f) {
 		OnTakeDamage();
+		UpdateDamageAnimation();
 	}
 	UpdateHealthBar();
+}
+
+void USTUPlayerHUDWidget::UpdateDamageAnimation() {
+	if (!IsAnimationPlaying(DamageAnimation)) {
+		PlayAnimation(DamageAnimation);
+	}
 }
 
 void USTUPlayerHUDWidget::UpdateHealthBar() const {

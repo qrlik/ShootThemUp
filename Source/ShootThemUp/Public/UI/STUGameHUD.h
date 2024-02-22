@@ -6,6 +6,7 @@
 #include "GameFramework/HUD.h"
 #include "STUGameHUD.generated.h"
 
+class USTUBaseWidget;
 enum class EMatchState;
 
 UCLASS()
@@ -36,7 +37,7 @@ private:
 	void OnMatchStateChanged(EMatchState State);
 
 	UPROPERTY()
-	TMap<EMatchState, TObjectPtr<UUserWidget>> GameWidgets;
+	TMap<EMatchState, TObjectPtr<USTUBaseWidget>> GameWidgets;
 	UPROPERTY()
-	TObjectPtr<UUserWidget> CurrentWidget;
+	TObjectPtr<USTUBaseWidget> CurrentWidget;
 };

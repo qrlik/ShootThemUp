@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
+#include "UI/STUBaseWidget.h"
 #include "STUMenuWidget.generated.h"
 
 struct FLevelData;
@@ -12,7 +12,7 @@ class UHorizontalBox;
 class UButton;
 
 UCLASS()
-class SHOOTTHEMUP_API USTUMenuWidget : public UUserWidget {
+class SHOOTTHEMUP_API USTUMenuWidget : public USTUBaseWidget {
 	GENERATED_BODY()
 
 protected:

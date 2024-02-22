@@ -17,5 +17,5 @@ protected:
 	TSubclassOf<UUserWidget> MenuWidgetClass;
 
 private:
-	void CreateMenuWidget();
+	void CreateMenuWidget() const;
 };

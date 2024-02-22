@@ -3,10 +3,10 @@
 
 #include "UI/STUGameHUD.h"
 
+#include "Engine/Canvas.h"
+#include "UI/STUBaseWidget.h"
 #include "STUGameModeBase.h"
 #include "STUUtils.h"
-#include "Blueprint/UserWidget.h"
-#include "Engine/Canvas.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogGameHUD, All, All);
 
@@ -22,9 +22,9 @@ void ASTUGameHUD::BeginPlay() {
 }
 
 void ASTUGameHUD::CreateWidgets() {
-	GameWidgets.Add(EMatchState::InProgress, CreateWidget(GetWorld(), PlayerHUDWidgetClass));
-	GameWidgets.Add(EMatchState::Pause, CreateWidget(GetWorld(), PauseWidgetClass));
-	GameWidgets.Add(EMatchState::GameOver, CreateWidget(GetWorld(), GameOverWidgetClass));
+	GameWidgets.Add(EMatchState::InProgress, CreateWidget<USTUBaseWidget>(GetWorld(), PlayerHUDWidgetClass));
+	GameWidgets.Add(EMatchState::Pause, CreateWidget<USTUBaseWidget>(GetWorld(), PauseWidgetClass));
+	GameWidgets.Add(EMatchState::GameOver, CreateWidget<USTUBaseWidget>(GetWorld(), GameOverWidgetClass));
 }
 
 void ASTUGameHUD::InitMatchStateDelegate() {
@@ -59,5 +59,6 @@ void ASTUGameHUD::OnMatchStateChanged(EMatchState State) {
 		CurrentWidget->RemoveFromParent();
 	}
 	Widget->AddToViewport();
+	Widget->Show();
 	CurrentWidget = Widget;
 }
