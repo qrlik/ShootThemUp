@@ -20,6 +20,12 @@ void USTUMenuWidget::NativeOnInitialized() {
 	InitLevelItemsBox();
 }
 
+void USTUMenuWidget::OnAnimationFinished_Implementation(const UWidgetAnimation* Animation) {
+	if (Animation == HideAnimation) {
+		OnHideAnimationFinished();
+	}
+}
+
 void USTUMenuWidget::InitStartGameButton() {
 	if (StartGameButton) {
 		StartGameButton->OnClicked.AddDynamic(this, &USTUMenuWidget::OnStartGame);
@@ -64,7 +70,7 @@ void USTUMenuWidget::InitLevelItemsBox() {
 	}
 }
 
-void USTUMenuWidget::OnStartGame() {
+void USTUMenuWidget::OnHideAnimationFinished() {
 	auto* GameInstance = STUUtils::GetGameInstance<USTUGameInstance>(GetWorld());
 	if (!GameInstance) {
 		return;
@@ -74,6 +80,10 @@ void USTUMenuWidget::OnStartGame() {
 		return;
 	}
 	GameInstance->LoadLevel(SelectedLevelItemWidget->GetLevelData().LevelName);
+}
+
+void USTUMenuWidget::OnStartGame() {
+	PlayAnimation(HideAnimation);
 }
 
 void USTUMenuWidget::OnQuitGame() {

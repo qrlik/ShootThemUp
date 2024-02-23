@@ -17,6 +17,7 @@ class SHOOTTHEMUP_API USTUMenuWidget : public USTUBaseWidget {
 
 protected:
 	virtual void NativeOnInitialized() override;
+	virtual void OnAnimationFinished_Implementation(const UWidgetAnimation* Animation) override;
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton> StartGameButton;
@@ -27,6 +28,9 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UHorizontalBox> LevelItemsBox;
 
+	UPROPERTY(Transient, meta = (BindWidgetAnim))
+	TObjectPtr<UWidgetAnimation> HideAnimation;
+
 	UPROPERTY(EditAnywhere, Category = "UI")
 	TSubclassOf<USTULevelItemWidget> LevelItemWidgetClass;
 
@@ -34,6 +38,8 @@ private:
 	void InitStartGameButton();
 	void InitQuitGameButton();
 	void InitLevelItemsBox();
+
+	void OnHideAnimationFinished();
 
 	UFUNCTION()
 	void OnStartGame();
