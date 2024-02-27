@@ -6,6 +6,7 @@
 #include "Components/HorizontalBox.h"
 #include "Kismet/GameplayStatics.h"
 #include "Menu/UI/STULevelItemWidget.h"
+#include "Sound/SoundCue.h"
 #include "STUCoreTypes.h"
 #include "STUGameInstance.h"
 #include "STUUtils.h"
@@ -84,6 +85,7 @@ void USTUMenuWidget::OnHideAnimationFinished() {
 
 void USTUMenuWidget::OnStartGame() {
 	PlayAnimation(HideAnimation);
+	UGameplayStatics::PlaySound2D(this, StartGameSound);
 }
 
 void USTUMenuWidget::OnQuitGame() {

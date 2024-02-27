@@ -7,9 +7,9 @@
 #include "STUMenuWidget.generated.h"
 
 struct FLevelData;
-class USTULevelItemWidget;
-class UHorizontalBox;
 class UButton;
+class UHorizontalBox;
+class USTULevelItemWidget;
 
 UCLASS()
 class SHOOTTHEMUP_API USTUMenuWidget : public USTUBaseWidget {
@@ -30,6 +30,9 @@ protected:
 
 	UPROPERTY(Transient, meta = (BindWidgetAnim))
 	TObjectPtr<UWidgetAnimation> HideAnimation;
+
+	UPROPERTY(EditAnywhere, Category = "Audio")
+	TObjectPtr<USoundCue> StartGameSound;
 
 	UPROPERTY(EditAnywhere, Category = "UI")
 	TSubclassOf<USTULevelItemWidget> LevelItemWidgetClass;

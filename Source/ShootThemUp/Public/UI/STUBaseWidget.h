@@ -16,4 +16,7 @@ public:
 protected:
 	UPROPERTY(Transient, meta = (BindWidgetAnim))
 	TObjectPtr<UWidgetAnimation> ShowAnimation;
+
+	UPROPERTY(EditAnywhere, Category = "Audio")
+	TObjectPtr<USoundCue> ShowSound;
 };
