@@ -12,3 +12,8 @@ Attenuation Air Absorption
 Attenuation Listener Focus
 Attenuation Reverb Send
 Attenuation Occlusion
+
+lesson 148. 
+UGameplayStatics::PlaySound2D play sound without Attenuation
+UGameplayStatics::PlaySoundAtLocation/Attached play sound with Attenuation
+UGameplayStatics::SpawnSoundAtLocation/Attached return AudioComponent for use (Play(),SetPaused(),Stop())

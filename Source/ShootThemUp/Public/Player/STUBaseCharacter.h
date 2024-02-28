@@ -47,6 +47,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	TObjectPtr<UAnimMontage> DeathAnimMontage;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Audio")
+	TObjectPtr<USoundCue> DeathSound;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Material")
 	FName TeamColorMaterial = "Paint Color";
 

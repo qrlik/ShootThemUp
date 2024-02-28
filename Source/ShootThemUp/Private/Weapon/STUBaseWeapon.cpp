@@ -4,6 +4,8 @@
 
 #include "Components/STUWeaponVFXComponent.h"
 #include "GameFramework/Character.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBaseWeapon, All, All)
 
@@ -114,10 +116,12 @@ bool ASTUBaseWeapon::CheckEmptyClip() const {
 
 void ASTUBaseWeapon::MakeShot() {
 	if (CheckEmptyClip()) {
+		UGameplayStatics::PlaySoundAtLocation(this, NoAmmoSound, GetActorLocation());
 		return;
 	}
 	MakeShotImpl();
 	DecreaseAmmo();
+	UGameplayStatics::PlaySoundAtLocation(this, ShotSound, GetActorLocation());
 	Vfx->ShowMuzzleEffect(WeaponMesh, MuzzleSocketName);
 }
 

@@ -78,6 +78,12 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<USTUWeaponVFXComponent> Vfx;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Audio")
+	TObjectPtr<USoundCue> ShotSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Audio")
+	TObjectPtr<USoundCue> NoAmmoSound;
+
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	FWeaponUIData UIData;
 

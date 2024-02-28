@@ -62,7 +62,7 @@ void ASTUProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor
 	PlayHitEffect(Hit);
 
 	CollisionComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
-	UGameplayStatics::PlaySound2D(this, ExplosionSound);
+	UGameplayStatics::PlaySoundAtLocation(this, ExplosionSound, GetActorLocation());
 	AudioComponent->Stop();
 
 	if (TraceComponent->IsActive()) {
