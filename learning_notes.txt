@@ -1,2 +1,14 @@
-lesson 146.
+lesson 144,145. Sound Animation Notify
+
+lesson 146. USoundClass 
 Sound -> Sound Cue -> Sound Class 
+
+lesson 147. Sound Attenuation
+Audio3DVisualize - show all sounds console
+
+Attenuation Distance
+Attenuation Spatialization
+Attenuation Air Absorption
+Attenuation Listener Focus
+Attenuation Reverb Send
+Attenuation Occlusion

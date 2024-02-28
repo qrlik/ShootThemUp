@@ -3,10 +3,12 @@
 #include "Weapon/STUProjectile.h"
 
 #include "NiagaraComponent.h"
+#include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/STUWeaponVFXComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Sound/SoundCue.h"
 #include "Weapon/STUBaseWeapon.h"
 
 ASTUProjectile::ASTUProjectile()
@@ -25,6 +27,9 @@ ASTUProjectile::ASTUProjectile()
 	MeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 	MovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>("MovementComponent");
+
+	AudioComponent = CreateDefaultSubobject<UAudioComponent>("AudioComponent");
+	AudioComponent->SetupAttachment(CollisionComponent);
 }
 
 void ASTUProjectile::SetWeaponOwner(AActor* Character) {
@@ -57,6 +62,9 @@ void ASTUProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor
 	PlayHitEffect(Hit);
 
 	CollisionComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
+	UGameplayStatics::PlaySound2D(this, ExplosionSound);
+	AudioComponent->Stop();
+
 	if (TraceComponent->IsActive()) {
 		TraceComponent->Deactivate();
 		MeshComponent->SetVisibility(false, true);
