@@ -2,7 +2,7 @@
 
 #include "Weapon/STULauncherWeapon.h"
 
-#include "Components/STUWeaponVFXComponent.h"
+#include "Components/STUWeaponFXComponent.h"
 #include "Weapon/STUProjectile.h"
 
 void ASTULauncherWeapon::MakeShotImpl() {

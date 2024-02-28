@@ -5,10 +5,9 @@
 #include "NiagaraComponent.h"
 #include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
-#include "Components/STUWeaponVFXComponent.h"
+#include "Components/STUWeaponFXComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Sound/SoundCue.h"
 #include "Weapon/STUBaseWeapon.h"
 
 ASTUProjectile::ASTUProjectile()
@@ -62,7 +61,6 @@ void ASTUProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor
 	PlayHitEffect(Hit);
 
 	CollisionComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
-	UGameplayStatics::PlaySoundAtLocation(this, ExplosionSound, GetActorLocation());
 	AudioComponent->Stop();
 
 	if (TraceComponent->IsActive()) {

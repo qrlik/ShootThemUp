@@ -24,10 +24,13 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	USphereComponent* CollisionComponent;
+	TObjectPtr<USphereComponent> CollisionComponent;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	UStaticMeshComponent* MeshComponent;
+	TObjectPtr<UStaticMeshComponent> MeshComponent;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Audio")
+	TObjectPtr<USoundCue> PickupSound;
 
 	UPROPERTY(EditAnywhere, Category = "Pickup", meta = (ClampMin = "0.0"))
 	FVector2D MinMaxRotationSpeed = { 25.0, 75.0 };

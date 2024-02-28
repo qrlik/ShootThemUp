@@ -4,7 +4,9 @@
 
 #include "Components/SphereComponent.h"
 #include "Components/STUHealthComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Player/STUBaseCharacter.h"
+#include "Sound/SoundCue.h"
 
 ASTUBasePickup::ASTUBasePickup() {
 	PrimaryActorTick.bCanEverTick = true;
@@ -81,9 +83,11 @@ void ASTUBasePickup::TryToGive() {
 }
 
 void ASTUBasePickup::OnTake() {
+	bActive = false;
 	CollisionComponent->SetVisibility(false, true);
 	CollisionComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
-	bActive = false;
+
+	UGameplayStatics::PlaySoundAtLocation(this, PickupSound, GetActorLocation());
 
 	FTimerHandle RespawnTimer;
 	GetWorldTimerManager().SetTimer(RespawnTimer, this, &ASTUBasePickup::Respawn, RespawnTime);

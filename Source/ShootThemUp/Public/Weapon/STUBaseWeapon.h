@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "STUBaseWeapon.generated.h"
 
-class USTUWeaponVFXComponent;
+class USTUWeaponFXComponent;
 
 DECLARE_DELEGATE(FOnClipEmptySignature)
 
@@ -44,7 +44,7 @@ public:
 
 	virtual void Destroyed() override;
 
-	USTUWeaponVFXComponent* GetVfx() const;
+	USTUWeaponFXComponent* GetVfx() const;
 	const FWeaponUIData& GetUIData() const { return UIData; }
 	const FAmmoData& GetAmmoData() const { return CurrentAmmo; }
 	bool TryToAddAmmo(int32 ClipsAmount);
@@ -76,7 +76,7 @@ protected:
 	TObjectPtr<USkeletalMeshComponent> WeaponMesh;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-	TObjectPtr<USTUWeaponVFXComponent> Vfx;
+	TObjectPtr<USTUWeaponFXComponent> FXComponent;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Audio")
 	TObjectPtr<USoundCue> ShotSound;

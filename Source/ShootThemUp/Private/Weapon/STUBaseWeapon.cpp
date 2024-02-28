@@ -2,7 +2,7 @@
 
 #include "Weapon/STUBaseWeapon.h"
 
-#include "Components/STUWeaponVFXComponent.h"
+#include "Components/STUWeaponFXComponent.h"
 #include "GameFramework/Character.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
@@ -15,7 +15,7 @@ ASTUBaseWeapon::ASTUBaseWeapon() {
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>("WeaponMesh");
 	SetRootComponent(WeaponMesh);
 
-	Vfx = CreateDefaultSubobject<USTUWeaponVFXComponent>("VFXComponent");
+	FXComponent = CreateDefaultSubobject<USTUWeaponFXComponent>("VFXComponent");
 }
 
 void ASTUBaseWeapon::Destroyed() {
@@ -23,8 +23,8 @@ void ASTUBaseWeapon::Destroyed() {
 	Super::Destroyed();
 }
 
-USTUWeaponVFXComponent* ASTUBaseWeapon::GetVfx() const {
-	return Vfx;
+USTUWeaponFXComponent* ASTUBaseWeapon::GetVfx() const {
+	return FXComponent;
 }
 
 bool ASTUBaseWeapon::CanReload() const {
@@ -60,7 +60,7 @@ void ASTUBaseWeapon::BeginPlay() {
 	Super::BeginPlay();
 
 	check(WeaponMesh);
-	check(Vfx);
+	check(FXComponent);
 
 	CurrentAmmo = DefaultAmmo;
 }
@@ -122,7 +122,7 @@ void ASTUBaseWeapon::MakeShot() {
 	MakeShotImpl();
 	DecreaseAmmo();
 	UGameplayStatics::PlaySoundAtLocation(this, ShotSound, GetActorLocation());
-	Vfx->ShowMuzzleEffect(WeaponMesh, MuzzleSocketName);
+	FXComponent->ShowMuzzleEffect(WeaponMesh, MuzzleSocketName);
 }
 
 void ASTUBaseWeapon::MakeShotImpl() {

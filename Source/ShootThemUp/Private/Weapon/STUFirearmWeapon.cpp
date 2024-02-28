@@ -2,7 +2,7 @@
 
 #include "Weapon/STUFirearmWeapon.h"
 
-#include "Components/STUWeaponVFXComponent.h"
+#include "Components/STUWeaponFXComponent.h"
 #include "Player/STUBaseCharacter.h"
 
 void ASTUFirearmWeapon::MakeShotImpl() {
@@ -13,10 +13,10 @@ void ASTUFirearmWeapon::MakeShotImpl() {
 
 	const auto HitResult = GetHitResult();
 	const auto& TraceEnd = (HitResult.bBlockingHit) ? HitResult.ImpactPoint : HitResult.TraceEnd;
-	Vfx->ShowTraceEffect(GetMuzzleTransform().GetLocation(), TraceEnd);
+	FXComponent->ShowTraceEffect(GetMuzzleTransform().GetLocation(), TraceEnd);
 	if (HitResult.bBlockingHit) {
 		//DrawDebugSphere(World, HitResult.ImpactPoint, 10.f, 24, FColor::Red, false, 5.f);
-		Vfx->PlayHitEffect(HitResult);
+		FXComponent->PlayHitEffect(HitResult);
 
 		if (auto* HitActor = HitResult.HitObjectHandle.FetchActor<ASTUBaseCharacter>()) {
 			HitActor->TakeDamage(Damage, FDamageEvent{}, GetController(), this);

@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "STUWeaponVFXComponent.generated.h"
+#include "STUWeaponFXComponent.generated.h"
 
 class UNiagaraComponent;
 class UPhysicalMaterial;
@@ -28,6 +28,17 @@ struct FWeaponDecal {
 };
 
 USTRUCT(BlueprintType)
+struct FHitEffect {
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UNiagaraSystem> NiagaraEffect;
+
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<USoundCue> Sound;
+};
+
+USTRUCT(BlueprintType)
 struct FWeaponTrace {
 	GENERATED_BODY()
 
@@ -39,29 +50,29 @@ struct FWeaponTrace {
 };
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-class SHOOTTHEMUP_API USTUWeaponVFXComponent : public UActorComponent {
+class SHOOTTHEMUP_API USTUWeaponFXComponent : public UActorComponent {
 	GENERATED_BODY()
 
 public:
-	USTUWeaponVFXComponent();
+	USTUWeaponFXComponent();
 
 	void ShowTraceEffect(const FVector& TraceStart, const FVector& TraceEnd) const;
 	void ShowMuzzleEffect(USceneComponent* Weapon, const FName& MuzzleSocket) const;
 	void PlayHitEffect(const FHitResult& Hit) const;
 
 protected:
-	UPROPERTY(EditDefaultsOnly, Category = "VFX")
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon Effects")
 	TObjectPtr<UNiagaraSystem> MuzzleEffect;
 
-	UPROPERTY(EditDefaultsOnly, Category = "VFX")
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon Effects")
 	FWeaponTrace Trace;
 
-	UPROPERTY(EditDefaultsOnly, Category = "VFX")
-	TObjectPtr<UNiagaraSystem> DefaultHitEffect;
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon Effects")
+	FHitEffect DefaultHitEffect;
 
-	UPROPERTY(EditDefaultsOnly, Category = "VFX")
-	TMap<TObjectPtr<UPhysicalMaterial>, TObjectPtr<UNiagaraSystem>> HitEffectsMap;
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon Effects")
+	TMap<TObjectPtr<UPhysicalMaterial>, FHitEffect> HitEffectsMap;
 
-	UPROPERTY(EditDefaultsOnly, Category = "VFX")
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon Effects")
 	FWeaponDecal HitDecal;
 };

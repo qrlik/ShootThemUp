@@ -43,9 +43,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	TObjectPtr<UAudioComponent> AudioComponent;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Audio")
-	TObjectPtr<USoundCue> ExplosionSound;
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Projectile")
 	float LifeTime = 10.f;
 
