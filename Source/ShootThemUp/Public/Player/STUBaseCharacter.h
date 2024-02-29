@@ -7,6 +7,7 @@
 #include "STUBaseCharacter.generated.h"
 
 enum class EMovementFlags;
+class USoundCue;
 class USTUCharacterMovementComponent;
 class USTUHealthComponent;
 class USTUWeaponComponent;

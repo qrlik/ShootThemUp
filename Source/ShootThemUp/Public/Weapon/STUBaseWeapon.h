@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "STUBaseWeapon.generated.h"
 
+class USoundCue;
 class USTUWeaponFXComponent;
 
 DECLARE_DELEGATE(FOnClipEmptySignature)
