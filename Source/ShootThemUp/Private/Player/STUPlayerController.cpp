@@ -2,6 +2,7 @@
 
 #include "Player/STUPlayerController.h"
 
+#include "STUGameInstance.h"
 #include "Components/STURespawnComponent.h"
 #include "GameFramework/GameModeBase.h"
 #include "STUGameModeBase.h"
@@ -17,8 +18,8 @@ void ASTUPlayerController::BeginPlay() {
 	InitMatchStateDelegate();
 }
 
-void ASTUPlayerController::OnPossess(APawn* aPawn) {
-	Super::OnPossess(aPawn);
+void ASTUPlayerController::OnPossess(APawn* PossessedPawn) {
+	Super::OnPossess(PossessedPawn);
 
 	OnPawnPossess.Broadcast();
 }
@@ -27,6 +28,7 @@ void ASTUPlayerController::SetupInputComponent() {
 	Super::SetupInputComponent();
 	if (InputComponent) {
 		InputComponent->BindAction("PauseGame", IE_Pressed, this, &ASTUPlayerController::OnPauseGame);
+		InputComponent->BindAction("Mute", IE_Pressed, this, &ASTUPlayerController::OnMuteSound);
 	}
 }
 
@@ -45,6 +47,12 @@ void ASTUPlayerController::OnMatchStateChanged(EMatchState State) {
 	else {
 		SetInputMode(FInputModeUIOnly{});
 		bShowMouseCursor = true;
+	}
+}
+
+void ASTUPlayerController::OnMuteSound() {
+	if (const auto* GameInstance = STUUtils::GetGameInstance<USTUGameInstance>(GetWorld())) {
+		GameInstance->ToggleVolume();
 	}
 }
 

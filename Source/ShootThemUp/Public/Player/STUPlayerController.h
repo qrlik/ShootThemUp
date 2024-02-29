@@ -23,7 +23,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	virtual void OnPossess(APawn* aPawn) override;
+	virtual void OnPossess(APawn* PossessedPawn) override;
 	virtual void SetupInputComponent() override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
@@ -33,5 +33,6 @@ private:
 	void InitMatchStateDelegate();
 
 	void OnMatchStateChanged(EMatchState State);
+	void OnMuteSound();
 	void OnPauseGame();
 };

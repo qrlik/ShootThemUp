@@ -3,6 +3,7 @@
 #include "STUGameInstance.h"
 
 #include "Kismet/GameplayStatics.h"
+#include "Sound/STUSoundFuncLib.h"
 #include "STUCoreTypes.h"
 
 DEFINE_LOG_CATEGORY_STATIC(STUGameInstance, All, All);
@@ -28,4 +29,8 @@ void USTUGameInstance::LoadLevel(const FName& Level) {
 		}
 	}
 	UE_LOG(STUGameInstance, Error, TEXT("Can't find level - %s"), *Level.ToString());
+}
+
+void USTUGameInstance::ToggleVolume() const {
+	USTUSoundFuncLib::ToggleSoundClass(MasterSoundClass);
 }

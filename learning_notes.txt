@@ -1,3 +1,7 @@
+
+FMath::Clamp
+DEFINE_LOG_CATEGORY_STATIC
+
 lesson 144,145. Sound Animation Notify
 
 lesson 146. USoundClass 
@@ -17,3 +21,7 @@ lesson 148.
 UGameplayStatics::PlaySound2D play sound without Attenuation
 UGameplayStatics::PlaySoundAtLocation/Attached play sound with Attenuation
 UGameplayStatics::SpawnSoundAtLocation/Attached return AudioComponent for use (Play(),SetPaused(),Stop())
+
+lesson 150.
+EG Flip Flop - alternates between A/B
+USoundClass Childs

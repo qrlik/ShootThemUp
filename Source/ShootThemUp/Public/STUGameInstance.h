@@ -19,12 +19,17 @@ public:
 
 	void LoadLevel(const FName& Level);
 
+	void ToggleVolume() const;
+
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Game")
 	FName MenuLevelName = NAME_None;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Game", meta = (ToolTip = "Levels Data with unique names"))
 	TArray<FLevelData> LevelsData;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Audio")
+	TObjectPtr<USoundClass> MasterSoundClass;
 
 private:
 	FName LastLevelName = NAME_None;
