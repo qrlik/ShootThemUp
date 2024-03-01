@@ -20,9 +20,16 @@ void ASTUFirearmWeapon::MakeShotImpl() {
 		FXComponent->PlayHitEffect(HitResult);
 
 		if (auto* HitActor = HitResult.HitObjectHandle.FetchActor<ASTUBaseCharacter>()) {
-			HitActor->TakeDamage(Damage, FDamageEvent{}, STUUtils::GetController(GetOwner()), this);
+			HitActor->TakeDamage(CalculateDamage(HitResult), FDamageEvent{}, STUUtils::GetController(GetOwner()), this);
 		}
 	}
 }
 
-
+float ASTUFirearmWeapon::CalculateDamage(const FHitResult& Hit) const {
+	if (Hit.PhysMaterial.IsValid()) {
+		if (const auto* Modifier = DamageModifiers.Find(Hit.PhysMaterial.Get())) {
+			return *Modifier * Damage;
+		}
+	}
+	return Damage;
+}
