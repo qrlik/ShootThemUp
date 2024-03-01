@@ -11,5 +11,9 @@ class SHOOTTHEMUP_API USTUAIPerceptionComponent : public UAIPerceptionComponent 
 	GENERATED_BODY()
 
 public:
-	AActor* GetClosestEnemy() const;
+	AActor* GetCurrentEnemy() const;
+
+private:
+	TArray<AActor*> GetPerceivedEnemies() const;
+	TArray<AActor*> GetPerceivedEnemiesBySense(TSubclassOf<UAISense> Sense) const;
 };

@@ -2,6 +2,7 @@
 
 #include "Components/STUHealthComponent.h"
 
+#include "Perception/AISense_Damage.h"
 #include "STUGameModeBase.h"
 #include "STUUtils.h"
 
@@ -31,6 +32,8 @@ void USTUHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, co
 		return;
 	}
 	AddHealth(-Damage);
+	ReportDamageEvent(InstigatedBy, Damage);
+
 	if (const auto World = GetWorld()) {
 		World->GetTimerManager().ClearTimer(AutoHealTimer);
 	}
@@ -87,4 +90,13 @@ void USTUHealthComponent::Killed(const AController* Killer) const {
 	const auto Pawn = Cast<APawn>(GetOwner());
 	const auto Victim = (Pawn) ? Pawn->Controller : nullptr;
 	GameMode->Killed(Killer, Victim);
+}
+
+void USTUHealthComponent::ReportDamageEvent(const AController* InstigatedBy, float Damage) const {
+	auto* Pawn = STUUtils::GetPawn(InstigatedBy);
+	auto* Owner = GetOwner();
+	if (!Pawn || !Owner) {
+		return;
+	}
+	UAISense_Damage::ReportDamageEvent(Owner, Owner, Pawn, Damage, Pawn->GetActorLocation(), Owner->GetActorLocation());
 }

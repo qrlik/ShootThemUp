@@ -30,3 +30,10 @@ UInputComponent::BindAction can use delegate with payload
 ### lesson 155. Headshot
 USkeletalMeshComponent::GetBodyInstance by bone name
 FBodyInstance::GetSimplePhysicalMaterial get phys.mat from mesh
+
+### lesson 156. AI Sense Damage
+PerceptionComponent property already in AAIController. Move custom class to private.
+TArray::RemoveAllSwap cheaper remove without shuffling
+
+UAISense_Damage::ReportDamageEvent
+UAISense_Hearing::ReportNoiseEvent etc.

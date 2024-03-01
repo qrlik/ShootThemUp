@@ -59,6 +59,7 @@ private:
 	void StartAutoHeal();
 
 	void Killed(const AController* Killer) const;
+	void ReportDamageEvent(const AController* InstigatedBy, float Damage) const;
 
 	FTimerHandle AutoHealTimer;
 

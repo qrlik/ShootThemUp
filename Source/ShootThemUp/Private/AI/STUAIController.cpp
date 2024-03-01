@@ -34,7 +34,7 @@ void ASTUAIController::OnPossess(APawn* InPawn) {
 }
 
 void ASTUAIController::UpdateEnemyActor() {
-	EnemyActor = Perception->GetClosestEnemy();
+	EnemyActor = Perception->GetCurrentEnemy();
 }
 
 void ASTUAIController::UpdateFocus() {

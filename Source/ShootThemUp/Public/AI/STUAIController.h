@@ -23,8 +23,6 @@ public:
 protected:
 	virtual void OnPossess(APawn* InPawn) override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
-	TObjectPtr<USTUAIPerceptionComponent> Perception;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<USTURespawnComponent> Respawn;
@@ -32,6 +30,9 @@ protected:
 private:
 	void UpdateEnemyActor();
 	void UpdateFocus();
+
+	UPROPERTY()
+	TObjectPtr<USTUAIPerceptionComponent> Perception;
 
 	TWeakObjectPtr<AActor> EnemyActor;
 };
