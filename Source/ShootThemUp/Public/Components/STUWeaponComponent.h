@@ -48,6 +48,8 @@ public:
 	void StartFire();
 	void StopFire();
 
+	void Zoom(bool State);
+
 protected:
 	virtual void BeginPlay() override;
 

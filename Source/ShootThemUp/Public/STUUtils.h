@@ -42,8 +42,16 @@ public:
 		return nullptr;
 	}
 
+	template <typename T = AController>
+	static T* GetController(const AActor* Actor) {
+		if (auto* Pawn = Cast<APawn>(Actor)) {
+			return Pawn->GetController<T>();
+		}
+		return nullptr;
+	}
+
+
 	static APawn* GetPawn(const AController* Controller);
-	static AController* GetController(const AActor* Actor);
 
 	static bool AreEnemies(const AController* Lhs, const AController* Rhs);
 };

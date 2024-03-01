@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
+#include "STUUtils.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogBaseWeapon, All, All)
 
@@ -72,13 +73,6 @@ FTransform ASTUBaseWeapon::GetMuzzleTransform() const {
 	return FTransform{};
 }
 
-AController* ASTUBaseWeapon::GetController() const {
-	if (const auto* Character = Cast<ACharacter>(GetOwner())) {
-		return Character->GetController();
-	}
-	return nullptr;
-}
-
 FHitResult ASTUBaseWeapon::GetHitResult() const {
 	FHitResult HitResult;
 	FVector TraceStart, TraceEnd;
@@ -128,6 +122,17 @@ void ASTUBaseWeapon::MakeShot() {
 void ASTUBaseWeapon::MakeShotImpl() {
 }
 
+void ASTUBaseWeapon::Zoom(bool State) const {
+	if (ZoomFov <= 0) {
+		return;
+	}
+	const auto* Controller = STUUtils::GetController<APlayerController>(GetOwner());
+	if (!Controller || !Controller->PlayerCameraManager) {
+		return;
+	}
+	Controller->PlayerCameraManager->SetFOV((State) ? static_cast<float>(ZoomFov) : Controller->PlayerCameraManager->DefaultFOV);
+}
+
 void ASTUBaseWeapon::DecreaseAmmo() {
 	if (CurrentAmmo.Bullets <= 0) {
 		UE_LOG(LogBaseWeapon, Warning, TEXT("ASTUBaseWeapon::DecreaseAmmo No more bullets"));
@@ -148,7 +153,7 @@ void ASTUBaseWeapon::ChangeClip() {
 		CurrentAmmo.Clips -= 1;
 	}
 	CurrentAmmo.Bullets = DefaultAmmo.Bullets;
-	//UE_LOG(LogBaseWeapon, Display, TEXT("========= CHANGE CLIP =========="));
+	// UE_LOG(LogBaseWeapon, Display, TEXT("========= CHANGE CLIP =========="));
 }
 
 void ASTUBaseWeapon::OnEquip() const {
@@ -156,7 +161,7 @@ void ASTUBaseWeapon::OnEquip() const {
 }
 
 void ASTUBaseWeapon::GetShotTrace(FVector& Start, FVector& End) const {
-	const auto* Controller = GetController();
+	const auto* Controller = STUUtils::GetController(GetOwner());
 	if (!Controller) {
 		return;
 	}
@@ -182,4 +187,3 @@ void ASTUBaseWeapon::TryToShot() {
 	}
 	MakeShot();
 }
-

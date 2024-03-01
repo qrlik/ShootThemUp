@@ -17,6 +17,8 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& Initializer):
 
 	HealthComponent = CreateDefaultSubobject<USTUHealthComponent>("HealthComponent");
 	WeaponComponent = CreateDefaultSubobject<USTUWeaponComponent>("WeaponComponent");
+	auto x = WeaponComponent->GetOwner();
+	auto x1 = 5;
 }
 
 void ASTUBaseCharacter::BeginPlay() {

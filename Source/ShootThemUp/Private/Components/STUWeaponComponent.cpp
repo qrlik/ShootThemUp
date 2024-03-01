@@ -62,6 +62,7 @@ void USTUWeaponComponent::NextWeapon() {
 	if (!CanDoAction()) {
 		return;
 	}
+	Zoom(false);
 	EquipWeapon(GetNextWeaponIndex());
 }
 
@@ -107,6 +108,12 @@ void USTUWeaponComponent::StartFire() {
 void USTUWeaponComponent::StopFire() {
 	if (CurrentWeapon) {
 		CurrentWeapon->StopFire();
+	}
+}
+
+void USTUWeaponComponent::Zoom(bool State) {
+	if (CurrentWeapon) {
+		CurrentWeapon->Zoom(State);
 	}
 }
 

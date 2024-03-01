@@ -11,13 +11,6 @@ APawn* STUUtils::GetPawn(const AController* Controller) {
 	return nullptr;
 }
 
-AController* STUUtils::GetController(const AActor* Actor) {
-	if (auto* Pawn = Cast<APawn>(Actor)) {
-		return Pawn->Controller;
-	}
-	return nullptr;
-}
-
 bool STUUtils::AreEnemies(const AController* Lhs, const AController* Rhs) {
 	if (!Lhs || !Rhs || Lhs == Rhs) {
 		return false;

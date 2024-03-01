@@ -4,6 +4,7 @@
 
 #include "Components/STUWeaponFXComponent.h"
 #include "Player/STUBaseCharacter.h"
+#include "STUUtils.h"
 
 void ASTUFirearmWeapon::MakeShotImpl() {
 	const auto* World = GetWorld();
@@ -19,7 +20,7 @@ void ASTUFirearmWeapon::MakeShotImpl() {
 		FXComponent->PlayHitEffect(HitResult);
 
 		if (auto* HitActor = HitResult.HitObjectHandle.FetchActor<ASTUBaseCharacter>()) {
-			HitActor->TakeDamage(Damage, FDamageEvent{}, GetController(), this);
+			HitActor->TakeDamage(Damage, FDamageEvent{}, STUUtils::GetController(GetOwner()), this);
 		}
 	}
 }

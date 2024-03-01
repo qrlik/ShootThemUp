@@ -60,6 +60,8 @@ public:
 	void StartFire();
 	void StopFire();
 
+	void Zoom(bool State) const;
+
 	FOnClipEmptySignature OnClipEmpty;
 
 protected:
@@ -67,7 +69,6 @@ protected:
 	virtual void MakeShotImpl();
 
 	FTransform GetMuzzleTransform() const;
-	AController* GetController() const;
 	FHitResult GetHitResult() const;
 
 	bool CheckEmptyClip() const;
@@ -105,6 +106,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	int16 ShotDistance = 3000;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (ClampMin = "0"))
+	int32 ZoomFov = 0.f;
 
 private:
 	void DecreaseAmmo();
