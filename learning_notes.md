@@ -37,3 +37,6 @@ TArray::RemoveAllSwap cheaper remove without shuffling
 
 UAISense_Damage::ReportDamageEvent
 UAISense_Hearing::ReportNoiseEvent etc.
+
+### lesson 157. Maps from UE4
+Need rebuild nav, light, reflections. Thats help with some strange nullptr components asserts.
