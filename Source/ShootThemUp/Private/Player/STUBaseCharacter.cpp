@@ -2,6 +2,8 @@
 
 #include "Player/STUBaseCharacter.h"
 
+#include "STUGameModeBase.h"
+#include "STUUtils.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/STUCharacterMovementComponent.h"
 #include "Components/STUHealthComponent.h"
@@ -17,8 +19,16 @@ ASTUBaseCharacter::ASTUBaseCharacter(const FObjectInitializer& Initializer):
 
 	HealthComponent = CreateDefaultSubobject<USTUHealthComponent>("HealthComponent");
 	WeaponComponent = CreateDefaultSubobject<USTUWeaponComponent>("WeaponComponent");
-	auto x = WeaponComponent->GetOwner();
-	auto x1 = 5;
+}
+
+void ASTUBaseCharacter::Reset() {
+	WeaponComponent->StopFire();
+	Super::Reset();
+}
+
+void ASTUBaseCharacter::TurnOff() {
+	WeaponComponent->StopFire();
+	Super::TurnOff();
 }
 
 void ASTUBaseCharacter::BeginPlay() {
@@ -31,12 +41,16 @@ void ASTUBaseCharacter::BeginPlay() {
 	LandedDelegate.AddDynamic(this, &ASTUBaseCharacter::OnGroundLanded);
 	HealthComponent->OnHealthChange.AddUObject(this, &ASTUBaseCharacter::OnHealthChanged);
 	HealthComponent->OnDeath.AddUObject(this, &ASTUBaseCharacter::OnDeath);
+	InitMatchStateDelegate();
 }
 
 void ASTUBaseCharacter::OnDeathImpl() {
 }
 
 void ASTUBaseCharacter::OnHealthChangedImpl(float Delta) const {
+}
+
+void ASTUBaseCharacter::OnMatchStateChangedImpl(EMatchState State) const {
 }
 
 float ASTUBaseCharacter::GetDirectionAngle() const {
@@ -65,6 +79,13 @@ void ASTUBaseCharacter::SetPlayerColor(FLinearColor Color) const {
 		return;
 	}
 	Material->SetVectorParameterValue(TeamColorMaterial, Color);
+}
+
+void ASTUBaseCharacter::InitMatchStateDelegate() {
+	if (auto* GameMode = STUUtils::GetGameMode<ASTUGameModeBase>(GetWorld())) {
+		check(!GameMode->OnMatchStateChange.IsBoundToObject(this));
+		GameMode->OnMatchStateChange.AddUObject(this, &ASTUBaseCharacter::OnMatchStateChanged);
+	}
 }
 
 void ASTUBaseCharacter::OnDeath() {
@@ -99,6 +120,13 @@ void ASTUBaseCharacter::OnGroundLanded(const FHitResult& Hit) {
 	}
 	const auto FallDamage = FMath::GetMappedRangeValueClamped(LandedDamageVelocity, LandedDamage, FallVelocity);
 	TakeDamage(FallDamage, FDamageEvent{}, nullptr, nullptr);
+}
+
+void ASTUBaseCharacter::OnMatchStateChanged(EMatchState State) {
+	if (State == EMatchState::Pause) {
+		WeaponComponent->StopFire();
+	}
+	OnMatchStateChangedImpl(State);
 }
 
 void ASTUBaseCharacter::StartRun() {

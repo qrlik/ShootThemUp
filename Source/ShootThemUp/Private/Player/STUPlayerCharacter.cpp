@@ -8,6 +8,7 @@
 #include "Components/STUCharacterMovementComponent.h"
 #include "Components/STUWeaponComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "STUGameModeBase.h"
 
 ASTUPlayerCharacter::ASTUPlayerCharacter(const FObjectInitializer& Initializer):
 	Super(Initializer) {
@@ -42,6 +43,16 @@ void ASTUPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	PlayerInputComponent->BindAxis("TurnAround", this, &ASTUBaseCharacter::AddControllerYawInput);
 }
 
+void ASTUPlayerCharacter::Reset() {
+	WeaponComponent->Zoom(false);
+	Super::Reset();
+}
+
+void ASTUPlayerCharacter::TurnOff() {
+	WeaponComponent->Zoom(false);
+	Super::TurnOff();
+}
+
 void ASTUPlayerCharacter::BeginPlay() {
 	Super::BeginPlay();
 
@@ -63,6 +74,12 @@ void ASTUPlayerCharacter::OnDeathImpl() {
 void ASTUPlayerCharacter::OnHealthChangedImpl(float Delta) const {
 	if (Delta < 0.f) {
 		PlayCameraShake();
+	}
+}
+
+void ASTUPlayerCharacter::OnMatchStateChangedImpl(EMatchState State) const {
+	if (State == EMatchState::Pause) {
+		WeaponComponent->Zoom(false);
 	}
 }
 

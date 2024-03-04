@@ -19,10 +19,14 @@ public:
 
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
+	virtual void Reset() override;
+	virtual void TurnOff() override;
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void OnDeathImpl() override;
 	virtual void OnHealthChangedImpl(float Delta) const override;
+	virtual void OnMatchStateChangedImpl(EMatchState State) const override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<USpringArmComponent> SpringArmComponent;

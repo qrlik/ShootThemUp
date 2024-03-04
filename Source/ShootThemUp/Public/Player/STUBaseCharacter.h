@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "STUBaseCharacter.generated.h"
 
+enum class EMatchState;
 enum class EMovementFlags;
 class USoundCue;
 class USTUCharacterMovementComponent;
@@ -19,6 +20,9 @@ class SHOOTTHEMUP_API ASTUBaseCharacter : public ACharacter
 
 public:
 	ASTUBaseCharacter(const FObjectInitializer& Initializer);
+
+	virtual void Reset() override;
+	virtual void TurnOff() override;
 
 	UFUNCTION(BlueprintCallable)
 	float GetDirectionAngle() const;
@@ -36,6 +40,7 @@ protected:
 
 	virtual void OnDeathImpl();
 	virtual void OnHealthChangedImpl(float Delta) const;
+	virtual void OnMatchStateChangedImpl(EMatchState State) const;
 
 	void UpdateMovementFlag(EMovementFlags Flag, float Amount) const;
 
@@ -64,8 +69,11 @@ protected:
 	float LifeSpanOnDeath = 5.f;
 
 private:
+	void InitMatchStateDelegate();
+
 	void OnDeath();
 	void OnHealthChanged(float Delta) const;
 	UFUNCTION()
 	void OnGroundLanded(const FHitResult& Hit);
+	void OnMatchStateChanged(EMatchState State);
 };

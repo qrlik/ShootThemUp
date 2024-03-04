@@ -18,7 +18,7 @@ struct FWeaponDecal {
 	TObjectPtr<UMaterialInterface> Material;
 
 	UPROPERTY(EditDefaultsOnly)
-	FVector Size;
+	FVector Size = FVector(0.0);
 
 	UPROPERTY(EditDefaultsOnly)
 	float LifeTime = 0.f;
