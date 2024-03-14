@@ -1,5 +1,7 @@
-# 2. Bases
-## lesson 7.
+# 2. Bases<br>
+\ \
+
+## lesson 7.<br>
 Saved\Logs
 Saved\Crashed
 
@@ -69,6 +71,7 @@ for non-property field use TWeakObjectPtr
 
 
 # 3. Project, Animations
+
 ## lesson 22. 
 Project Description - Legal - copyrights
 RMB - Asset Actions - Migrate
@@ -106,6 +109,7 @@ FMath::Sign
 
 
 # 4. Character Health
+
 ## lesson 33.
 UTextRenderComponent
 meta = (ClampMin, ClampMax)
@@ -152,6 +156,7 @@ FMath::GetMappedRangeValueClamped
 
 
 # 5. Weapon
+
 ## lesson 44.
 UPrimitiveComponent::SetOwnerNoSee
 
@@ -195,6 +200,7 @@ Layered blend per bone - Cached locomotion + upper body result.
 
 
 # 6. UMG (Unreal Motion Graphics)
+
 ## lesson 68. UUserWidget
 UUserWidget::AddToViewport
 UUserWidget::RemoveFromParent
@@ -206,6 +212,7 @@ UTexture2D
 
 
 # 7. Pickups
+
 ## lesson 78. Actor Rotation
 AActor::AddActorLocal[Offset][Transform][Rotation]
 FMath::RandBool
@@ -214,6 +221,7 @@ FMath::RandBool
 
 
 # 8. VFX, Niagara
+
 ## lesson 81. Niagara
 Particle System (Cascade) - old legacy
 Niagara Emitter -> Niagara System
@@ -268,6 +276,7 @@ Inactive Response -> Complete (Finish then Kill)
 
 
 # 9. AI
+
 ## lesson 93. Navigation Mesh Volume
 AAIController -> AI MoveTo + Nav Mesh Bounds Volume
 
@@ -374,6 +383,7 @@ UEnvQueryTest::SetWorkOnFloatValues
 
 
 # 10. Game Mode
+
 ## lesson 111. Spawn AI
 FActorSpawnParameters
 FActorSpawnParameters::SpawnCollisionHandlingOverride
@@ -412,6 +422,7 @@ USceneComponent::GetAttachChildren
 
 
 # 11. Game Interfaces
+
 ## lesson 127. Game Pause
 AGameModeBase::SetPause
 AGameModeBase::ClearPause
@@ -460,6 +471,7 @@ UUserWidget::OnAnimationFinished_Implementation
 
 
 # 12. Sound
+
 ## lesson 144. Play Sound Animation Notify
 
 ## lesson 146. USoundClass 
