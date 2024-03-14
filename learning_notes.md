@@ -1,13 +1,12 @@
-# 2. Bases<br>
-\ \
+# 2. Bases<br><br><br>
 
-## lesson 7.<br>
-Saved\Logs
-Saved\Crashed
+## lesson 7.<br/><br/><br/>
+Saved\Logs<br/>
+Saved\Crashed<br/>
 
 ## lesson 8. Logs
-GEngine->AddOnScreenDebugMessage
-*DEFINE_LOG_CATEGORY_STATIC* - LogCategory only in source file
+GEngine->AddOnScreenDebugMessage<br>
+*DEFINE_LOG_CATEGORY_STATIC* - LogCategory only in source file<br>
 
 *FName* - lightweight system for using strings. **Case-insensitive**, immutable and cannot be manipulated.
 INVALID_NAME_CHARACTERS, IsValidObjectName.
