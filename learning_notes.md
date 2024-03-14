@@ -1,12 +1,12 @@
-# 2. Bases<br><br><br>
+# 2. Bases
 
-## lesson 7.<br/><br/><br/>
-Saved\Logs<br/>
-Saved\Crashed<br/>
+## lesson 7.
+Saved\Logs
+Saved\Crashed
 
 ## lesson 8. Logs
-GEngine->AddOnScreenDebugMessage<br>
-*DEFINE_LOG_CATEGORY_STATIC* - LogCategory only in source file<br>
+GEngine->AddOnScreenDebugMessage
+*DEFINE_LOG_CATEGORY_STATIC* - LogCategory only in source file
 
 *FName* - lightweight system for using strings. **Case-insensitive**, immutable and cannot be manipulated.
 INVALID_NAME_CHARACTERS, IsValidObjectName.
@@ -66,8 +66,7 @@ Program: A standalone utility program built on top of the Unreal Engine.
 for property field use TObjectPtr. Sseful for automatic replacement of raw pointers to support advanced cook-time dependency tracking and editor-time lazy load use case (wtf?)
 for non-property field use TWeakObjectPtr
 
-
-
+<br><br>
 
 # 3. Project, Animations
 
@@ -104,8 +103,7 @@ Event Graph -> Is Valid
 Draw Debug Arrow
 FMath::Sign
 
-
-
+<br><br>
 
 # 4. Character Health
 
@@ -151,8 +149,7 @@ FMath::Clamp
 ACharacter::LandedDelegate
 FMath::GetMappedRangeValueClamped
 
-
-
+<br><br>
 
 # 5. Weapon
 
@@ -195,8 +192,7 @@ UAnimNotify
 Equip animation slot changed to upper body and used locomotion cache (prevent default slot use)
 Layered blend per bone - Cached locomotion + upper body result.
 
-
-
+<br><br>
 
 # 6. UMG (Unreal Motion Graphics)
 
@@ -207,8 +203,7 @@ UUserWidget::RemoveFromParent
 ## lesson 68. Weapon Crosshair
 UTexture2D
 
-
-
+<br><br>
 
 # 7. Pickups
 
@@ -216,8 +211,7 @@ UTexture2D
 AActor::AddActorLocal[Offset][Transform][Rotation]
 FMath::RandBool
 
-
-
+<br><br>
 
 # 8. VFX, Niagara
 
@@ -271,8 +265,7 @@ UNiagaraComponent::SetVariableVec3
 UNiagaraComponent::Deactivate
 Inactive Response -> Complete (Finish then Kill)
 
-
-
+<br><br>
 
 # 9. AI
 
@@ -378,8 +371,7 @@ UEnvQueryTest::Cost
 UEnvQueryTest::ValidItemType
 UEnvQueryTest::SetWorkOnFloatValues
 
-
-
+<br><br>
 
 # 10. Game Mode
 
@@ -417,8 +409,7 @@ UPrimitiveComponent::SetOwnerNoSee
 USceneComponent::GetChildrenComponents
 USceneComponent::GetAttachChildren
 
-
-
+<br><br>
 
 # 11. Game Interfaces
 
@@ -466,8 +457,7 @@ UUserWidget::IsAnimationPlaying
 UUserWidget::PlayAnimation
 UUserWidget::OnAnimationFinished_Implementation
 
-
-
+<br><br>
 
 # 12. Sound
 
@@ -497,8 +487,7 @@ USoundClass Childs
 
 ## lesson 152. Sound Mix
 
-
-
+<br><br>
 
 # 13. Bonuses
 ## lesson 154. Weapon Zoom
