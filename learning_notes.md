@@ -276,10 +276,12 @@ AAIController -> AI MoveTo + Nav Mesh Bounds Volume\
 AAIController::RunBehaviorTree\
 AAIController::GetBlackboardComponent\
 Apostrophe - AI debug\
+
 **Composite Nodes - root of a branch and the base rules for how is executed**<br>
 *Selector* - first succeed -> success\
 *Sequence* - first fail -> fail\
 *Simple Parallel* - allows a single main Task node to be executed alongside of a full tree\
+
 **Tasks - leaves of the Tree**\
 *Finish With Result*\
 *Make Noise*\
@@ -331,6 +333,7 @@ UAIPerceptionComponent::GetCurrentlyPerceivedActors\
 
 UBTService\
 UBTService::TickNode\
+
 **Service Nodes - attach to Composite nodes, execute at their frequency**\
 *Default Focus* - set the focus of the AI Controller to Key (can use GetFocusActor)\
 *Run EQS* - execute EQS template and can update a specified Key\
@@ -340,6 +343,7 @@ UBrainComponent::Cleanup\
 
 ## lesson 103. Environment Query System
 AEQSTestingPawn\
+
 **Generator - produces the locations or Actors, referred to as Items**\
 *Actors of Class* - finds all of the Actors of a given class\
 *Composite* - can add multiple Generators to an array\
