@@ -273,36 +273,36 @@ Inactive Response -> Complete (Finish then Kill)
 AAIController -> AI MoveTo + Nav Mesh Bounds Volume
 
 ## lesson 94. Blackboard + Behaviour Tree
-AAIController::RunBehaviorTree
-AAIController::GetBlackboardComponent
-Apostrophe - AI debug
-**Composite Nodes - root of a branch and the base rules for how is executed**
-*Selector* - first succeed -> success
-*Sequence* - first fail -> fail
-*Simple Parallel* - allows a single main Task node to be executed alongside of a full tree
-**Tasks - leaves of the Tree**
-*Finish With Result*
-*Make Noise*
-*Move Directly Toward* - without regard to any navigation system
-*Move To*
-*Play Animation/Sound*
-*Push Pawn Action*
-*Rotate to face BB entry* - must have *Use Controller Rotation Yaw*
-*Run Behavior* - cannot be modified at runtime
-*Run Behavior Dynamic* - not support a subtree's Root-level Decorator
-*Run EQS Query* - runs the specified Environment Query System
-*Set Tag Cooldown*
-*Wait*
+AAIController::RunBehaviorTree<br>
+AAIController::GetBlackboardComponent<br>
+Apostrophe - AI debug<br>
+**Composite Nodes - root of a branch and the base rules for how is executed**<br>
+*Selector* - first succeed -> success<br>
+*Sequence* - first fail -> fail<br>
+*Simple Parallel* - allows a single main Task node to be executed alongside of a full tree<br>
+**Tasks - leaves of the Tree**<br>
+*Finish With Result*<br>
+*Make Noise*<br>
+*Move Directly Toward* - without regard to any navigation system<br>
+*Move To*<br>
+*Play Animation/Sound*<br>
+*Push Pawn Action*<br>
+*Rotate to face BB entry* - must have *Use Controller Rotation Yaw*<br>
+*Run Behavior* - cannot be modified at runtime<br>
+*Run Behavior Dynamic* - not support a subtree's Root-level Decorator<br>
+*Run EQS Query* - runs the specified Environment Query System<br>
+*Set Tag Cooldown*<br>
+*Wait*<br>
 *Wait Blackboard Time*
 
-## lesson 94. Custom BT Task. 
-FBlackboardKeySelector
-UBTTaskNode::ExecuteTask
-UNavigationSystemV1::GetCurrent
-UNavigationSystemV1::GetRandomReachablePointInRadius
+## lesson 95. Custom BT Task. 
+FBlackboardKeySelector\
+UBTTaskNode::ExecuteTask\
+UNavigationSystemV1::GetCurrent\
+UNavigationSystemV1::GetRandomReachablePointInRadius\
 UBlackboardComponent::SetValueAsVector
 
-UCharacterMovementComponent::bUseControllerDesiredRotation - smoothly rotate (clear bUseControllerRotationYaw)
+UCharacterMovementComponent::bUseControllerDesiredRotation - smoothly rotate (clear bUseControllerRotationYaw)\
 UCharacterMovementComponent::RotationRate
 
 ## lesson 97. Perception Component
