@@ -65,6 +65,9 @@ Program: A standalone utility program built on top of the Unreal Engine.
 for property field use TObjectPtr. Sseful for automatic replacement of raw pointers to support advanced cook-time dependency tracking and editor-time lazy load use case (wtf?)
 for non-property field use TWeakObjectPtr
 
+
+
+
 # 3. Project, Animations
 ## lesson 22. 
 Project Description - Legal - copyrights
@@ -98,6 +101,9 @@ UCharacterMovementComponent::GetMaxSpeed
 Event Graph -> Is Valid
 Draw Debug Arrow
 FMath::Sign
+
+
+
 
 # 4. Character Health
 ## lesson 33.
@@ -142,6 +148,9 @@ FMath::Clamp
 ACharacter::LandedDelegate
 FMath::GetMappedRangeValueClamped
 
+
+
+
 # 5. Weapon
 ## lesson 44.
 UPrimitiveComponent::SetOwnerNoSee
@@ -182,6 +191,9 @@ UAnimNotify
 Equip animation slot changed to upper body and used locomotion cache (prevent default slot use)
 Layered blend per bone - Cached locomotion + upper body result.
 
+
+
+
 # 6. UMG (Unreal Motion Graphics)
 ## lesson 68. UUserWidget
 UUserWidget::AddToViewport
@@ -190,10 +202,16 @@ UUserWidget::RemoveFromParent
 ## lesson 68. Weapon Crosshair
 UTexture2D
 
+
+
+
 # 7. Pickups
 ## lesson 78. Actor Rotation
 AActor::AddActorLocal[Offset][Transform][Rotation]
 FMath::RandBool
+
+
+
 
 # 8. VFX, Niagara
 ## lesson 81. Niagara
@@ -245,6 +263,9 @@ Parameters -> User Exposed -> Vector -> Beam End Link Input
 UNiagaraComponent::SetVariableVec3
 UNiagaraComponent::Deactivate
 Inactive Response -> Complete (Finish then Kill)
+
+
+
 
 # 9. AI
 ## lesson 93. Navigation Mesh Volume
@@ -349,6 +370,9 @@ UEnvQueryTest::Cost
 UEnvQueryTest::ValidItemType
 UEnvQueryTest::SetWorkOnFloatValues
 
+
+
+
 # 10. Game Mode
 ## lesson 111. Spawn AI
 FActorSpawnParameters
@@ -383,6 +407,9 @@ AController::GetOnNewPawnNotifier - not work when game mode use RestartPlayer (b
 UPrimitiveComponent::SetOwnerNoSee
 USceneComponent::GetChildrenComponents
 USceneComponent::GetAttachChildren
+
+
+
 
 # 11. Game Interfaces
 ## lesson 127. Game Pause
@@ -429,6 +456,9 @@ UUserWidget::IsAnimationPlaying
 UUserWidget::PlayAnimation
 UUserWidget::OnAnimationFinished_Implementation
 
+
+
+
 # 12. Sound
 ## lesson 144. Play Sound Animation Notify
 
@@ -456,6 +486,10 @@ USoundClass Childs
 
 ## lesson 152. Sound Mix
 
+
+
+
+# 13. Bonuses
 ## lesson 154. Weapon Zoom
 UInputComponent::BindAction<DelegateType> can use delegate with payload
 PlayerCameraManager->SetFOV
